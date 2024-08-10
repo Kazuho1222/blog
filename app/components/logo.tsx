@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import React from 'react'
+import styles from '../../styles/logo.module.css'
 
-export default function Logo() {
+export default function Logo({ boxOn = false }) {
   return (
-    <Link href="/">
+    <Link className={boxOn ? styles.box : styles.basic} href="/">
       CUBE
     </Link>
   )
