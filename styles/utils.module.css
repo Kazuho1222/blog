@@ -20,7 +20,7 @@
 
 /* 横並び（中央揃え） */
 .sideBySideCenter {
-  comporses: sideBySide;
+  composes: sideBySide;
   align-items: center;
   text-align: center;
 }
