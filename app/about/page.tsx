@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Contact from '../components/contact'
 import Container from '../components/container'
 import Hero from '../components/hero'
+import Meta from '../components/meta'
 import PostBody from '../components/post-body'
 import { TwoColumn, TwoColumnMain, TwoColumnSidebar } from '../components/two-column'
 import eyecatch from '../images/about.jpg'
@@ -9,6 +10,13 @@ import eyecatch from '../images/about.jpg'
 export default function About() {
   return (
     <Container large={false}>
+      <Meta
+        pageTitle='アバウト'
+        pageDesc='About development activities'
+        pageImg={eyecatch.src}
+        pageImgW={eyecatch.width}
+        pageImgH={eyecatch.height}
+      />
       <Hero
         title='About'
         subtitle='About development activities'
