@@ -7,7 +7,7 @@ export default function Home() {
     <>
       <main>
         <Container large={false}>
-          <Meta pageTitle={""} pageDesc={""} />
+          <Meta pageTitle={""} pageDesc={""} pageImg={undefined} pageImgW={undefined} pageImgH={undefined} />
           <Hero
             title="CUBE"
             subtitle="アウトプットしていくサイト"

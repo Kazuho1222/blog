@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import Image from 'next/legacy/image'
 import Contact from '../components/contact'
 import Container from '../components/container'
 import Hero from '../components/hero'
