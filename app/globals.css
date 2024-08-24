@@ -26,7 +26,7 @@
   --space-md: calc(var(--space-xs) * 2);
   --space-lg: calc(var(--space-xs) * 3);
   --space-xl: calc(var(--space-xs) * 4);
-  --space-jump: calc(1.25rem, 0.35rem + 3.8vw, 3.75rem);
+  --space-jump: clamp(1.25rem, 0.35rem + 3.8vw, 3.75rem);
 }
 
 /* @media (prefers-color-scheme: dark) {

@@ -7,8 +7,10 @@ const { siteTitle, siteDesc, siteUrl, siteLocale, siteType, siteIcon } = siteMet
 
 // 汎用OGP画像
 import siteImg from '../images/ogp.jpg'
+import Head from 'next/head'
+import { MetaType } from '@/types/types'
 
-export default function Meta({ pageTitle, pageDesc, pageImg, pageImgW, pageImgH }: { pageTitle: string, pageDesc: string, pageImg: any, pageImgW: any, pageImgH: any }) {
+export default function Meta({ pageTitle, pageDesc, pageImg, pageImgW, pageImgH }: MetaType) {
 
   // ページのタイトル
   const title = pageTitle ? `${pageTitle} | ${siteTitle}` : siteTitle
@@ -26,7 +28,7 @@ export default function Meta({ pageTitle, pageDesc, pageImg, pageImgW, pageImgH 
   const imgUrl = img.startsWith('https') ? img : `${siteUrl}${img}`
 
   return (
-    <head>
+    <Head>
       <title>{title}</title>
       <meta property='og:title' content={title} />
       <meta name="description" content={desc} />
@@ -43,9 +45,9 @@ export default function Meta({ pageTitle, pageDesc, pageImg, pageImgW, pageImgH 
       <link rel="apple-touch-icon" href={siteIcon} />
 
       <meta property='og:image' content={imgUrl} />
-      <meta property='og:image:width' content={imgW} />
-      <meta property='og:image:height' content={imgH} />
+      <meta property='og:image:width' content={imgW.toString()} />
+      <meta property='og:image:height' content={imgH.toString()} />
       <meta name="twitter:card" content="summary_large_image" />
-    </head>
+    </Head>
   )
 }
