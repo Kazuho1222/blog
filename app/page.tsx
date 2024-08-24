@@ -1,8 +1,26 @@
+import { PostType } from "@/types/types"
 import Container from "./components/container"
 import Hero from "./components/hero"
 import Meta from "./components/meta"
+import Posts from "./components/posts"
+import Pagination from "./components/pagination"
+import { getAllPosts } from "./lib/api"
+import { eyecatchLocal } from "./lib/constants"
+import { getImageBuffer } from "./lib/getImageBuffer"
+import { getPlaiceholder } from "plaiceholder"
 
-export default function Home() {
+export default async function Home() {
+  const posts = await getAllPosts(4)
+
+  for (const post of posts) {
+    if (!post.eyecatch) {
+      post.eyecatch = { ...eyecatchLocal }
+    }
+    const imageBuffer = await getImageBuffer(post.eyecatch.url)
+    const { base64 } = await getPlaiceholder(imageBuffer)
+    post.eyecatch.blurDataURL = base64
+  }
+
   return (
     <>
       <main>
@@ -13,6 +31,9 @@ export default function Home() {
             subtitle="アウトプットしていくサイト"
             imageOn
           />
+
+          <Posts posts={posts} />
+          <Pagination nextUrl="/blog" nextText="More Posts" />
         </Container>
       </main>
     </>
