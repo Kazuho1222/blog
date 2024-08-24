@@ -15,7 +15,7 @@ import { getPlaiceholder } from "plaiceholder";
 import Pagination from "@/app/components/pagination";
 const { siteTitle, siteUrl } = siteMeta
 
-export default async function Post({ params }: { params: { slug: any } }) {
+export default async function Post({ params }: { params: { slug: string } }) {
   const slug = params.slug
   const post = await getPostBySlug(slug)
   if (!post) {
