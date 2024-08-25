@@ -22,7 +22,7 @@ export default async function Blog() {
 
   return (
     <Container large={false}>
-      <Meta pageTitle='ブログ' pageDesc='ブログの記事一覧' pageImg={undefined} pageImgW={undefined} pageImgH={undefined} />
+      <Meta pageTitle='ブログ' pageDesc='ブログの記事一覧' />
       <Hero
         title='Blog'
         subtitle='Recent Posts'

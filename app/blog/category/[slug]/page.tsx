@@ -1,13 +1,13 @@
 import Container from '@/app/components/container'
+import Meta from '@/app/components/meta'
 import PostHeader from '@/app/components/post-header'
 import Posts from '@/app/components/posts'
 import { getAllCategories, getAllPostsByCategory } from '@/app/lib/api'
 import { eyecatchLocal } from '@/app/lib/constants'
 import { getImageBuffer } from '@/app/lib/getImageBuffer'
 import { getPlaiceholder } from 'plaiceholder'
-import React from 'react'
 
-export default async function Category({ params }: { params: { slug: string } }) {
+export default async function Category({ params }: { params: { slug: string } }, name: string) {
   const catSlug = params.slug
   const allCats = await getAllCategories()
   const cat = allCats.find(({ slug }: { slug: string }) => slug === catSlug)
@@ -28,6 +28,7 @@ export default async function Category({ params }: { params: { slug: string } })
 
   return (
     <Container large={false}>
+      <Meta pageTitle={name} pageDesc={`${name}に関する記事`} />
       <PostHeader title={cat.name} subtitle="Blog Category" publish={''} />
       <Posts posts={posts} />
     </Container>

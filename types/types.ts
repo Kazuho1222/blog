@@ -1,9 +1,9 @@
 export interface MetaType {
   pageTitle: string;
   pageDesc: string;
-  pageImg: any;
-  pageImgW: number | undefined;
-  pageImgH: number | undefined;
+  pageImg?: string;
+  pageImgW?: number;
+  pageImgH?: number;
 }
 
 export interface PostType {

@@ -25,7 +25,7 @@ export default async function Home() {
     <>
       <main>
         <Container large={false}>
-          <Meta pageTitle={""} pageDesc={""} pageImg={undefined} pageImgW={undefined} pageImgH={undefined} />
+          <Meta pageTitle={""} pageDesc={""} />
           <Hero
             title="CUBE"
             subtitle="アウトプットしていくサイト"
