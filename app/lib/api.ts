@@ -1,4 +1,6 @@
+import { get } from "http";
 import { createClient, MicroCMSClient } from "microcms-js-sdk";
+import { Asap_Condensed } from "next/font/google";
 
 if (!process.env.MICROCMS_SERVICE_DOMAIN || !process.env.MICROCMS_API_KEY) {
   throw new Error("MICROCMS_SERVICE_DOMAINとMICROCMS_API_KEYは必須です。");
@@ -64,6 +66,24 @@ export async function getAllCategories(limit = 100) {
     return categories.contents;
   } catch (error) {
     console.log("~~ getAllCategories ~~");
+    console.log(error);
+  }
+}
+
+export async function getAllPostsByCategory(catID: string, limit = 100) {
+  try {
+    const posts = await client.get({
+      endpoint: "blogs",
+      queries: {
+        filters: `categories[contains]${catID}`,
+        fields: "title,slug,eyecatch",
+        orders: "-publishDate",
+        limit: limit,
+      },
+    });
+    return posts.contents;
+  } catch (error) {
+    console.log("~~ getAllPostsByCategory ~~");
     console.log(error);
   }
 }
