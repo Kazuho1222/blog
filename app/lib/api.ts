@@ -51,3 +51,19 @@ export async function getAllPosts(limit = 100) {
     console.log(err);
   }
 }
+
+export async function getAllCategories(limit = 100) {
+  try {
+    const categories = await client.get({
+      endpoint: "categories",
+      queries: {
+        fields: "name,id,slug",
+        limit: limit,
+      },
+    });
+    return categories.contents;
+  } catch (error) {
+    console.log("~~ getAllCategories ~~");
+    console.log(error);
+  }
+}
