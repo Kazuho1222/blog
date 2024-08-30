@@ -1,5 +1,5 @@
 .flexContainer {
-  composes: spaceBetween from "./utils.module.css";
+  composes: spaceBetween from './utils.module.css';
   margin: var(--space-lg) 0;
   gap: 1em;
 }

@@ -1,10 +1,13 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import Header from "./components/header";
-import Footer from "./components/footer";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import Footer from "./components/footer";
+import Header from "./components/header";
+import "./globals.css";
+import { Suspense } from "react";
+import GoogleAnalytics from "./components/googleanalytics";
+
 config.autoAddCss = false;
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,6 +25,9 @@ export default function RootLayout({
   return (
     <html lang="jp">
       <body className={inter.className}>
+        <Suspense>
+          <GoogleAnalytics />
+        </Suspense>
         <Header />
         {children}
         <Footer />
