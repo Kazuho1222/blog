@@ -5,8 +5,16 @@ import Hero from '../components/hero'
 import Meta from '../components/meta'
 import PostBody from '../components/post-body'
 import { TwoColumn, TwoColumnMain, TwoColumnSidebar } from '../components/two-column'
-import eyecatch from '../images/about.jpg'
+// import eyecatch from '../images/about.jpg'
 import Accordion from '../components/accordion'
+import { height } from '@fortawesome/free-brands-svg-icons/fa42Group'
+
+const eyecatch = {
+  src: 'https://images.microcms-assets.io/assets/93b42a5f4a114f00b170397593b04592/17d6566f7eb5485ba6c4ced763d06f8d/about.jpg',
+  height: 960,
+  width: 1920,
+  blurDataURL: 'data:image/jpeg;base64,',
+}
 
 export default function About() {
   return (
