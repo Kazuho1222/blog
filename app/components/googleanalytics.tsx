@@ -1,40 +1,40 @@
-'use client'
+// 'use client'
 
-import { usePathname, useSearchParams } from 'next/navigation'
-import Script from 'next/script'
-import { useEffect } from 'react'
-import * as gtag from '../lib/gtag'
+// import { usePathname, useSearchParams } from 'next/navigation'
+// import Script from 'next/script'
+// import { useEffect } from 'react'
+// import * as gtag from '../lib/gtag'
 
-function GoogleAnalytics() {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+// function GoogleAnalytics() {
+//   const pathname = usePathname()
+//   const searchParams = useSearchParams()
 
-  useEffect(() => {
-    const url = pathname + searchParams.toString()
-    gtag.pageview(url)
-  }, [pathname, searchParams])
+//   useEffect(() => {
+//     const url = pathname + searchParams.toString()
+//     gtag.pageview(url)
+//   }, [pathname, searchParams])
 
-  return (
-    <>
-      <Script
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_MEASUREMENT_ID}`}
-      />
-      <Script
-        id="gtag-init"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-        window.dataLayer=window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js',new Data());
+//   return (
+//     <>
+//       <Script
+//         strategy="afterInteractive"
+//         src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_MEASUREMENT_ID}`}
+//       />
+//       <Script
+//         id="gtag-init"
+//         strategy="afterInteractive"
+//         dangerouslySetInnerHTML={{
+//           __html: `
+//         window.dataLayer=window.dataLayer || [];
+//         function gtag(){dataLayer.push(arguments);}
+//         gtag('js',new Data());
 
-        gtag('config','${gtag.GA_MEASUREMENT_ID}');
-      `,
-        }}
-      />
-    </>
-  )
-}
+//         gtag('config','${gtag.GA_MEASUREMENT_ID}');
+//       `,
+//         }}
+//       />
+//     </>
+//   )
+// }
 
-export default GoogleAnalytics
+// export default GoogleAnalytics

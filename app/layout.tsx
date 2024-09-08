@@ -6,7 +6,7 @@ import Footer from "./components/footer";
 import Header from "./components/header";
 import "./globals.css";
 import { Suspense } from "react";
-import GoogleAnalytics from "./components/googleanalytics";
+// import GoogleAnalytics from "./components/googleanalytics";
 
 config.autoAddCss = false;
 
@@ -25,9 +25,9 @@ export default function RootLayout({
   return (
     <html lang="jp">
       <body className={inter.className}>
-        <Suspense>
+        {/* <Suspense>
           <GoogleAnalytics />
-        </Suspense>
+        </Suspense> */}
         <Header />
         {children}
         <Footer />
