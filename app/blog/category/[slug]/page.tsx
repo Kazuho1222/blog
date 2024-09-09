@@ -35,15 +35,15 @@ export default async function Category({ params }: { params: { slug: string } },
   )
 }
 
-export async function getStaticPaths() {
-  const allCats = await getAllCategories()
+// export async function getStaticPaths() {
+//   const allCats = await getAllCategories()
 
-  const paths = allCats.map((cat: { slug: string }) => ({
-    params: { slug: cat.slug },
+//   const paths = allCats.map((cat: { slug: string }) => ({
+//     params: { slug: cat.slug },
 
-  }))
-  return {
-    paths,
-    fallback: false,
-  }
-}
+//   }))
+//   return {
+//     paths,
+//     fallback: false,
+//   }
+// }
