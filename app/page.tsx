@@ -8,6 +8,7 @@ import { getAllPosts } from "./lib/api"
 import { eyecatchLocal } from "./lib/constants"
 import { getImageBuffer } from "./lib/getImageBuffer"
 import { getPlaiceholder } from "plaiceholder"
+import { cache } from "react"
 
 export default async function Home() {
   const posts = await getAllPosts(4)

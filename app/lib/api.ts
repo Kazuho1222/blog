@@ -1,89 +1,104 @@
-import { get } from "http";
-import { createClient, MicroCMSClient } from "microcms-js-sdk";
-import { Asap_Condensed } from "next/font/google";
+import { get } from 'http'
+import { createClient, MicroCMSClient } from 'microcms-js-sdk'
+import { Asap_Condensed } from 'next/font/google'
 
 if (!process.env.MICROCMS_SERVICE_DOMAIN || !process.env.MICROCMS_API_KEY) {
-  throw new Error("MICROCMS_SERVICE_DOMAINとMICROCMS_API_KEYは必須です。");
+  throw new Error('MICROCMS_SERVICE_DOMAINとMICROCMS_API_KEYは必須です。')
 }
 
 export const client = createClient({
   serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN,
   apiKey: process.env.MICROCMS_API_KEY,
-});
+})
 
 export async function getPostBySlug(slug: string) {
   try {
     const post = await client.get({
-      endpoint: "blogs",
+      customRequestInit: {
+        cache: 'no-store',
+      },
+      endpoint: 'blogs',
       queries: { filters: `slug[equals]${slug}` },
-    });
-    return post.contents[0];
+    })
+    return post.contents[0]
   } catch (err) {
-    console.log("~~ getPostBuSlug ~~");
-    console.log(err);
+    console.log('~~ getPostBuSlug ~~')
+    console.log(err)
   }
 }
 
 export async function getAllSlugs(limit = 100) {
   try {
     const slugs = await client.get({
-      endpoint: "blogs",
-      queries: { fields: "title,slug", orders: "-publishDate", limit: limit },
-    });
-    return slugs.contents;
+      customRequestInit: {
+        cache: 'no-store',
+      },
+      endpoint: 'blogs',
+      queries: { fields: 'title,slug', orders: '-publishDate', limit: limit },
+    })
+    return slugs.contents
   } catch (err) {
-    console.log("~~ getAllSlugs ~~");
-    console.log(err);
+    console.log('~~ getAllSlugs ~~')
+    console.log(err)
   }
 }
 
 export async function getAllPosts(limit = 100) {
   try {
     const posts = await client.get({
-      endpoint: "blogs",
+      customRequestInit: {
+        cache: 'no-store',
+      },
+      endpoint: 'blogs',
       queries: {
-        fields: "title,slug,eyecatch",
-        orders: "-publishDate",
+        fields: 'title,slug,eyecatch',
+        orders: '-publishDate',
         limit: limit,
       },
-    });
-    return posts.contents;
+    })
+    return posts.contents
   } catch (err) {
-    console.log("~~ getAllPosts ~~");
-    console.log(err);
+    console.log('~~ getAllPosts ~~')
+    console.log(err)
   }
 }
 
 export async function getAllCategories(limit = 100) {
   try {
     const categories = await client.get({
-      endpoint: "categories",
+      customRequestInit: {
+        cache: 'no-store',
+      },
+      endpoint: 'categories',
       queries: {
-        fields: "name,id,slug",
+        fields: 'name,id,slug',
         limit: limit,
       },
-    });
-    return categories.contents;
+    })
+    return categories.contents
   } catch (error) {
-    console.log("~~ getAllCategories ~~");
-    console.log(error);
+    console.log('~~ getAllCategories ~~')
+    console.log(error)
   }
 }
 
 export async function getAllPostsByCategory(catID: string, limit = 100) {
   try {
     const posts = await client.get({
-      endpoint: "blogs",
+      customRequestInit: {
+        cache: 'no-store',
+      },
+      endpoint: 'blogs',
       queries: {
         filters: `categories[contains]${catID}`,
-        fields: "title,slug,eyecatch",
-        orders: "-publishDate",
+        fields: 'title,slug,eyecatch',
+        orders: '-publishDate',
         limit: limit,
       },
-    });
-    return posts.contents;
+    })
+    return posts.contents
   } catch (error) {
-    console.log("~~ getAllPostsByCategory ~~");
-    console.log(error);
+    console.log('~~ getAllPostsByCategory ~~')
+    console.log(error)
   }
 }
