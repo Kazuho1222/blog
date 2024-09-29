@@ -77,7 +77,11 @@ export const dynamicParams = false
 export async function generateStaticParams() {
   const allSlugs = await getAllSlugs()
 
-  return allSlugs.map(({ slug }: { slug: string }) => {
-    return { slug: slug }
-  })
+  if (!allSlugs) {
+    return { notFound: true }
+  } else {
+    return allSlugs.map(({ slug }: { slug: string }) => {
+      return { slug: slug }
+    })
+  }
 }
