@@ -14,9 +14,9 @@ export const client = createClient({
 export async function getPostBySlug(slug: string) {
   try {
     const post = await client.get({
-      customRequestInit: {
-        cache: 'no-store',
-      },
+      // customRequestInit: {
+      //   cache: 'no-store',
+      // },
       endpoint: 'blogs',
       queries: { filters: `slug[equals]${slug}` },
     })
@@ -30,9 +30,9 @@ export async function getPostBySlug(slug: string) {
 export async function getAllSlugs(limit = 100) {
   try {
     const slugs = await client.get({
-      customRequestInit: {
-        cache: 'no-store',
-      },
+      // customRequestInit: {
+      //   cache: 'no-store',
+      // },
       endpoint: 'blogs',
       queries: { fields: 'title,slug', orders: '-publishDate', limit: limit },
     })
@@ -46,9 +46,9 @@ export async function getAllSlugs(limit = 100) {
 export async function getAllPosts(limit = 100) {
   try {
     const posts = await client.get({
-      customRequestInit: {
-        cache: 'no-store',
-      },
+      // customRequestInit: {
+      //   cache: 'no-store',
+      // },
       endpoint: 'blogs',
       queries: {
         fields: 'title,slug,eyecatch',
@@ -66,9 +66,9 @@ export async function getAllPosts(limit = 100) {
 export async function getAllCategories(limit = 100) {
   try {
     const categories = await client.get({
-      customRequestInit: {
-        cache: 'no-store',
-      },
+      // customRequestInit: {
+      //   cache: 'no-store',
+      // },
       endpoint: 'categories',
       queries: {
         fields: 'name,id,slug',
@@ -85,9 +85,9 @@ export async function getAllCategories(limit = 100) {
 export async function getAllPostsByCategory(catID: string, limit = 100) {
   try {
     const posts = await client.get({
-      customRequestInit: {
-        cache: 'no-store',
-      },
+      // customRequestInit: {
+      //   cache: 'no-store',
+      // },
       endpoint: 'blogs',
       queries: {
         filters: `categories[contains]${catID}`,
