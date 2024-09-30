@@ -18,15 +18,10 @@ export async function getPostBySlug(slug: string) {
       endpoint: 'blogs',
       queries: { filters: `slug[equals]${slug}` },
     })
-
-    if (post.contents.length === 0) {
-      return null
-    }
-
     return post.contents[0]
-  } catch (err) {
+  } catch (error) {
     console.log('~~ getPostBuSlug ~~')
-    console.log(err)
+    console.log(error)
   }
 }
 
@@ -40,9 +35,9 @@ export async function getAllSlugs(limit = 100) {
       queries: { fields: 'title,slug', orders: '-publishDate', limit: limit },
     })
     return slugs.contents
-  } catch (err) {
+  } catch (error) {
     console.log('~~ getAllSlugs ~~')
-    console.log(err)
+    console.log(error)
   }
 }
 
@@ -60,9 +55,9 @@ export async function getAllPosts(limit = 100) {
       },
     })
     return posts.contents
-  } catch (err) {
+  } catch (error) {
     console.log('~~ getAllPosts ~~')
-    console.log(err)
+    console.log(error)
   }
 }
 
