@@ -18,6 +18,11 @@ export async function getPostBySlug(slug: string) {
       endpoint: 'blogs',
       queries: { filters: `slug[equals]${slug}` },
     })
+
+    if (post.contents.length === 0) {
+      return null
+    }
+
     return post.contents[0]
   } catch (err) {
     console.log('~~ getPostBuSlug ~~')
@@ -49,7 +54,7 @@ export async function getAllPosts(limit = 100) {
       },
       endpoint: 'blogs',
       queries: {
-        fields: 'title,slug,eyecatch',
+        fields: 'title,slug,eyecatch,publishedAt',
         orders: '-publishDate',
         limit: limit,
       },
