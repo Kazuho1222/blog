@@ -1,14 +1,12 @@
-import { PostType } from "@/types/types"
+import { getPlaiceholder } from "plaiceholder"
 import Container from "./components/container"
 import Hero from "./components/hero"
 import Meta from "./components/meta"
-import Posts from "./components/posts"
 import Pagination from "./components/pagination"
+import Posts from "./components/posts"
 import { getAllPosts } from "./lib/api"
 import { eyecatchLocal } from "./lib/constants"
 import { getImageBuffer } from "./lib/getImageBuffer"
-import { getPlaiceholder } from "plaiceholder"
-import { cache } from "react"
 
 export default async function Home() {
   const posts = await getAllPosts(4)

@@ -1,6 +1,7 @@
+import BlogDeleteButton from "@/app/components/blog-delete-button";
 import Container from "@/app/components/container";
 import ConvertBody from "@/app/components/convert-body";
-import pagination from "@/app/components/pagination";
+import Pagination from "@/app/components/pagination";
 import PostBody from "@/app/components/post-body";
 import PostCategories from "@/app/components/post-categories";
 import PostHeader from "@/app/components/post-header";
@@ -12,7 +13,6 @@ import { getImageBuffer } from "@/app/lib/getImageBuffer";
 import { prevNextPost } from "@/app/lib/prev-next-post";
 import Image from "next/legacy/image";
 import { getPlaiceholder } from "plaiceholder";
-import Pagination from "@/app/components/pagination";
 const { siteTitle, siteUrl } = siteMeta
 
 export default async function Post({ params }: { params: { slug: string } }) {
@@ -21,7 +21,7 @@ export default async function Post({ params }: { params: { slug: string } }) {
   if (!post) {
     return { notFound: true }
   } else {
-    const { title, publishData: publish, content, categories } = post
+    const { id, title, publishData: publish, content, categories } = post
     const description = extractText(content)
     const eyecatch = post.eyecatch ?? eyecatchLocal
     const imageBuffer = await getImageBuffer(eyecatch.url)
@@ -34,7 +34,11 @@ export default async function Post({ params }: { params: { slug: string } }) {
     return (
       <Container large={false}>
         <article>
-          <PostHeader title={title} subtitle='Blog Article' publish={publish} />
+          <div className="flex justify-between items-center">
+            <PostHeader title={title} subtitle='Blog Article' publish={publish} />
+            <BlogDeleteButton blogId={id} />
+
+          </div>
 
           <figure>
             <Image

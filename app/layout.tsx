@@ -6,6 +6,8 @@ import Footer from "./components/footer";
 import Header from "./components/header";
 import "./globals.css";
 import { Suspense } from "react";
+import { Toaster } from "@/components/ui/toaster";
+import Loading from "./loading";
 // import GoogleAnalytics from "./components/googleanalytics";
 
 config.autoAddCss = false;
@@ -28,9 +30,12 @@ export default function RootLayout({
         {/* <Suspense>
           <GoogleAnalytics />
         </Suspense> */}
-        <Header />
-        {children}
-        <Footer />
+        <Suspense fallback={<Loading />}>
+          <Header />
+          {children}
+          <Toaster />
+          <Footer />
+        </Suspense>
       </body>
     </html>
   );

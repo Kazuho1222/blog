@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import styles from '../../styles/nav.module.css'
 import { useState } from 'react'
+import { Button } from '@/components/ui/button'
 
 export default function Nav() {
   const [navIsOpen, setNavIsOpen] = useState(false)
@@ -47,6 +48,11 @@ export default function Nav() {
         <li>
           <Link href="/blog" onClick={closeNav}>
             Blog
+          </Link>
+        </li>
+        <li>
+          <Link href="/create-blog" onClick={closeNav}>
+            <Button className='hover:bg-red-500'>Create-Blog</Button>
           </Link>
         </li>
       </ul>
