@@ -8,13 +8,13 @@ import { getImageBuffer } from '@/app/lib/getImageBuffer'
 import { getPlaiceholder } from 'plaiceholder'
 
 interface CategoryProps {
-  params: {
-    slug: string
-  }
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
 export default async function Category({ params }: CategoryProps) {
-  const catSlug = params.slug
+  const catSlug = (await params).slug
   const allCats = await getAllCategories()
   const cat = allCats.find(({ slug }: { slug: string }) => slug === catSlug)
   const posts = await getAllPostsByCategory(cat.id)
