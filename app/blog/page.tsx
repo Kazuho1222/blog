@@ -36,15 +36,15 @@ export default async function Blog() {
   }
 
   return (
-    <Container large={false}>
+    (<Container large={false}>
       <Meta pageTitle='ブログ' pageDesc='ブログの記事一覧' />
       <Hero title='Blog' subtitle='Recent Posts' imageOn={false} />
       {/* データが存在しない場合、エラーメッセージや空の状態を表示 */}
       {posts.length > 0 ? (
         <Posts posts={posts} />
       ) : (
-        <p>No posts available. Please check back later.</p> // fallback コンテンツ
+        (<p>No posts available. Please check back later.</p>) // fallback コンテンツ
       )}
-    </Container>
+    </Container>)
   );
 }

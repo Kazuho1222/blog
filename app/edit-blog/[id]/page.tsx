@@ -1,7 +1,8 @@
 import EditBlogForm from "@/app/components/edit-blog-form";
 import { getAllCategories, getPostBySlug } from "../../lib/api";
 
-export default async function EditBlogPage({ params }: { params: { id: string } }) {
+export default async function EditBlogPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const post = await getPostBySlug(params.id)
   const categories = await getAllCategories()
 

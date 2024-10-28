@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
 
-const BlogDeleteButton = async ({ blogId }: { blogId: string }) => {
+const BlogDeleteButton = ({ blogId }: { blogId: string }) => {
   const router = useRouter()
   const { toast } = useToast()
 

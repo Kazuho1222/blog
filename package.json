@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "rm -rf .next/cache/fetch-cache && next build",
     "postbuild": "next-sitemap",
     "start": "next start",
@@ -23,6 +23,7 @@
     "@radix-ui/react-popover": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.2",
+    "@tiptap/extension-link": "^2.9.1",
     "@tiptap/extension-underline": "^2.9.1",
     "@tiptap/pm": "^2.9.1",
     "@tiptap/react": "^2.9.1",
@@ -34,13 +35,13 @@
     "html-to-text": "^9.0.5",
     "lucide-react": "^0.446.0",
     "microcms-js-sdk": "^3.1.2",
-    "next": "^14.2.16",
+    "next": "15.0.1",
     "next-sitemap": "^4.2.3",
     "plaiceholder": "^3.0.0",
-    "react": "^18.3.1",
+    "react": "19.0.0-rc-69d4b800-20241021",
     "react-datepicker": "^7.4.0",
     "react-day-picker": "^8.10.1",
-    "react-dom": "^18.3.1",
+    "react-dom": "19.0.0-rc-69d4b800-20241021",
     "react-hook-form": "^7.53.0",
     "sharp": "^0.33.4",
     "tailwind-merge": "^2.5.2",
@@ -50,12 +51,16 @@
   "devDependencies": {
     "@types/html-to-text": "^9.0.4",
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "eslint": "^8",
-    "eslint-config-next": "14.2.5",
+    "eslint-config-next": "15.0.1",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
   }
 }

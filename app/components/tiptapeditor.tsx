@@ -12,6 +12,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ content, onChange }) => {
   const editor = useEditor({
     extensions: [StarterKit, Underline],
     content,
+    immediatelyRender: false, // SSRの問題回避
     onUpdate: ({ editor }) => {
       if (editor) {
         onChange(editor.getHTML())

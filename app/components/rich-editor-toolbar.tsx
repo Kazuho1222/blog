@@ -1,8 +1,9 @@
 import { useCallback } from "react"
-import { Editor } from "@tiptap/react"
+import type { Editor } from "@tiptap/react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBold, faCode, faHeading, faItalic, faLink, faList, faListOl, faQuoteRight, faStrikethrough, faUnderline } from "@fortawesome/free-solid-svg-icons"
 import Underline from '@tiptap/extension-underline'
+import Link from '@tiptap/extension-link'
 
 const RichEditorToolbar = ({ editor }: { editor: Editor }) => {
   const setLink = useCallback(() => {

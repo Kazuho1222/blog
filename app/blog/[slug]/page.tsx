@@ -17,7 +17,8 @@ import Link from "next/link";
 import { getPlaiceholder } from "plaiceholder";
 const { siteTitle, siteUrl } = siteMeta
 
-export default async function Post({ params }: { params: { slug: string } }) {
+export default async function Post(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const slug = params.slug
   const post = await getPostBySlug(slug)
 
@@ -25,7 +26,6 @@ export default async function Post({ params }: { params: { slug: string } }) {
     return { notFound: true }
   } else {
     const { id, title, publishData: publish, content, categories } = post
-    const description = extractText(content)
     const eyecatch = post.eyecatch ?? eyecatchLocal
     const imageBuffer = await getImageBuffer(eyecatch.url)
     const { base64 } = await getPlaiceholder(imageBuffer)

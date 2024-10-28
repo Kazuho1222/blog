@@ -12,12 +12,13 @@ import { faCircleXmark } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
-import React, { useRef, useState } from "react"
+import type React from "react"
+import { useEffect, useRef, useState } from "react"
 import { useForm } from 'react-hook-form'
 import { z } from "zod"
 import Container from "./container"
 import TiptapEditor from "./tiptapeditor"
-import { FormDataType, PostType } from "@/types/types"
+import type { FormDataType } from "@/types/types"
 
 const pattern = /^[\u0021-\u007e]+$/;
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024
@@ -137,6 +138,12 @@ export default function EditBlogForm({ post, categories }: { post: any, categori
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(post.eyecatch?.url || null)
+  const [content, setContent] = useState(post.content)
+
+  useEffect(() => {
+    form.setValue("content", content)
+  }, [content, form])
+
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleDateChange = (date: Date | null) => {
@@ -220,13 +227,13 @@ export default function EditBlogForm({ post, categories }: { post: any, categori
             <FormField
               control={form.control}
               name="content"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <FormLabel>内容</FormLabel>
                   <FormControl>
                     <TiptapEditor
-                      content={field.value}
-                      onChange={(newContent) => form.setValue('content', newContent)} />
+                      content={content}
+                      onChange={setContent} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
