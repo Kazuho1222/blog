@@ -9,12 +9,17 @@ export interface MetaType {
 export interface PostType {
   title: string
   slug: string
+  content: string
   eyecatch: {
     url: string
     width: number
     height: number
     blurDataURL?: string
   }
+  categories: {
+    category: string[]
+  }
+  publishDate: Date
 }
 export interface FormDataType {
   title: string

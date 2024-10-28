@@ -17,6 +17,7 @@ import { useForm } from 'react-hook-form'
 import { z } from "zod"
 import Container from "./container"
 import TiptapEditor from "./tiptapeditor"
+import { FormDataType, PostType } from "@/types/types"
 
 const pattern = /^[\u0021-\u007e]+$/;
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024
@@ -40,19 +41,19 @@ const FormSchema = z.object({
   }),
 })
 
-export default function CreateBlogForm({ categories }: { initialDate: string, categories: { slug: string, id: string }[] }) {
+export default function EditBlogForm({ post, categories }: { post: any, categories: { slug: string, id: string }[] }) {
   const { toast } = useToast()
   const router = useRouter()
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      title: "",
-      slug: "",
-      content: "",
-      eyecatch: "",
-      categories: [],
-      publishDate: "",
+      title: post.title,
+      slug: post.slug,
+      content: post.content,
+      eyecatch: post.eyecatch?.url || "",
+      categories: post.categories.map((category: { id: string }) => category.id),
+      publishDate: post.publishDate ? new Date(post.publishDate).toISOString() : "",
     },
   })
 
@@ -76,9 +77,9 @@ export default function CreateBlogForm({ categories }: { initialDate: string, ca
     return data.url
   }
 
-  const createBlog = async (formData: any, imageUrl: string) => {
-    const response = await fetch('https://kazuho-blog.microcms.io/api/v1/blogs', {
-      method: 'POST',
+  const editBlog = async (formData: FormDataType, imageUrl: string) => {
+    const response = await fetch(`https://kazuho-blog.microcms.io/api/v1/blogs/${post.id}`, {
+      method: 'PATCH',
       headers: {
         'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY || '',
         'Content-Type': 'application/json',
@@ -97,22 +98,32 @@ export default function CreateBlogForm({ categories }: { initialDate: string, ca
     return data
   }
 
+  const extractFileNameFromUrl = (url: string) => {
+    return url.split('/').pop() || ''
+  }
+
+
   const handleSubmit = async (formData: any) => {
     try {
       const fileInput = fileInputRef.current
       const file = fileInput?.files?.[0]
 
-      let imageUrl = ''
+      let imageUrl = formData.eyecatch
       if (file) {
         imageUrl = await uploadImage(file)
+        const fileName = file.name
+        form.setValue("eyecatch", fileName)
+      } else if (imageUrl) {
+        const fileName = extractFileNameFromUrl(imageUrl)
+        form.setValue("eyecatch", fileName)
       }
 
-      const response = await createBlog(formData, imageUrl)
+      const response = await editBlog(formData, imageUrl)
 
       if (response) {
         console.log('投稿に成功しました！')
         router.push('/')
-        router.refresh
+        router.refresh()
         toast({
           title: '投稿に成功しました！'
         })
@@ -125,7 +136,7 @@ export default function CreateBlogForm({ categories }: { initialDate: string, ca
   }
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [previewImage, setPreviewImage] = useState<string | null>(null)
+  const [previewImage, setPreviewImage] = useState<string | null>(post.eyecatch?.url || null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleDateChange = (date: Date | null) => {
@@ -163,7 +174,7 @@ export default function CreateBlogForm({ categories }: { initialDate: string, ca
   return (
     <div className="m-4">
       <Container large={false}>
-        <h1 className="text-center">新規ブログ作成</h1>
+        <h1 className="text-center">ブログ編集画面</h1>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
             <FormField
@@ -199,7 +210,7 @@ export default function CreateBlogForm({ categories }: { initialDate: string, ca
                 <FormItem className="relative mt-4">
                   <FormLabel className="flex mt-4">投稿日</FormLabel>
                   <InputDateTime
-                    selectedDate={selectedDate}
+                    selectedDate={new Date(form.watch("publishDate"))}
                     onChange={handleDateChange}
                   />
                   <FormMessage />
@@ -214,7 +225,7 @@ export default function CreateBlogForm({ categories }: { initialDate: string, ca
                   <FormLabel>内容</FormLabel>
                   <FormControl>
                     <TiptapEditor
-                      content={""}
+                      content={field.value}
                       onChange={(newContent) => form.setValue('content', newContent)} />
                   </FormControl>
                   <FormMessage />
@@ -231,6 +242,7 @@ export default function CreateBlogForm({ categories }: { initialDate: string, ca
                       <Label htmlFor="eyecatch">アイキャッチ</Label>
                       <FormDescription>ファイルサイズは最大5MBです</FormDescription>
                       <Input id="eyecatch" type="file" accept="image/*" onChange={handleImageChange} ref={fileInputRef} />
+
                       {previewImage && (
                         <div className="relative mt-4">
                           <Label className="flex mb-2">プレビュー</Label>
@@ -238,7 +250,7 @@ export default function CreateBlogForm({ categories }: { initialDate: string, ca
                             <img src={previewImage} alt="アイキャッチプレビュー" className="max-w-xs h-auto" />
                             <button
                               type="button"
-                              className="opacity-0 group-hover:opacity-100 absolute top-1 right-2 cursor-pointer transition-opacity duration-300" onClick={handleRemoveImage}>
+                              className="opacity-0 group-hover:opacity-100 absolute top-1 right-2 cursor-pointer transition-opacity duration-300 bg-slate-200 rounded-full" onClick={handleRemoveImage}>
                               <FontAwesomeIcon icon={faCircleXmark} size="2x" style={{ display: "hidden" }} />
                             </button>
                           </div>
@@ -280,7 +292,7 @@ export default function CreateBlogForm({ categories }: { initialDate: string, ca
                 </FormItem>
               )}
             />
-            <Button type="submit" className='hover:bg-red-500'>送信</Button>
+            <Button type="submit" className='hover:bg-red-500'>更新</Button>
           </form>
         </Form >
       </Container>

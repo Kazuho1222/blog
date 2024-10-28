@@ -11,13 +11,16 @@ import { eyecatchLocal, siteMeta } from "@/app/lib/constants";
 import extractText from "@/app/lib/extract-text";
 import { getImageBuffer } from "@/app/lib/getImageBuffer";
 import { prevNextPost } from "@/app/lib/prev-next-post";
+import { Button } from "@/components/ui/button";
 import Image from "next/legacy/image";
+import Link from "next/link";
 import { getPlaiceholder } from "plaiceholder";
 const { siteTitle, siteUrl } = siteMeta
 
 export default async function Post({ params }: { params: { slug: string } }) {
   const slug = params.slug
   const post = await getPostBySlug(slug)
+
   if (!post) {
     return { notFound: true }
   } else {
@@ -36,8 +39,10 @@ export default async function Post({ params }: { params: { slug: string } }) {
         <article>
           <div className="flex justify-between items-center">
             <PostHeader title={title} subtitle='Blog Article' publish={publish} />
-            <BlogDeleteButton blogId={id} />
-
+            <div className="flex justify-end space-x-4">
+              <Link href={`/edit-blog/${post.slug}`} className="ml-40"><Button>Edit</Button></Link>
+              <BlogDeleteButton blogId={id} />
+            </div>
           </div>
 
           <figure>
@@ -89,3 +94,5 @@ export async function generateStaticParams() {
     })
   }
 }
+
+export const revalidate = 0
