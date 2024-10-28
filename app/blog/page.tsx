@@ -6,7 +6,7 @@ import Posts from '../components/posts';
 import { getAllPosts } from '../lib/api';
 import { eyecatchLocal } from '../lib/constants';
 import { getImageBuffer } from '../lib/getImageBuffer';
-import { PostType } from '@/types/types';
+import type { PostType } from '@/types/types';
 
 export default async function Blog() {
   let posts: PostType[] = [];
