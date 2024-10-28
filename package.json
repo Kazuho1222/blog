@@ -7,8 +7,7 @@
     "build": "rm -rf .next/cache/fetch-cache && next build",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "lint": "next lint",
-    "vercel-build": "npm install --legacy-peer-deps && npm run build"
+    "lint": "next lint"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
@@ -39,10 +38,10 @@
     "next": "15.0.1",
     "next-sitemap": "^4.2.3",
     "plaiceholder": "^3.0.0",
-    "react": "19.0.0-rc-69d4b800-20241021",
+    "react": "^18.3.1",
     "react-datepicker": "^7.4.0",
     "react-day-picker": "^8.10.1",
-    "react-dom": "19.0.0-rc-69d4b800-20241021",
+    "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.0",
     "sharp": "^0.33.4",
     "tailwind-merge": "^2.5.2",
