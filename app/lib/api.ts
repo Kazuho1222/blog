@@ -25,9 +25,6 @@ export async function getPostBySlug(slug: string) {
 export async function getAllSlugs(limit = 100) {
   try {
     const slugs = await client.get({
-      customRequestInit: {
-        next: { revalidate: 0 },
-      },
       endpoint: 'blogs',
       queries: { fields: 'title,slug', orders: '-publishDate', limit: limit },
     })
@@ -41,9 +38,6 @@ export async function getAllSlugs(limit = 100) {
 export async function getAllPosts(limit = 100) {
   try {
     const posts = await client.get({
-      customRequestInit: {
-        next: { revalidate: 0 },
-      },
       endpoint: 'blogs',
       queries: {
         fields: 'title,slug,eyecatch,publishedAt',
@@ -61,9 +55,6 @@ export async function getAllPosts(limit = 100) {
 export async function getAllCategories(limit = 100) {
   try {
     const categories = await client.get({
-      customRequestInit: {
-        next: { revalidate: 0 },
-      },
       endpoint: 'categories',
       queries: {
         fields: 'name,id,slug',
@@ -80,9 +71,6 @@ export async function getAllCategories(limit = 100) {
 export async function getAllPostsByCategory(catID: string, limit = 100) {
   try {
     const posts = await client.get({
-      customRequestInit: {
-        next: { revalidate: 0 },
-      },
       endpoint: 'blogs',
       queries: {
         filters: `categories[contains]${catID}`,
