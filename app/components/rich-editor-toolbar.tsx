@@ -32,7 +32,7 @@ const RichEditorToolbar = ({ editor }: { editor: Editor }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         className={
-          !editor.isActive("heading", { level: 1 }) ? "opacity-20" : ""
+          !editor.isActive("heading", { level: [1, 2, 3] }) ? "opacity-20" : ""
         }
       >
         <FontAwesomeIcon icon={faHeading} />
