@@ -33,7 +33,7 @@ const FormSchema = z.object({
   publishDate: z.string().min(1, {
     message: "必須項目です",
   }),
-  content: z.string().min(1, {
+  _content: z.string().min(1, {
     message: "必須項目です",
   }),
   eyecatch: z.string().default(""),
@@ -51,7 +51,7 @@ export default function EditBlogForm({ post, categories }: { post: any, categori
     defaultValues: {
       title: post.title,
       slug: post.slug,
-      content: post.content,
+      _content: post._content,
       eyecatch: post.eyecatch?.url || "",
       categories: post.categories.map((category: { id: string }) => category.id),
       publishDate: post.publishDate ? new Date(post.publishDate).toISOString() : "",
@@ -138,11 +138,11 @@ export default function EditBlogForm({ post, categories }: { post: any, categori
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(post.eyecatch?.url || null)
-  const [content, setContent] = useState(post.content)
+  const [_content, _setContent] = useState(post._content)
 
   useEffect(() => {
-    form.setValue("content", content)
-  }, [content, form])
+    form.setValue("_content", _content)
+  }, [_content, form])
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -226,14 +226,14 @@ export default function EditBlogForm({ post, categories }: { post: any, categori
             />
             <FormField
               control={form.control}
-              name="content"
+              name="_content"
               render={() => (
                 <FormItem>
                   <FormLabel>内容</FormLabel>
                   <FormControl>
                     <TiptapEditor
-                      content={content}
-                      onChange={setContent} />
+                      content={_content}
+                      onChange={_setContent} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

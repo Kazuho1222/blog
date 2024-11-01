@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 import type { Editor } from "@tiptap/react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBold, faCode, faHeading, faItalic, faLink, faList, faListOl, faQuoteRight, faStrikethrough, faUnderline } from "@fortawesome/free-solid-svg-icons"
+import { faBold, faCode, faHeading, faItalic, faLink, faList, faListOl, faQuoteRight, faRedo, faStrikethrough, faUnderline, faUndo } from "@fortawesome/free-solid-svg-icons"
 import Underline from '@tiptap/extension-underline'
 import Link from '@tiptap/extension-link'
 
@@ -95,6 +95,12 @@ const RichEditorToolbar = ({ editor }: { editor: Editor }) => {
         className={!editor.isActive("link") ? "opacity-20" : ""}
       >
         <FontAwesomeIcon icon={faLink} />
+      </button>
+      <button onClick={() => editor.chain().focus().undo().run()} type="button">
+        <FontAwesomeIcon icon={faUndo} />
+      </button>
+      <button onClick={() => editor.chain().focus().redo().run()} type="button">
+        <FontAwesomeIcon icon={faRedo} />
       </button>
     </div>
 

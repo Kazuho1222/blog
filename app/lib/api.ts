@@ -22,6 +22,26 @@ export async function getPostBySlug(slug: string) {
   }
 }
 
+export async function migrateContentToNewField() {
+  try {
+    const posts = await client.get({ endpoint: 'blogs' })
+
+    for (const post of posts.contents) {
+      const contentHTML = post.content
+
+      await client.update({
+        endpoint: 'blogs',
+        contentId: post.id,
+        content: { _content: contentHTML },
+      })
+
+      console.log(`Post ${post.id} has been migrated to _content field.`)
+    }
+  } catch (error) {
+    console.error('Error migration content:', error)
+  }
+}
+
 export async function getAllSlugs(limit = 100) {
   try {
     const slugs = await client.get({

@@ -1,3 +1,7 @@
 {
-  "cSpell.words": ["eyecatch"]
+  "cSpell.words": ["eyecatch"],
+  "editor.renderWhitespace": "all",
+  "editor.tabSize": 2,
+  "files.autoSave": "onFocusChange",
+  "editor.wordWrap": "on"
 }

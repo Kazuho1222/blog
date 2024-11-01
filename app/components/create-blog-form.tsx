@@ -31,7 +31,7 @@ const FormSchema = z.object({
   publishDate: z.string().min(1, {
     message: "必須項目です",
   }),
-  content: z.string().min(1, {
+  _content: z.string().min(1, {
     message: "必須項目です",
   }),
   eyecatch: z.string().default(""),
@@ -49,7 +49,7 @@ export default function CreateBlogForm({ categories }: { initialDate: string, ca
     defaultValues: {
       title: "",
       slug: "",
-      content: "",
+      _content: "",
       eyecatch: "",
       categories: [],
       publishDate: "",
@@ -208,14 +208,14 @@ export default function CreateBlogForm({ categories }: { initialDate: string, ca
             />
             <FormField
               control={form.control}
-              name="content"
-              render={({ field }) => (
+              name="_content"
+              render={() => (
                 <FormItem>
                   <FormLabel>内容</FormLabel>
                   <FormControl>
                     <TiptapEditor
                       content={""}
-                      onChange={(newContent) => form.setValue('content', newContent)} />
+                      onChange={(newContent) => form.setValue('_content', newContent)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

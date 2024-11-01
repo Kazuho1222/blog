@@ -25,7 +25,7 @@ export default async function Post(props: { params: Promise<{ slug: string }> })
   if (!post) {
     return { notFound: true }
   } else {
-    const { id, title, publishData: publish, content, categories } = post
+    const { id, title, publishData: publish, _content, categories } = post
     const eyecatch = post.eyecatch ?? eyecatchLocal
     const imageBuffer = await getImageBuffer(eyecatch.url)
     const { base64 } = await getPlaiceholder(imageBuffer)
@@ -63,7 +63,7 @@ export default async function Post(props: { params: Promise<{ slug: string }> })
           <TwoColumn>
             <TwoColumnMain>
               <PostBody>
-                <ConvertBody contentHTML={content} />
+                <ConvertBody contentHTML={_content} />
               </PostBody>
             </TwoColumnMain>
             <TwoColumnSidebar>
