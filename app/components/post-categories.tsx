@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from '../../styles/post-catefories.module.css';
+import styles from '../../styles/post-categories.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderOpen } from '@fortawesome/free-regular-svg-icons';
 
