@@ -31,7 +31,7 @@ export default async function Blog() {
       post.eyecatch.blurDataURL = base64;
     } catch (error) {
       console.error('Error processing eyecatch for post:', post.slug, error);
-      post.eyecatch.blurDataURL = ''; // 画像処理に失敗した場合の代替値
+      post.eyecatch!.blurDataURL = ''; // 画像処理に失敗した場合の代替値
     }
   }
 
