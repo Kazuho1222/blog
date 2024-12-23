@@ -16,13 +16,13 @@ export default function Posts({ posts }: { posts: PostType[] | undefined }) {
           <Link href={`/blog/${slug}`}>
             <figure>
               <Image
-                src={eyecatch.url}
+                src={eyecatch!.url}
                 alt=''
                 layout='fill'
                 objectFit='cover'
                 sizes='(min-width:1152px) 576px,50vw'
                 placeholder='blur'
-                blurDataURL={eyecatch.blurDataURL}
+                blurDataURL={eyecatch!.blurDataURL}
               />
             </figure>
             <h2>{title}</h2>
