@@ -7,30 +7,38 @@ export interface MetaType {
 }
 
 export interface PostType {
+  id: string
   title: string
   slug: string
-  content: string
-  eyecatch: {
+  _content: string
+  eyecatch?: {
     url: string
     width: number
     height: number
     blurDataURL?: string
   }
   categories: {
-    category: string[]
-  }
-  publishDate: Date
+    id: string
+  }[]
+  publishDate: string
 }
 export interface FormDataType {
   title: string
   slug: string
-  eyecatch: {
-    url?: string
-    width?: number
-    height?: number
-    blurDataURL?: string
-  }
-  content: string
+  eyecatch:
+    | string
+    | {
+        url?: string
+        width?: number
+        height?: number
+        blurDataURL?: string
+      }
+  _content: string
   categories: string[]
   publishDate: string
+}
+
+export interface CategoryType {
+  slug: string
+  id: string
 }

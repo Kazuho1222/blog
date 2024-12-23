@@ -18,7 +18,7 @@ import { useForm } from 'react-hook-form'
 import { z } from "zod"
 import Container from "./container"
 import TiptapEditor from "./tiptapeditor"
-import type { FormDataType } from "@/types/types"
+import type { CategoryType, FormDataType, PostType } from "@/types/types"
 
 const pattern = /^[\u0021-\u007e]+$/;
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024
@@ -42,7 +42,7 @@ const FormSchema = z.object({
   }),
 })
 
-export default function EditBlogForm({ post, categories }: { post: any, categories: { slug: string, id: string }[] }) {
+export default function EditBlogForm({ post, categories }: { post: PostType, categories: CategoryType[] }) {
   const { toast } = useToast()
   const router = useRouter()
 
@@ -52,7 +52,7 @@ export default function EditBlogForm({ post, categories }: { post: any, categori
       title: post.title,
       slug: post.slug,
       _content: post._content,
-      eyecatch: post.eyecatch?.url || "",
+      eyecatch: post.eyecatch?.url,
       categories: post.categories.map((category: { id: string }) => category.id),
       publishDate: post.publishDate ? new Date(post.publishDate).toISOString() : "",
     },
@@ -104,12 +104,12 @@ export default function EditBlogForm({ post, categories }: { post: any, categori
   }
 
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: FormDataType) => {
     try {
       const fileInput = fileInputRef.current
       const file = fileInput?.files?.[0]
 
-      let imageUrl = formData.eyecatch
+      let imageUrl = typeof formData.eyecatch === "string" ? formData.eyecatch : formData.eyecatch?.url || ""
       if (file) {
         imageUrl = await uploadImage(file)
         const fileName = file.name
@@ -253,11 +253,11 @@ export default function EditBlogForm({ post, categories }: { post: any, categori
                       {previewImage && (
                         <div className="relative mt-4">
                           <Label className="flex mb-2">プレビュー</Label>
-                          <div className="relative inline-block group">
+                          <div className="relative inline-block group hover:opacity-80">
                             <img src={previewImage} alt="アイキャッチプレビュー" className="max-w-xs h-auto" />
                             <button
                               type="button"
-                              className="opacity-0 group-hover:opacity-100 absolute top-1 right-2 cursor-pointer transition-opacity duration-300 bg-slate-200 rounded-full" onClick={handleRemoveImage}>
+                              className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity duration-300 rounded-full" onClick={handleRemoveImage}>
                               <FontAwesomeIcon icon={faCircleXmark} size="2x" style={{ display: "hidden" }} />
                             </button>
                           </div>
