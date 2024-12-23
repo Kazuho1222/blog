@@ -19,6 +19,7 @@ import { z } from "zod"
 import Container from "./container"
 import TiptapEditor from "./tiptapeditor"
 import type { CategoryType, FormDataType, PostType } from "@/types/types"
+import Image from "next/image"
 
 const pattern = /^[\u0021-\u007e]+$/;
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024
@@ -254,7 +255,7 @@ export default function EditBlogForm({ post, categories }: { post: PostType, cat
                         <div className="relative mt-4">
                           <Label className="flex mb-2">プレビュー</Label>
                           <div className="relative inline-block group hover:opacity-80">
-                            <img src={previewImage} alt="アイキャッチプレビュー" className="max-w-xs h-auto" />
+                            <Image src={previewImage} alt="アイキャッチプレビュー" className="max-w-xs h-auto" width={500} height={500} />
                             <button
                               type="button"
                               className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity duration-300 rounded-full" onClick={handleRemoveImage}>
