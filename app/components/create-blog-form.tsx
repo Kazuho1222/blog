@@ -6,7 +6,6 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import InputDateTime from "@/components/ui/inputdatetime"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { faCircleXmark } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -18,6 +17,7 @@ import { z } from "zod"
 import Container from "./container"
 import TiptapEditor from "./tiptapeditor"
 import Image from "next/image"
+import { FormDataType } from "@/types/types"
 
 const pattern = /^[\u0021-\u007e]+$/;
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024
@@ -77,7 +77,7 @@ export default function CreateBlogForm({ categories }: { initialDate: string, ca
     return data.url
   }
 
-  const createBlog = async (formData: any, imageUrl: string) => {
+  const createBlog = async (formData: FormDataType, imageUrl: string) => {
     const response = await fetch('https://kazuho-blog.microcms.io/api/v1/blogs', {
       method: 'POST',
       headers: {
@@ -98,7 +98,7 @@ export default function CreateBlogForm({ categories }: { initialDate: string, ca
     return data
   }
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: FormDataType) => {
     try {
       const fileInput = fileInputRef.current
       const file = fileInput?.files?.[0]

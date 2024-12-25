@@ -6,7 +6,6 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input"
 import InputDateTime from "@/components/ui/inputdatetime"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { faCircleXmark } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -137,8 +136,9 @@ export default function EditBlogForm({ post, categories }: { post: PostType, cat
     }
   }
 
+  console.log(post.eyecatch?.url)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [previewImage, setPreviewImage] = useState<string | null>(post.eyecatch?.url || null)
+  const [previewImage, setPreviewImage] = useState<string | null>(post.eyecatch?.url || null);
   const [_content, _setContent] = useState(post._content)
 
   useEffect(() => {
@@ -255,7 +255,13 @@ export default function EditBlogForm({ post, categories }: { post: PostType, cat
                         <div className="relative mt-4">
                           <Label className="flex mb-2">プレビュー</Label>
                           <div className="relative inline-block group hover:opacity-80">
-                            <Image src={previewImage} alt="アイキャッチプレビュー" className="max-w-xs h-auto" width={500} height={500} />
+                            <Image
+                              src={previewImage}
+                              alt="アイキャッチプレビュー"
+                              className="max-w-xs h-auto"
+                              width={500}
+                              height={500}
+                            />
                             <button
                               type="button"
                               className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity duration-300 rounded-full" onClick={handleRemoveImage}>
