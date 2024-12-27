@@ -20,14 +20,12 @@ interface TiptapEditorProps {
 
 const TiptapEditor: React.FC<TiptapEditorProps> = ({ content, onChange }) => {
   const editor = useEditor({
-    extensions: [StarterKit, Underline, Document, Text, Paragraph, Blockquote.configure({ HTMLAttributes: { class: styles.blockquote } }), BulletList.configure({ HTMLAttributes: { class: styles.bulletList } }),
-      OrderedList.configure({ HTMLAttributes: { class: styles.orderedList } }), Link.configure({
-        openOnClick: false,
-        autolink: true,
-        defaultProtocol: 'https',
-        HTMLAttributes: { class: styles.link },
-      }),
-      CodeBlock.configure({ HTMLAttributes: { class: styles.codeBlock } })
+    extensions: [StarterKit, Underline, Link.configure({
+      openOnClick: false,
+      autolink: true,
+      defaultProtocol: 'https',
+      HTMLAttributes: { class: styles.link },
+    })
     ],
     content,
     immediatelyRender: false, // SSRの問題回避
