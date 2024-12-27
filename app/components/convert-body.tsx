@@ -1,8 +1,11 @@
-import parse, { Element } from 'html-react-parser'
-import Image from 'next/legacy/image'
+import parse, { Element } from 'html-react-parser';
+import Image from 'next/legacy/image';
 
 export default function ConvertBody({ contentHTML }: { contentHTML: string }) {
-  const contentReact = parse(contentHTML, {
+  // contentHTMLが文字列でない場合は空の文字列を使用
+  const safeContentHTML = typeof contentHTML === 'string' ? contentHTML : '';
+
+  const contentReact = parse(safeContentHTML, {
     replace: (node) => {
       if (node instanceof Element && node.name === 'img') {
         const { src, alt, width, height } = node.attribs

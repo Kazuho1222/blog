@@ -1,17 +1,9 @@
-import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import RichEditorToolbar from './rich-editor-toolbar'
-import Underline from '@tiptap/extension-underline'
-import BulletList from '@tiptap/extension-bullet-list'
-import ListItem from '@tiptap/extension-list-item'
-import OrderedList from '@tiptap/extension-ordered-list'
-import Document from '@tiptap/extension-document'
-import Text from '@tiptap/extension-text'
-import Paragraph from '@tiptap/extension-paragraph'
-import Blockquote from '@tiptap/extension-blockquote'
 import Link from '@tiptap/extension-link'
+import Underline from '@tiptap/extension-underline'
+import { EditorContent, useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
 import styles from '../../styles/tiptap-editor.module.css'
-import CodeBlock from '@tiptap/extension-code-block'
+import RichEditorToolbar from './rich-editor-toolbar'
 
 interface TiptapEditorProps {
   content: string
