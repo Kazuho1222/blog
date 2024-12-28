@@ -18,7 +18,7 @@ import { z } from "zod"
 import Container from "./container"
 import TiptapEditor from "./tiptapeditor"
 import type { CategoryType, FormDataType, PostType } from "@/types/types"
-import Image from "next/image"
+import Image from "next/legacy/image"
 
 const pattern = /^[\u0021-\u007e]+$/;
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024
@@ -136,7 +136,6 @@ export default function EditBlogForm({ post, categories }: { post: PostType, cat
     }
   }
 
-  console.log(post.eyecatch?.url)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(post.eyecatch?.url || null);
   const [_content, _setContent] = useState(post._content)
@@ -259,8 +258,8 @@ export default function EditBlogForm({ post, categories }: { post: PostType, cat
                               src={previewImage}
                               alt="アイキャッチプレビュー"
                               className="max-w-xs h-auto"
-                              width={500}
-                              height={500}
+                              width={post.eyecatch?.width || 500} // 元の幅を使用
+                              height={post.eyecatch?.height || 500} // 元の高さを使用
                             />
                             <button
                               type="button"

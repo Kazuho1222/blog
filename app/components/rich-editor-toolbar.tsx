@@ -1,6 +1,5 @@
 import { faBold, faCode, faHeading, faItalic, faLink, faList, faListOl, faQuoteRight, faRedo, faStrikethrough, faUnderline, faUndo } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import Link from '@tiptap/extension-link'
 import type { Editor } from "@tiptap/react"
 import { useCallback } from "react"
 
@@ -32,7 +31,7 @@ const RichEditorToolbar = ({ editor }: { editor: Editor }) => {
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         className={
-          !editor.isActive("heading", { level: [1, 2, 3] }) ? "opacity-20" : ""
+          !editor.isActive("heading", { level: 1 }) ? "opacity-20" : ""
         }
       >
         <FontAwesomeIcon icon={faHeading} />
@@ -46,7 +45,7 @@ const RichEditorToolbar = ({ editor }: { editor: Editor }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={!editor.isActive("Italic") ? "opacity-20" : ""}>
+        className={!editor.isActive("italic") ? "opacity-20" : ""}>
         <FontAwesomeIcon icon={faItalic} />
       </button>
       <button
