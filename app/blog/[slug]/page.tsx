@@ -12,7 +12,7 @@ import extractText from "@/app/lib/extract-text";
 import { getImageBuffer } from "@/app/lib/getImageBuffer";
 import { prevNextPost } from "@/app/lib/prev-next-post";
 import { Button } from "@/components/ui/button";
-import Image from "next/legacy/image";
+import Image from "next/image";
 import Link from "next/link";
 import { getPlaiceholder } from "plaiceholder";
 const { siteTitle, siteUrl } = siteMeta

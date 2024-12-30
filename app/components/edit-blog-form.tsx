@@ -18,7 +18,7 @@ import { z } from "zod"
 import Container from "./container"
 import TiptapEditor from "./tiptapeditor"
 import type { CategoryType, FormDataType, PostType } from "@/types/types"
-import Image from "next/legacy/image"
+import Image from "next/image"
 
 const pattern = /^[\u0021-\u007e]+$/;
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024

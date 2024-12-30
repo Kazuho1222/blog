@@ -1,5 +1,5 @@
 import parse, { Element } from 'html-react-parser';
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 
 export default function ConvertBody({ contentHTML }: { contentHTML: string }) {
   // contentHTMLが文字列でない場合は空の文字列を使用

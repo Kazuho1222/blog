@@ -1,4 +1,4 @@
-import Image from 'next/legacy/image'
+import Image from 'next/image'
 import styles from '../../styles/hero.module.css'
 // import cube from '../images/cube.jpg'
 

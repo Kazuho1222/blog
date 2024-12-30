@@ -2,9 +2,13 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    loader: 'imgix',
-    path: '',
-    domains: ['images.microcms-assets.io'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.microcms-assets.io',
+        pathname: '/assets/**',
+      },
+    ],
   },
   env: {
     MICROCMS_SERVICE_DOMAIN: process.env.MICROCMS_SERVICE_DOMAIN,
