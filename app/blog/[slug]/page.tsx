@@ -51,7 +51,7 @@ export default async function Post(props: { params: Promise<{ slug: string }> })
               key={eyecatch.url}
               src={eyecatch.url}
               alt=""
-              layout="responsive"
+              // layout="responsive"
               width={eyecatch.width}
               height={eyecatch.height}
               sizes="(min-width:1152px)1152px,100vw"

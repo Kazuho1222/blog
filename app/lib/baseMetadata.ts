@@ -19,11 +19,11 @@ export const baseMetadata = {
   alternates: {
     canonical: './',
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-  },
+  // viewport: {
+  //   width: 'device-width',
+  //   initialScale: 1,
+  //   maximumScale: 1,
+  // },
   title: {
     template: `%s | ${siteTitle}`,
     default: siteTitle,
@@ -34,6 +34,13 @@ export const baseMetadata = {
   //   apple: siteIcon,
   // },
 }
+
+// viewport設定を追加
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
 
 // openGraphに関する設定
 export const openGraphMetadata = {
