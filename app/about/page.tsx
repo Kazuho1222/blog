@@ -2,12 +2,13 @@ import Image from 'next/image'
 import Contact from '../components/contact'
 import Container from '../components/container'
 import Hero from '../components/hero'
-import Meta from '../components/meta'
 import PostBody from '../components/post-body'
 import { TwoColumn, TwoColumnMain, TwoColumnSidebar } from '../components/two-column'
 // import eyecatch from '../images/about.jpg'
 import Accordion from '../components/accordion'
-import { height } from '@fortawesome/free-brands-svg-icons/fa42Group'
+import { openGraphMetadata, twitterMetadata } from '../lib/baseMetadata'
+import { siteMeta } from '../lib/constants'
+const { siteTitle, siteUrl } = siteMeta
 
 const eyecatch = {
   src: 'https://images.microcms-assets.io/assets/93b42a5f4a114f00b170397593b04592/17d6566f7eb5485ba6c4ced763d06f8d/about.jpg',
@@ -19,13 +20,6 @@ const eyecatch = {
 export default function About() {
   return (
     <Container large={false}>
-      <Meta
-        pageTitle='アバウト'
-        pageDesc='About development activities'
-        pageImg={eyecatch.src}
-        pageImgW={eyecatch.width}
-        pageImgH={eyecatch.height}
-      />
       <Hero
         title='About'
         subtitle='About development activities'
@@ -85,4 +79,35 @@ export default function About() {
       </TwoColumn>
     </Container>
   )
+}
+
+// メタデータ
+const pageTitle = 'アバウト'
+const pageDesc = 'About development activities'
+const ogpTitle = `${pageTitle} | ${siteTitle}`
+const ogpUrl = new URL('/about', siteUrl).toString()
+
+export const metadata = {
+  title: pageTitle,
+  description: pageDesc,
+
+  openGraph: {
+    ...openGraphMetadata,
+    title: ogpTitle,
+    description: pageDesc,
+    url: ogpUrl,
+    images: [
+      {
+        url: eyecatch.src,
+        width: eyecatch.width,
+        height: eyecatch.height,
+      },
+    ],
+  },
+  twitter: {
+    ...twitterMetadata,
+    title: ogpTitle,
+    description: pageDesc,
+    images: [eyecatch.src],
+  },
 }

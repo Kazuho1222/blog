@@ -1,12 +1,14 @@
+import type { PostType } from '@/types/types';
 import { getPlaiceholder } from 'plaiceholder';
 import Container from '../components/container';
 import Hero from '../components/hero';
-import Meta from '../components/meta';
 import Posts from '../components/posts';
 import { getAllPosts } from '../lib/api';
-import { eyecatchLocal } from '../lib/constants';
+import { openGraphMetadata, twitterMetadata } from '../lib/baseMetadata';
+import { eyecatchLocal, siteMeta } from '../lib/constants';
 import { getImageBuffer } from '../lib/getImageBuffer';
-import type { PostType } from '@/types/types';
+
+const { siteTitle, siteUrl } = siteMeta
 
 export default async function Blog() {
   let posts: PostType[] = [];
@@ -37,7 +39,7 @@ export default async function Blog() {
 
   return (
     (<Container large={false}>
-      <Meta pageTitle='ブログ' pageDesc='ブログの記事一覧' />
+      {/* <Meta pageTitle='ブログ' pageDesc='ブログの記事一覧' /> */}
       <Hero title='Blog' subtitle='Recent Posts' imageOn={false} />
       {/* データが存在しない場合、エラーメッセージや空の状態を表示 */}
       {posts.length > 0 ? (
@@ -47,4 +49,27 @@ export default async function Blog() {
       )}
     </Container>)
   );
+}
+
+// メタデータ
+const pageTitle = 'ブログ'
+const pageDesc = 'ブログの記事一覧'
+const ogpTitle = `${pageTitle} | ${siteTitle}`
+const ogpUrl = new URL('/blog', siteUrl).toString()
+
+export const metadata = {
+  title: pageTitle,
+  description: pageDesc,
+
+  openGraph: {
+    ...openGraphMetadata,
+    title: ogpTitle,
+    description: pageDesc,
+    url: ogpUrl,
+  },
+  twitter: {
+    ...twitterMetadata,
+    title: ogpTitle,
+    description: pageDesc,
+  },
 }

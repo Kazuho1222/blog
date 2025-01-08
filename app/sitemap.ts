@@ -9,14 +9,16 @@ type Category = {
 }
 
 export default async function sitemap() {
+  // 各記事のURL
   const posts = await getAllSlugs()
   const postFields = posts.map((post: PostType) => {
     return {
       url: new URL(`/blog/${post.slug}`, siteUrl).toString(),
-      lastModifield: new Date(),
+      lastModified: new Date(),
     }
   })
 
+  // 各カテゴリーインデックスのURL
   const cats = await getAllCategories()
   const catFields = cats.map((cat: Category) => {
     return {
@@ -28,11 +30,11 @@ export default async function sitemap() {
   return [
     {
       url: new URL(siteUrl).toString(),
-      lastModifield: new Date(),
+      lastModified: new Date(),
     },
     {
       url: new URL('/about', siteUrl).toString(),
-      lastModifield: new Date(),
+      lastModified: new Date(),
     },
     ...postFields,
     ...catFields,

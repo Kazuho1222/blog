@@ -7,6 +7,7 @@ import PostCategories from "@/app/components/post-categories";
 import PostHeader from "@/app/components/post-header";
 import { TwoColumn, TwoColumnMain, TwoColumnSidebar } from "@/app/components/two-column";
 import { getAllSlugs, getPostBySlug } from "@/app/lib/api";
+import { openGraphMetadata, twitterMetadata } from "@/app/lib/baseMetadata";
 import { eyecatchLocal, siteMeta } from "@/app/lib/constants";
 import extractText from "@/app/lib/extract-text";
 import { getImageBuffer } from "@/app/lib/getImageBuffer";
@@ -96,3 +97,42 @@ export async function generateStaticParams() {
 }
 
 export const revalidate = 0
+
+// メタデータ
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
+  const slug = params.slug
+  const post = await getPostBySlug(slug);
+  const { title: pageTitle, publishDate: publish, content, categories } = post;
+
+  const pageDesc = extractText(content);
+  const eyecatch = post.eyecatch ?? eyecatchLocal;
+
+  const ogpTitle = `${pageTitle} | ${siteTitle}`;
+  const ogpUrl = new URL(`/blog/${slug}`, siteUrl).toString();
+
+  const metadata = {
+    title: pageTitle,
+    description: pageDesc,
+    openGraph: {
+      ...openGraphMetadata,
+      title: ogpTitle,
+      description: pageDesc,
+      url: ogpUrl,
+      images: [
+        {
+          url: eyecatch.url,
+          width: eyecatch.width,
+          height: eyecatch.height,
+        },
+      ],
+    },
+    twitter: {
+      ...twitterMetadata,
+      title: ogpTitle,
+      description: pageDesc,
+      images: [eyecatch.url],
+    },
+  };
+  return metadata;
+}

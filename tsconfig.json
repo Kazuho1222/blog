@@ -28,6 +28,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "scripts/migrateContent.js"
-  ],
+, "app/next-sitemap.config.js"  ],
   "exclude": ["node_modules"]
 }
