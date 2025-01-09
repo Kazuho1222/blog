@@ -18,11 +18,10 @@ export default function Posts({ posts }: { posts: PostType[] | undefined }) {
               <Image
                 src={eyecatch!.url}
                 alt=''
-                width={eyecatch?.width}
-                height={eyecatch?.height}
                 // layout='fill'
                 // objectFit='cover'
                 sizes='(min-width:1152px) 576px,50vw'
+                fill
                 placeholder='blur'
                 blurDataURL={eyecatch!.blurDataURL}
               />
