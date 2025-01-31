@@ -25,75 +25,77 @@ export default async function Post(props: { params: Promise<{ slug: string }> })
 
   if (!post) {
     return { notFound: true }
-  } else {
-    const { id, title, publishData: publish, _content, categories } = post
-    const eyecatch = post.eyecatch ?? eyecatchLocal
-    const imageBuffer = await getImageBuffer(eyecatch.url)
-    const { base64 } = await getPlaiceholder(imageBuffer)
-    eyecatch.blurDataURL = base64
-
-    const allSlugs = await getAllSlugs()
-    const [prevPost, nextPost] = prevNextPost(allSlugs, slug)
-
-    return (
-      <Container large={false}>
-        <article>
-          <div className="flex justify-between items-center">
-            <PostHeader title={title} subtitle='Blog Article' publish={publish} />
-            <div className="flex justify-end space-x-4">
-              <Link href={`/edit-blog/${post.slug}`} className="ml-40"><Button>Edit</Button></Link>
-              <BlogDeleteButton blogId={id} />
-            </div>
-          </div>
-
-          <figure>
-            <Image
-              key={eyecatch.url}
-              src={eyecatch.url}
-              alt=""
-              // layout="responsive"
-              width={eyecatch.width}
-              height={eyecatch.height}
-              sizes="(min-width:1152px)1152px,100vw"
-              priority
-              placeholder="blur"
-              blurDataURL={eyecatch.blurDataURL}
-            />
-          </figure>
-
-          <TwoColumn>
-            <TwoColumnMain>
-              <PostBody>
-                <ConvertBody contentHTML={_content} />
-              </PostBody>
-            </TwoColumnMain>
-            <TwoColumnSidebar>
-              <PostCategories categories={categories} />
-            </TwoColumnSidebar>
-          </TwoColumn>
-          <Pagination
-            prevText={prevPost.title}
-            prevUrl={`/blog/${prevPost.slug}`}
-            nextText={nextPost.title}
-            nextUrl={`/blog/${nextPost.slug}`}
-          />
-        </article>
-      </Container>
-    )
+  } const { id, title, publishDate: publish, _content, categories, eyecatch = post.eyecatch ?? eyecatchLocal } = post
+  // const eyecatch = post.eyecatch ?? eyecatchLocal
+  if (!eyecatch) {
+    return { notFound: true }
   }
+  const imageBuffer = await getImageBuffer(eyecatch.url)
+  const { base64 } = await getPlaiceholder(imageBuffer)
+  if (!post.eyecatch) {
+    return { notFound: true }
+  }
+  post.eyecatch.blurDataURL = base64
+  const allSlugs = await getAllSlugs();
+  if (!allSlugs) return { notFound: true };
+  const [prevPost, nextPost] = prevNextPost(allSlugs, slug);
+
+  return (
+    <Container large={false}>
+      <article>
+        <div className="flex justify-between items-center">
+          <PostHeader title={title} subtitle='Blog Article' publish={publish} />
+          <div className="flex justify-end space-x-4">
+            <Link href={`/edit-blog/${post.slug}`} className="ml-40"><Button>Edit</Button></Link>
+            <BlogDeleteButton blogId={id} />
+          </div>
+        </div>
+
+        <figure>
+          <Image
+            key={eyecatch.url}
+            src={eyecatch.url}
+            alt=""
+            // layout="responsive"
+            width={eyecatch.width}
+            height={eyecatch.height}
+            sizes="(min-width:1152px)1152px,100vw"
+            priority
+            placeholder="blur"
+            blurDataURL={post.eyecatch.blurDataURL}
+          />
+        </figure>
+
+        <TwoColumn>
+          <TwoColumnMain>
+            <PostBody>
+              <ConvertBody contentHTML={_content} />
+            </PostBody>
+          </TwoColumnMain>
+          <TwoColumnSidebar>
+            <PostCategories categories={categories} />
+          </TwoColumnSidebar>
+        </TwoColumn>
+        <Pagination
+          prevText={prevPost.title}
+          prevUrl={`/blog/${prevPost.slug}`}
+          nextText={nextPost.title}
+          nextUrl={`/blog/${nextPost.slug}`}
+        />
+      </article>
+    </Container>
+  )
 }
 
 export const dynamicParams = false
 export async function generateStaticParams() {
   const allSlugs = await getAllSlugs()
 
-  if (!allSlugs) {
-    return { notFound: true }
-  } else {
-    return allSlugs.map(({ slug }: { slug: string }) => {
-      return { slug: slug }
-    })
-  }
+  if (!allSlugs || allSlugs.length === 0) {
+    return []
+  } return allSlugs.map(({ slug }: { slug: string }) => {
+    return { slug: slug }
+  })
 }
 
 export const revalidate = 0
@@ -103,9 +105,12 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   const params = await props.params;
   const slug = params.slug
   const post = await getPostBySlug(slug);
-  const { title: pageTitle, publishDate: publish, content, categories } = post;
+  if (!post) {
+    return { notFound: true };
+  }
+  const { title: pageTitle, publishDate: publish, _content, categories } = post;
 
-  const pageDesc = extractText(content);
+  const pageDesc = extractText(_content);
   const eyecatch = post.eyecatch ?? eyecatchLocal;
 
   const ogpTitle = `${pageTitle} | ${siteTitle}`;

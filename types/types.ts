@@ -1,3 +1,5 @@
+import { number } from "zod"
+
 export interface MetaType {
   pageTitle: string
   pageDesc: string
@@ -19,6 +21,8 @@ export interface PostType {
   }
   categories: {
     id: string
+    name: string
+    slug: string
   }[]
   publishDate: string
 }
@@ -26,19 +30,20 @@ export interface FormDataType {
   title: string
   slug: string
   eyecatch:
-    | string
-    | {
-        url?: string
-        width?: number
-        height?: number
-        blurDataURL?: string
-      }
+  | string
+  | {
+    url?: string
+    width?: number
+    height?: number
+    blurDataURL?: string
+  }
   _content: string
   categories: string[]
   publishDate: string
 }
 
 export interface CategoryType {
-  slug: string
   id: string
+  name: string
+  slug: string
 }

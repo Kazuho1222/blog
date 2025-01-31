@@ -1,9 +1,11 @@
 import EditBlogForm from "@/app/components/edit-blog-form";
 import { getAllCategories, getPostBySlug } from "../../lib/api";
+import type { PostType } from "@/types/types";
+import type { JSX } from "react";
 
-export default async function EditBlogPage(props: { params: Promise<{ id: string }> }) {
+export default async function EditBlogPage(props: { params: Promise<{ id: string }> }): Promise<JSX.Element> {
   const params = await props.params;
-  const post = await getPostBySlug(params.id)
+  const post: PostType | undefined = await getPostBySlug(params.id)
   const categories = await getAllCategories()
 
   if (!post) {

@@ -3,7 +3,7 @@ declare global {
     gtag: (
       command: string,
       measurementId: string,
-      config?: { [key: string]: any }
+      config?: { [key: string]: unknown }
     ) => void
   }
 }

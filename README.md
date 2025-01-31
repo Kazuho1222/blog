@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CUBE（Blogサイト）
 
-## Getting Started
+[![Deploy](https://img.shields.io/badge/Deploy-Vercel-blue)](https://nextjs-microcms-blog-vert.vercel.app/)  
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-First, run the development server:
+## 概要
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+このプロジェクトは、以下の書籍を利用し、一部分を改修・開発し **さらにブログとしての追加機能を実装し** より利用者に使いやすくすることを目的として開発されました。  
+[作って学ぶ Next.js/React Webサイト構築](https://ebisu.com/next-react-website/)  
+未経験からプログラミングスキルを身につけるため、**React、Next.js、** を活用しています。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 主な機能
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **新規ブログ作成機能**: ナビゲーションバーに表示されている「Create-Blog」ボタンを押すと、新規ブログ作成画面に遷移し、必須項目入力後、「送信」ボタンを押すとブログが作成され、トップ画面に戻ります。
+- **ブログ編集機能**: 各ブログページ内にある「Edit」ボタンを押すと、現在の入力内容が項目に入った状態でブログ編集画面に遷移し、編集後、「更新」ボタンを押すとブログが更新され、トップ画面に戻ります。
+- **ブログ削除機能**: 各ブログページ内にある「Delete」ボタンを押すと、アラートが表示され、「はい」を押すと該当のブログが削除され、トップ画面に戻ります。「いいえ」を押すと元のブログ画面に戻ります。
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+---
 
-## Learn More
+## デモ
 
-To learn more about Next.js, take a look at the following resources:
+![デモGIFやスクリーンショット]()  
+[デプロイ先はこちら](https://nextjs-microcms-blog-vert.vercel.app/)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## 使用技術
 
-## Deploy on Vercel
+- **フロントエンド**: React, Next.js, TypeScript
+- **開発環境の準備**: Node.js, git
+- **ヘッドレスCMS**: microCMS
+- **デザイン**: CSS Modules, styled-jsx, TailwindCSS
+- **その他**: Vercel（デプロイ）, Cusor（エディター）
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## セットアップ方法
+
+1. リポジトリをクローンします:
+   ```bash
+   git clone https://github.com/Kazuho1222/blog.git
+   ```

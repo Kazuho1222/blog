@@ -11,6 +11,10 @@ import { getImageBuffer } from "./lib/getImageBuffer"
 export default async function Home() {
   const posts = await getAllPosts(4)
 
+  if (!posts) {
+    return <div>投稿がありません。</div>
+  }
+
   for (const post of posts) {
     if (!post.eyecatch) {
       post.eyecatch = { ...eyecatchLocal }

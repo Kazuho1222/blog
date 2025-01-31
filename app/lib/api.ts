@@ -1,3 +1,4 @@
+import type { CategoryType, PostType } from '@/types/types'
 import { createClient } from 'microcms-js-sdk'
 
 if (!process.env.MICROCMS_SERVICE_DOMAIN || !process.env.MICROCMS_API_KEY) {
@@ -9,7 +10,7 @@ export const client = createClient({
   apiKey: process.env.MICROCMS_API_KEY,
 })
 
-export async function getPostBySlug(slug: string) {
+export async function getPostBySlug(slug: string): Promise<PostType | undefined> {
   try {
     const post = await client.get({
       endpoint: 'blogs',
@@ -22,7 +23,7 @@ export async function getPostBySlug(slug: string) {
   }
 }
 
-export async function migrateContentToNewField() {
+export async function migrateContentToNewField(): Promise<void> {
   try {
     const posts = await client.get({ endpoint: 'blogs' })
 
@@ -42,7 +43,7 @@ export async function migrateContentToNewField() {
   }
 }
 
-export async function getAllSlugs(limit = 100) {
+export async function getAllSlugs(limit = 100): Promise<PostType[] | undefined> {
   try {
     const slugs = await client.get({
       endpoint: 'blogs',
@@ -55,7 +56,7 @@ export async function getAllSlugs(limit = 100) {
   }
 }
 
-export async function getAllPosts(limit = 100) {
+export async function getAllPosts(limit = 100): Promise<PostType[] | undefined> {
   try {
     const posts = await client.get({
       endpoint: 'blogs',
@@ -72,7 +73,7 @@ export async function getAllPosts(limit = 100) {
   }
 }
 
-export async function getAllCategories(limit = 100) {
+export async function getAllCategories(limit = 100): Promise<CategoryType[] | undefined> {
   try {
     const categories = await client.get({
       endpoint: 'categories',
@@ -88,7 +89,7 @@ export async function getAllCategories(limit = 100) {
   }
 }
 
-export async function getAllPostsByCategory(catID: string, limit = 100) {
+export async function getAllPostsByCategory(catID: string, limit = 100): Promise<PostType[] | undefined> {
   try {
     const posts = await client.get({
       endpoint: 'blogs',

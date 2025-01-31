@@ -1,4 +1,4 @@
-import { PostType } from '@/types/types'
+import type { PostType } from '@/types/types'
 import { getAllCategories, getAllSlugs } from './lib/api'
 import { siteMeta } from './lib/constants'
 const { siteUrl } = siteMeta
@@ -11,6 +11,7 @@ type Category = {
 export default async function sitemap() {
   // 各記事のURL
   const posts = await getAllSlugs()
+  if (!posts) return []
   const postFields = posts.map((post: PostType) => {
     return {
       url: new URL(`/blog/${post.slug}`, siteUrl).toString(),
@@ -20,6 +21,7 @@ export default async function sitemap() {
 
   // 各カテゴリーインデックスのURL
   const cats = await getAllCategories()
+  if (!cats) return []
   const catFields = cats.map((cat: Category) => {
     return {
       url: new URL(`/blog/category/${cat.slug}`, siteUrl).toString(),

@@ -9,9 +9,8 @@ export async function POST(request: Request) {
       ...rest,
       _content: content,
     }
-
     const apiKey = process.env.MICROCMS_API_KEY
-    const endpoint = `https://kazuho-blog.microcms.io/api/v1/blogs`
+    const endpoint = 'https://kazuho-blog.microcms.io/api/v1/blogs'
 
     const res = await fetch(endpoint, {
       method: 'POST',

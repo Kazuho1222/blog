@@ -15,7 +15,7 @@ export default async function Blog() {
 
   try {
     // データ取得に成功した場合
-    posts = await getAllPosts();
+    posts = await getAllPosts() || [];
   } catch (error) {
     console.error('Error fetching posts:', error);
     // データが取得できなかった場合の代替処理
@@ -33,7 +33,9 @@ export default async function Blog() {
       post.eyecatch.blurDataURL = base64;
     } catch (error) {
       console.error('Error processing eyecatch for post:', post.slug, error);
-      post.eyecatch!.blurDataURL = ''; // 画像処理に失敗した場合の代替値
+      if (post.eyecatch) {
+        post.eyecatch.blurDataURL = ''; // 画像処理に失敗した場合の代替値
+      }
     }
   }
 
