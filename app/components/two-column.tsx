@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import styles from '../../styles/two-column.module.css'
 
 export function TwoColumn({ children }: { children: ReactNode }) {

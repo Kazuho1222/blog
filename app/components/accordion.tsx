@@ -2,7 +2,8 @@
 
 import { faCircleChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useRef, useState } from 'react'
+import type React from 'react'
+import { useRef, useState } from 'react'
 import styles from '../../styles/accordion.module.css'
 
 interface AccordionProps {
@@ -22,7 +23,7 @@ export default function Accordion({ heading, children }: AccordionProps) {
   return (
     <div className={textIsOpen ? styles.open : styles.close}>
       <h3 className={styles.heading}>
-        <button onClick={toggleText}>
+        <button type="button" onClick={toggleText}>
           {heading}
           <FontAwesomeIcon icon={faCircleChevronDown} className={styles.icon} />
         </button>

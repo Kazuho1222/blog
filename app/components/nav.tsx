@@ -30,8 +30,8 @@ export default function Nav() {
         `}</style>
       )}
 
-      <button className={styles.btn} onClick={toggleNav}>
-        <span className={styles.bar}></span>
+      <button type="button" className={styles.btn} onClick={toggleNav}>
+        <span className={styles.bar} />
         <span className="sr-only">MENU</span>
       </button>
       <ul className={styles.list}>

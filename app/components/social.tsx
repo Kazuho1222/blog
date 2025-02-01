@@ -1,6 +1,6 @@
 import { faFacebookF, faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import styles from '../../styles/social.module.css';
 
 interface CustomProperties extends CSSProperties {

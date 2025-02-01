@@ -16,8 +16,8 @@ export default function ConvertBody({ contentHTML }: { contentHTML: string }) {
             <Image
               // layout='responsive'
               src={src}
-              width={parseInt(width, 10)}
-              height={parseInt(height, 10)}
+              width={Number.parseInt(width, 10)}
+              height={Number.parseInt(height, 10)}
               alt={alt}
               sizes='(min-width:768px)768px,100vw'
               style={{

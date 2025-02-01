@@ -60,6 +60,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@types/gtag.js": "^0.0.20",
     "@types/html-to-text": "^9.0.4",
     "@types/node": "^22",
     "@types/react": "npm:types-react@^19.0.0",

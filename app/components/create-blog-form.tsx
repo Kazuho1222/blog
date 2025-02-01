@@ -11,13 +11,14 @@ import { faCircleXmark } from "@fortawesome/free-regular-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
-import React, { useRef, useState } from "react"
+import type React from "react"
+import { useRef, useState } from "react"
 import { useForm } from 'react-hook-form'
 import { z } from "zod"
 import Container from "./container"
 import TiptapEditor from "./tiptapeditor"
 import Image from "next/image"
-import { FormDataType } from "@/types/types"
+import type { FormDataType } from "@/types/types"
 
 const pattern = /^[\u0021-\u007e]+$/;
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024

@@ -8,7 +8,7 @@ const { siteTitle, siteDesc, siteUrl, siteLocale, siteType, siteIcon } = siteMet
 // 汎用OGP画像
 import siteImg from '../images/ogp.jpg'
 import Head from 'next/head'
-import { MetaType } from '@/types/types'
+import type { MetaType } from '@/types/types'
 
 export default function Meta({ pageTitle, pageDesc, pageImg, pageImgW, pageImgH }: MetaType) {
 

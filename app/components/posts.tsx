@@ -2,7 +2,7 @@ import React from 'react'
 import styles from '../../styles/posts.module.css'
 import Link from 'next/link';
 import Image from 'next/image'
-import { PostType } from '@/types/types';
+import type { PostType } from '@/types/types';
 
 export default function Posts({ posts }: { posts: PostType[] | undefined }) {
   if (!posts) {

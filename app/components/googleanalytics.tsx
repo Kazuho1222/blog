@@ -10,6 +10,9 @@ function GoogleAnalytics() {
   const searchParams = useSearchParams()
 
   useEffect(() => {
+    if (!gtag.IS_GATAG) {
+      return
+    }
     const url = pathname + searchParams.toString()
     gtag.pageview(url)
   }, [pathname, searchParams])
@@ -18,21 +21,21 @@ function GoogleAnalytics() {
     <>
       <Script
         strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_MEASUREMENT_ID}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TAG_ID}`}
       />
       <Script
         id="gtag-init"
         strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
+      >
+        {`
         window.dataLayer=window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js',new Data());
-
-        gtag('config','${gtag.GA_MEASUREMENT_ID}');
-      `,
-        }}
-      />
+        gtag('config','${gtag.GA_TAG_ID}',{
+        page_path:window.location.pathname,
+        });
+      `}
+      </Script>
     </>
   )
 }
