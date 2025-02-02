@@ -10,16 +10,19 @@ export const client = createClient({
   apiKey: process.env.MICROCMS_API_KEY,
 })
 
-export async function getPostBySlug(slug: string): Promise<PostType | undefined> {
+export async function getPostBySlug(slug: string): Promise<PostType> {
   try {
     const post = await client.get({
       endpoint: 'blogs',
       queries: { filters: `slug[equals]${slug}` },
     })
+    if (!post.contents.length) {
+      throw new Error('Post not found')
+    }
     return post.contents[0]
   } catch (error) {
-    console.log('~~ getPostBuSlug ~~')
-    console.log(error)
+    console.error('Error fetching post:', error);
+    throw error
   }
 }
 

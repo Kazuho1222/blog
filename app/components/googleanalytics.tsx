@@ -30,7 +30,7 @@ function GoogleAnalytics() {
         {`
         window.dataLayer=window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
-        gtag('js',new Data());
+        gtag('js',new Date());
         gtag('config','${gtag.GA_TAG_ID}',{
         page_path:window.location.pathname,
         });

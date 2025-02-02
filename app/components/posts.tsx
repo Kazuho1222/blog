@@ -15,16 +15,20 @@ export default function Posts({ posts }: { posts: PostType[] | undefined }) {
         <article className={styles.post} key={slug}>
           <Link href={`/blog/${slug}`}>
             <figure>
-              <Image
-                src={eyecatch!.url}
-                alt=''
-                // layout='fill'
-                // objectFit='cover'
-                sizes='(min-width:1152px) 576px,50vw'
-                fill
-                placeholder='blur'
-                blurDataURL={eyecatch!.blurDataURL}
-              />
+              {eyecatch ? (
+                <Image
+                  src={eyecatch.url}
+                  alt=''
+                  // layout='fill'
+                  // objectFit='cover'
+                  sizes='(min-width:1152px) 576px,50vw'
+                  fill
+                  placeholder='blur'
+                  blurDataURL={eyecatch.blurDataURL}
+                />
+              ) : (
+                <div>No image available</div>
+              )}
             </figure>
             <h2>{title}</h2>
           </Link>

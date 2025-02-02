@@ -19,7 +19,8 @@ export default async function Blog() {
   } catch (error) {
     console.error('Error fetching posts:', error);
     // データが取得できなかった場合の代替処理
-    posts = []; // もしくは、fallback用のダミーデータをここで定義
+    return <div>投稿の取得に失敗しました。後でもう一度お試しください。</div>
+    // posts = []; // もしくは、fallback用のダミーデータをここで定義
   }
 
   // 各ポストに対して画像処理
