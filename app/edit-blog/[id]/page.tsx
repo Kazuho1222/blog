@@ -5,8 +5,8 @@ import type { JSX } from "react";
 
 export default async function EditBlogPage(props: { params: Promise<{ id: string }> }): Promise<JSX.Element> {
   const params = await props.params;
-  const post: PostType | undefined = await getPostBySlug(params.id)
-  const categories = await getAllCategories()
+  const post = await getPostBySlug(params.id);
+  const categories = await getAllCategories();
 
   if (!post) {
     return <div>ブログ記事が見つかりません。</div>
