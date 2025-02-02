@@ -1,6 +1,5 @@
 import EditBlogForm from "@/app/components/edit-blog-form";
 import { getAllCategories, getPostBySlug } from "../../lib/api";
-import type { PostType } from "@/types/types";
 import type { JSX } from "react";
 
 export default async function EditBlogPage(props: { params: Promise<{ id: string }> }): Promise<JSX.Element> {

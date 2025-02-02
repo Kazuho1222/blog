@@ -25,16 +25,14 @@ export default async function Post(props: { params: Promise<{ slug: string }> })
 
   if (!post) {
     return { notFound: true }
-  } const { id, title, publishDate: publish, _content, categories } = post
+  }
+  const { id, title, publishDate: publish, _content, categories } = post
   const eyecatch = post.eyecatch ?? eyecatchLocal
-  if (!eyecatch) {
-    return { notFound: true }
+  if (!post.eyecatch) {
+    post.eyecatch = { ...eyecatchLocal };
   }
   const imageBuffer = await getImageBuffer(eyecatch.url)
   const { base64 } = await getPlaiceholder(imageBuffer)
-  if (!post.eyecatch) {
-    return { notFound: true }
-  }
   post.eyecatch.blurDataURL = base64
   const allSlugs = await getAllSlugs();
   if (!allSlugs) return { notFound: true };
