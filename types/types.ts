@@ -13,7 +13,7 @@ export interface PostType {
   title: string
   slug: string
   _content: string
-  eyecatch?: {
+  eyecatch: {
     url: string
     width: number
     height: number
@@ -29,14 +29,12 @@ export interface PostType {
 export interface FormDataType {
   title: string
   slug: string
-  eyecatch:
-  | string
-  | {
-    url?: string
-    width?: number
-    height?: number
+  eyecatch: {
+    url: string
+    width: number
+    height: number
     blurDataURL?: string
-  }
+  } | string
   _content: string
   categories: string[]
   publishDate: string

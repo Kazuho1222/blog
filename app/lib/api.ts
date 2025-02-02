@@ -10,14 +10,14 @@ export const client = createClient({
   apiKey: process.env.MICROCMS_API_KEY,
 })
 
-export async function getPostBySlug(slug: string): Promise<PostType> {
+export async function getPostBySlug(slug: string): Promise<PostType | null> {
   try {
     const post = await client.get({
       endpoint: 'blogs',
       queries: { filters: `slug[equals]${slug}` },
     })
     if (!post.contents.length) {
-      throw new Error('Post not found')
+      return null
     }
     return post.contents[0]
   } catch (error) {
@@ -46,20 +46,23 @@ export async function migrateContentToNewField(): Promise<void> {
   }
 }
 
-export async function getAllSlugs(limit = 100): Promise<PostType[] | undefined> {
+export async function getAllSlugs(limit = 100): Promise<PostType[]> {
   try {
     const slugs = await client.get({
       endpoint: 'blogs',
       queries: { fields: 'title,slug', orders: '-publishDate', limit: limit },
     })
+    if (!slugs) {
+      throw new Error('AllSlugs not found')
+    }
     return slugs.contents
   } catch (error) {
-    console.log('~~ getAllSlugs ~~')
-    console.log(error)
+    console.error('Error fetching AllSlugs:', error);
+    throw error
   }
 }
 
-export async function getAllPosts(limit = 100): Promise<PostType[] | undefined> {
+export async function getAllPosts(limit = 100): Promise<PostType[]> {
   try {
     const posts = await client.get({
       endpoint: 'blogs',
@@ -69,14 +72,17 @@ export async function getAllPosts(limit = 100): Promise<PostType[] | undefined> 
         limit: limit,
       },
     })
+    if (!posts) {
+      throw new Error('AllPosts not found')
+    }
     return posts.contents
   } catch (error) {
-    console.log('~~ getAllPosts ~~')
-    console.log(error)
+    console.error('Error fetching AllPosts:', error);
+    throw error
   }
 }
 
-export async function getAllCategories(limit = 100): Promise<CategoryType[] | undefined> {
+export async function getAllCategories(limit = 100): Promise<CategoryType[]> {
   try {
     const categories = await client.get({
       endpoint: 'categories',
@@ -85,14 +91,17 @@ export async function getAllCategories(limit = 100): Promise<CategoryType[] | un
         limit: limit,
       },
     })
+    if (!categories) {
+      throw new Error('AllCategories not found')
+    }
     return categories.contents
   } catch (error) {
-    console.log('~~ getAllCategories ~~')
-    console.log(error)
+    console.error('Error fetching AllCategories:', error);
+    throw error
   }
 }
 
-export async function getAllPostsByCategory(catID: string, limit = 100): Promise<PostType[] | undefined> {
+export async function getAllPostsByCategory(catID: string, limit = 100): Promise<PostType[]> {
   try {
     const posts = await client.get({
       endpoint: 'blogs',
@@ -103,9 +112,12 @@ export async function getAllPostsByCategory(catID: string, limit = 100): Promise
         limit: limit,
       },
     })
+    if (!posts) {
+      throw new Error('AllPostsByCategory not found')
+    }
     return posts.contents
   } catch (error) {
-    console.log('~~ getAllPostsByCategory ~~')
-    console.log(error)
+    console.error('Error fetching AllPostsbyCategory:', error);
+    throw error
   }
 }

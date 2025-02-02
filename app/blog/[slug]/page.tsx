@@ -25,8 +25,8 @@ export default async function Post(props: { params: Promise<{ slug: string }> })
 
   if (!post) {
     return { notFound: true }
-  } const { id, title, publishDate: publish, _content, categories, eyecatch = post.eyecatch ?? eyecatchLocal } = post
-  // const eyecatch = post.eyecatch ?? eyecatchLocal
+  } const { id, title, publishDate: publish, _content, categories } = post
+  const eyecatch = post.eyecatch ?? eyecatchLocal
   if (!eyecatch) {
     return { notFound: true }
   }
