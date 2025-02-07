@@ -11,7 +11,8 @@
 .heading button {
   all: unset;
   outline: revert;
-  -webkit-tap-highlight-color: trasparent;
+  /* 協調をなくす */
+  -webkit-tap-highlight-color: transparent;
   cursor: pointer;
   box-sizing: border-box;
   width: 100%;
