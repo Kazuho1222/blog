@@ -1,82 +1,148 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-:root {
-  /* カラー（色） */
-  --white: #ffffff;
-  --gray-10: #eeeeee;
-  --gray-25: #aaaaaa;
-  --gray-50: #707070;
-  --gray-75: #444444;
-  --black: #222222;
-  --accent: #0d87e0;
+@custom-variant dark (&:is(.dark *));
 
-  /* タイポグラフィ（フォント） */
-  --body: clamp(1rem, 0.95rem * 0.2vw, 1.125rem);
-  --display: clamp(4.5rem, 1.83rem + 11.34vw, 10rem);
-  --heading1: clamp(2rem, 1.3rem + 3vw, 4rem);
-  --heading2: calc(var(--body) * 1.5);
-  --heading3: calc(var(--body) * 1.2);
-  --small-heading2: clamp(0.875rem, 4vw - 1rem, 1.6875rem);
-  --small-heading3: calc(var(--small-heading2) * 0.86);
+@theme {
+  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --background-image-gradient-conic: conic-gradient(
+    from 180deg at 50% 50%,
+    var(--tw-gradient-stops)
+  );
 
-  /* スペース（余白・間隔） */
-  --space-xs: clamp(1.25rem, 1rem + 0.98vw, 1.875rem);
-  --space-sm: calc(var(--space-xs) * 1.5);
-  --space-md: calc(var(--space-xs) * 2);
-  --space-lg: calc(var(--space-xs) * 3);
-  --space-xl: calc(var(--space-xs) * 4);
-  --space-jump: clamp(1.25rem, 0.35rem + 3.8vw, 3.75rem);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
 }
 
-/* 基本設定 */
-body {
-  color: var(--black);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial,
-    sans-serif;
-  font-size: var(--body);
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
 }
 
-h1 {
-  font-size: var(--heading1);
-}
+@layer utilities {
+  :root {
+    /* カラー（色） */
+    --white: #ffffff;
+    --gray-10: #eeeeee;
+    --gray-25: #aaaaaa;
+    --gray-50: #707070;
+    --gray-75: #444444;
+    --black: #222222;
+    --accent: #0d87e0;
 
-h2 {
-  font-size: var(--heading2);
-}
+    /* タイポグラフィ（フォント） */
+    --body: clamp(1rem, 0.95rem * 0.2vw, 1.125rem);
+    --display: clamp(4.5rem, 1.83rem + 11.34vw, 10rem);
+    --heading1: clamp(2rem, 1.3rem + 3vw, 4rem);
+    --heading2: calc(var(--body) * 1.5);
+    --heading3: calc(var(--body) * 1.2);
+    --small-heading2: clamp(0.875rem, 4vw - 1rem, 1.6875rem);
+    --small-heading3: calc(var(--small-heading2) * 0.86);
 
-h3 {
-  font-size: var(--heading3);
-}
+    /* スペース（余白・間隔） */
+    --space-xs: clamp(1.25rem, 1rem + 0.98vw, 1.875rem);
+    --space-sm: calc(var(--space-xs) * 1.5);
+    --space-md: calc(var(--space-xs) * 2);
+    --space-lg: calc(var(--space-xs) * 3);
+    --space-xl: calc(var(--space-xs) * 4);
+    --space-jump: clamp(1.25rem, 0.35rem + 3.8vw, 3.75rem);
+  }
 
-/* next/image */
-span > img {
-  transition: 0.2s;
-}
+  /* 基本設定 */
+  body {
+    color: var(--black);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica,
+      Arial, sans-serif;
+    font-size: var(--body);
+  }
 
-/* リセット */
-body,
-h1,
-h2,
-h3,
-p,
-figure,
-ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
+  h1 {
+    font-size: var(--heading1);
+  }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+  h2 {
+    font-size: var(--heading2);
+  }
 
-a {
-  color: inherit;
-  text-decoreation: none;
+  h3 {
+    font-size: var(--heading3);
+  }
+
+  /* next/image */
+  span > img {
+    transition: 0.2s;
+  }
+
+  /* リセット */
+  body,
+  h1,
+  h2,
+  h3,
+  p,
+  figure,
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  a {
+    color: inherit;
+    text-decoreation: none;
+  }
 }
 
 @layer base {
