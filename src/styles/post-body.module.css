@@ -1,0 +1,62 @@
+.stack > * + * {
+	margin-top: var(--stack-space, 1.5em);
+}
+
+.stack h2,
+.stack h3 {
+	--stack-space: 2em;
+}
+
+.stack h2 + *,
+.stack h3 + * {
+	--stack-space: 0.8em;
+}
+
+.stack p {
+	line-height: 1.8;
+}
+
+.stack ul {
+	padding: revert;
+	list-style: revert;
+}
+
+.stack ol {
+	list-style-type: decimal;
+	padding-left: 1.5rem;
+}
+
+/* Link styles */
+.stack a {
+	color: #3366ff;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.stack a:hover {
+	color: #3399ff;
+}
+
+.stack blockquote {
+	font-style: italic;
+	color: #666;
+	border-left: 4px solid #ddd;
+	padding-left: 1em;
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.stack code {
+	background: none;
+	color: inherit;
+	font-size: 0.8rem;
+	padding: 0;
+}
+
+.stack pre {
+	background: #1f2937;
+	border-radius: 0.5rem;
+	color: #fff;
+	font-family: "JetBrainsMono", monospace;
+	padding: 0.75rem 1rem;
+}

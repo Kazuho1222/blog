@@ -1,0 +1,61 @@
+'use client'
+
+import { Button } from '@/src/components/ui/button'
+import Link from 'next/link'
+import { useState } from 'react'
+import styles from '../styles/nav.module.css'
+
+export default function Nav() {
+	const [navIsOpen, setNavIsOpen] = useState(false)
+
+	const toggleNav = () => {
+		setNavIsOpen((prev) => !prev)
+	}
+
+	const closeNav = () => {
+		setNavIsOpen(false)
+	}
+
+	return (
+		<nav className={navIsOpen ? styles.open : styles.close}>
+			{navIsOpen && (
+				<style jsx global>{`
+        @media (max-width: 767px){
+          body{
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+          }
+        }
+        `}</style>
+			)}
+
+			<button type="button" className={styles.btn} onClick={toggleNav}>
+				<span className={styles.bar} />
+				<span className="sr-only">MENU</span>
+			</button>
+			<ul className={styles.list}>
+				<li>
+					<Link href="/" onClick={closeNav}>
+						Home
+					</Link>
+				</li>
+				<li>
+					<Link href="/about" onClick={closeNav}>
+						About
+					</Link>
+				</li>
+				<li>
+					<Link href="/blog" onClick={closeNav}>
+						Blog
+					</Link>
+				</li>
+				<li>
+					<Link href="/create-blog" onClick={closeNav}>
+						<Button className="hover:bg-red-500">Create-Blog</Button>
+					</Link>
+				</li>
+			</ul>
+		</nav>
+	)
+}
