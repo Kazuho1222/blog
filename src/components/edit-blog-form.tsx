@@ -160,7 +160,7 @@ export default function EditBlogForm({
 		}
 	}
 
-	const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+	const [_selectedDate, setSelectedDate] = useState<Date | null>(null)
 	const [previewImage, setPreviewImage] = useState<string | null>(
 		post.eyecatch?.url || null,
 	)

@@ -1,14 +1,7 @@
 // サイトに関する情報
 import { siteMeta } from './constants'
-const {
-	siteTitle,
-	siteDesc,
-	siteLang,
-	siteUrl,
-	siteLocale,
-	siteType,
-	siteIcon,
-} = siteMeta
+const { siteTitle, siteDesc, siteUrl, siteLocale, siteType, siteIcon } =
+	siteMeta
 
 // 汎用OGP画像
 import siteImg from '../images/ogp.jpg'
@@ -20,19 +13,19 @@ export const baseMetadata = {
 		canonical: './',
 	},
 	// viewport: {
-	//   width: 'device-width',
-	//   initialScale: 1,
-	//   maximumScale: 1,
+	// 	width: 'device-width',
+	// 	initialScale: 1,
+	// 	maximumScale: 1,
 	// },
 	title: {
 		template: `%s | ${siteTitle}`,
 		default: siteTitle,
 	},
 	description: siteDesc,
-	// icons: {
-	//   icon: siteIcon,
-	//   apple: siteIcon,
-	// },
+	icons: {
+		icon: siteIcon,
+		apple: siteIcon,
+	},
 }
 
 // viewport設定を追加

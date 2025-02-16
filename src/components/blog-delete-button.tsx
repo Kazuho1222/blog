@@ -37,7 +37,7 @@ const BlogDeleteButton = ({ blogId }: { blogId: string }) => {
 			toast({
 				title: '投稿を削除しました！',
 			})
-		} catch (error) {
+		} catch (_error) {
 			console.error('サーバーエラーが発生しました')
 		}
 	}

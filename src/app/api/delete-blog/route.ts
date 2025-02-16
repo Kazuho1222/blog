@@ -32,7 +32,7 @@ export async function DELETE(req: Request) {
 			{ message: 'ブログが正常に削除されました' },
 			{ status: 200 },
 		)
-	} catch (error) {
+	} catch (_error) {
 		return NextResponse.json(
 			{ error: 'サーバーエラーが発生しました' },
 			{ status: 500 },

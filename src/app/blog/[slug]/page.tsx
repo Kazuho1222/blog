@@ -117,7 +117,7 @@ export async function generateMetadata(props: {
 	if (!post) {
 		return { notFound: true }
 	}
-	const { title: pageTitle, publishDate: publish, _content, categories } = post
+	const { title: pageTitle, _content } = post
 
 	const pageDesc = extractText(_content)
 	const eyecatch = post.eyecatch ?? eyecatchLocal
