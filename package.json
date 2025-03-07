@@ -72,7 +72,7 @@
 		"@types/react-dom": "npm:types-react-dom@^19.0.0",
 		"eslint": "^9",
 		"eslint-config-next": "^15.2.1",
-		"eslint-config-prettier": "^10.0.2",
+		"eslint-config-prettier": "^10.1.1",
 		"postcss": "^8",
 		"typescript": "^5"
 	}
