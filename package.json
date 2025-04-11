@@ -54,7 +54,7 @@
 		"plaiceholder": "^3.0.0",
 		"react": "^19.1.0",
 		"react-datepicker": "^8.3.0",
-		"react-day-picker": "^9.6.5",
+		"react-day-picker": "^9.6.6",
 		"react-dom": "^19.1.0",
 		"react-hook-form": "^7.55.0",
 		"sharp": "^0.34.1",
