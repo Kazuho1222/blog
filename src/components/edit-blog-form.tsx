@@ -47,7 +47,7 @@ const FormSchema = z.object({
 	_content: z.string().min(1, {
 		message: '必須項目です',
 	}),
-	eyecatch: z.string().default(''),
+	eyecatch: z.string(),
 	categories: z.array(z.string()).min(1, {
 		message: 'カテゴリを1つ以上選択してください',
 	}),
