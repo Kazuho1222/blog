@@ -45,7 +45,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "dotenv": "^16.5.0",
-    "html-react-parser": "^5.2.3",
+    "html-react-parser": "^5.2.4",
     "html-to-text": "^9.0.5",
     "lucide-react": "^0.508.0",
     "microcms-js-sdk": "^3.2.0",
