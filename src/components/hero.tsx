@@ -1,5 +1,4 @@
-import Image from 'next/image'
-import styles from '../styles/hero.module.css'
+import Image from 'next/image';
 // import cube from '../images/cube.jpg'
 
 const cube = {
@@ -15,20 +14,26 @@ export default function Hero({
 	imageOn = false,
 }: { title: string; subtitle: string; imageOn: boolean }) {
 	return (
-		<div className={styles.flexContainer}>
-			<div className={styles.text}>
-				<h1 className={styles.title}>{title}</h1>
-				<p className={styles.subtitle}>{subtitle}</p>
+		<div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+			<div className="flex-1 text-center md:text-left pt-8 pb-10 md:pt-12 md:pb-14">
+				<h1 className="text-4xl md:text-6xl lg:text-8xl font-black tracking-wider leading-tight mb-4 text-gray-900">
+					{title}
+				</h1>
+				<p className="text-lg md:text-xl lg:text-2xl leading-relaxed text-gray-600">
+					{subtitle}
+				</p>
 			</div>
 			{imageOn && (
-				<figure className={styles.image}>
+				<figure className="w-full max-w-sm md:w-2/5 md:max-w-md flex-shrink-0">
 					<Image
 						src={cube}
-						alt=""
-						// layout="responsive"
-						sizes="(min-width:1152px)576px,(min-width:768px)50vw,100vw"
+						alt="Hero image"
+						width={500}
+						height={400}
+						sizes="(min-width: 768px) 45vw, 300px"
 						priority
 						placeholder="blur"
+						className="w-full h-auto rounded-lg"
 					/>
 				</figure>
 			)}
