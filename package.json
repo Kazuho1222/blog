@@ -38,7 +38,7 @@
     "@tiptap/extension-paragraph": "^2.26.0",
     "@tiptap/extension-text": "^2.24.0",
     "@tiptap/extension-underline": "^2.26.0",
-    "@tiptap/pm": "^2.24.2",
+    "@tiptap/pm": "^2.26.0",
     "@tiptap/react": "^2.25.0",
     "@tiptap/starter-kit": "^2.25.0",
     "class-variance-authority": "^0.7.1",
