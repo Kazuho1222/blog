@@ -37,7 +37,7 @@
     "@tiptap/extension-ordered-list": "^2.26.0",
     "@tiptap/extension-paragraph": "^3.0.1",
     "@tiptap/extension-text": "^2.24.0",
-    "@tiptap/extension-underline": "^2.26.0",
+    "@tiptap/extension-underline": "^3.0.3",
     "@tiptap/pm": "^2.26.0",
     "@tiptap/react": "^3.0.1",
     "@tiptap/starter-kit": "^3.0.1",
