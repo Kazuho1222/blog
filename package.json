@@ -9,7 +9,16 @@
     "start": "next start",
     "lint": "biome lint --write ./src",
     "format": "biome format ./src --write",
-    "check": "biome check --write ./src"
+    "check": "biome check --write ./src",
+    "audit": "npm audit --audit-level=moderate",
+    "audit:fix": "npm audit fix",
+    "update": "npm update",
+    "outdated": "npm outdated",
+    "clean": "rm -rf .next node_modules package-lock.json",
+    "reinstall": "npm run clean && npm install",
+    "type-check": "tsc --noEmit",
+    "test:build": "npm run build && npm run start",
+    "analyze": "ANALYZE=true npm run build"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
