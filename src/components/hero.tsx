@@ -14,17 +14,17 @@ export default function Hero({
 	imageOn = false,
 }: { title: string; subtitle: string; imageOn: boolean }) {
 	return (
-		<div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
-			<div className="flex-1 text-center md:text-left pt-8 pb-10 md:pt-12 md:pb-14">
-				<h1 className="text-4xl md:text-6xl lg:text-8xl font-black tracking-wider leading-tight mb-4 text-gray-900">
+		<div className="flex flex-col items-center gap-8 md:flex-row md:gap-12">
+			<div className="flex-1 pt-8 pb-10 text-center md:pt-12 md:pb-14 md:text-left">
+				<h1 className="mb-4 font-black text-4xl text-gray-900 leading-tight tracking-wider md:text-6xl lg:text-8xl">
 					{title}
 				</h1>
-				<p className="text-lg md:text-xl lg:text-2xl leading-relaxed text-gray-600">
+				<p className="text-gray-600 text-lg leading-relaxed md:text-xl lg:text-2xl">
 					{subtitle}
 				</p>
 			</div>
 			{imageOn && (
-				<figure className="w-full max-w-sm md:w-2/5 md:max-w-md flex-shrink-0">
+				<figure className="w-full max-w-sm flex-shrink-0 md:w-2/5 md:max-w-md">
 					<Image
 						src={cube}
 						alt="Hero image"
@@ -33,7 +33,7 @@ export default function Hero({
 						sizes="(min-width: 768px) 45vw, 300px"
 						priority
 						placeholder="blur"
-						className="w-full h-auto rounded-lg"
+						className="h-auto w-full rounded-lg"
 					/>
 				</figure>
 			)}

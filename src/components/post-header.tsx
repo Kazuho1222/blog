@@ -8,9 +8,9 @@ export default function PostHeader({
 	publish = '',
 }: { title: string; subtitle: string; publish: string }) {
 	return (
-		<div className="py-6 space-y-4">
-			<p className="text-lg md:text-xl font-bold text-gray-600">{subtitle}</p>
-			<h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+		<div className="space-y-4 py-6">
+			<p className="font-bold text-gray-600 text-lg md:text-xl">{subtitle}</p>
+			<h1 className="font-bold text-3xl text-gray-900 leading-tight md:text-4xl lg:text-5xl">
 				{title}
 			</h1>
 			{publish && (

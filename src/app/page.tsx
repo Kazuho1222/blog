@@ -25,16 +25,14 @@ export default async function Home() {
 	}
 
 	return (
-		<>
-			<main>
-				<Container large={false}>
-					<Meta pageTitle={''} pageDesc={''} />
-					<Hero title="CUBE" subtitle="アウトプットしていくサイト" imageOn />
+		<main>
+			<Container large={false}>
+				<Meta pageTitle={''} pageDesc={''} />
+				<Hero title="CUBE" subtitle="アウトプットしていくサイト" imageOn />
 
-					<Posts posts={posts} />
-					<Pagination nextUrl="/blog" nextText="More Posts" />
-				</Container>
-			</main>
-		</>
+				<Posts posts={posts} />
+				<Pagination nextUrl="/blog" nextText="More Posts" />
+			</Container>
+		</main>
 	)
 }
