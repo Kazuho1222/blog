@@ -42,7 +42,7 @@
     "@tiptap/extension-code-block": "^3.0.3",
     "@tiptap/extension-document": "^3.0.7",
     "@tiptap/extension-link": "^3.0.7",
-    "@tiptap/extension-list-item": "^3.0.7",
+    "@tiptap/extension-list-item": "^3.0.9",
     "@tiptap/extension-ordered-list": "^3.0.7",
     "@tiptap/extension-paragraph": "^3.0.6",
     "@tiptap/extension-text": "^3.0.7",
