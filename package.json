@@ -18,7 +18,10 @@
     "reinstall": "npm run clean && npm install",
     "type-check": "tsc --noEmit",
     "test:build": "npm run build && npm run start",
-    "analyze": "ANALYZE=true npm run build"
+    "analyze": "ANALYZE=true npm run build",
+    "scripts": {
+      "build:deploy": "npm run build && git add public/sitemap-0.xml && git commit -m 'Update sitemap' && git push"
+    }
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.0.0",
