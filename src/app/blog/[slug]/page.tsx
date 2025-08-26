@@ -19,6 +19,7 @@ import { getImageBuffer } from '@/src/lib/get-image-buffer'
 import { prevNextPost } from '@/src/lib/prev-next-post'
 import Image from 'next/image'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { getPlaiceholder } from 'plaiceholder'
 const { siteTitle, siteUrl } = siteMeta
 
@@ -30,7 +31,7 @@ export default async function Post(props: {
 	const post = await getPostBySlug(slug)
 
 	if (!post) {
-		return { notFound: true }
+		notFound()
 	}
 	const { id, title, publishDate: publish, _content, categories } = post
 	const eyecatch = post.eyecatch ?? eyecatchLocal
@@ -41,7 +42,7 @@ export default async function Post(props: {
 	const { base64 } = await getPlaiceholder(imageBuffer)
 	post.eyecatch.blurDataURL = base64
 	const allSlugs = await getAllSlugs()
-	if (!allSlugs) return { notFound: true }
+	if (!allSlugs) notFound()
 	const [prevPost, nextPost] = prevNextPost(allSlugs, slug)
 
 	return (
@@ -115,7 +116,7 @@ export async function generateMetadata(props: {
 	const slug = params.slug
 	const post = await getPostBySlug(slug)
 	if (!post) {
-		return { notFound: true }
+		notFound()
 	}
 	const { title: pageTitle, _content } = post
 
