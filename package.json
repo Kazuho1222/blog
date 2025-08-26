@@ -48,7 +48,7 @@
     "@tiptap/extension-document": "^3.2.0",
     "@tiptap/extension-link": "^3.2.0",
     "@tiptap/extension-list-item": "^3.2.0",
-    "@tiptap/extension-text": "^3.2.0",
+    "@tiptap/extension-text": "^3.3.0",
     "@tiptap/extension-paragraph": "^3.2.0",
     "@tiptap/extension-underline": "^3.2.0",
     "@tiptap/starter-kit": "^3.2.0",
