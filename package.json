@@ -49,7 +49,7 @@
     "@tiptap/extension-document": "^3.2.0",
     "@tiptap/extension-heading": "^3.3.0",
     "@tiptap/extension-history": "^3.3.0",
-    "@tiptap/extension-italic": "^3.3.0",
+    "@tiptap/extension-italic": "^3.4.1",
     "@tiptap/extension-link": "^3.2.0",
     "@tiptap/extension-list-item": "^3.3.0",
     "@tiptap/extension-paragraph": "^3.3.0",
