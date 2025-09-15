@@ -43,7 +43,7 @@
     "@tiptap/core": "^3.4.1",
     "@tiptap/extension-blockquote": "^3.3.0",
     "@tiptap/extension-bold": "^3.4.1",
-    "@tiptap/extension-bullet-list": "^3.4.1",
+    "@tiptap/extension-bullet-list": "^3.4.3",
     "@tiptap/extension-code": "^3.4.1",
     "@tiptap/extension-code-block": "^3.4.1",
     "@tiptap/extension-document": "^3.4.1",
