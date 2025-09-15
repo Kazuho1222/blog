@@ -9,7 +9,7 @@ const { siteTitle, siteDesc, siteUrl, siteLocale, siteType, siteIcon } =
 import type { MetaType } from '@/src/types/types'
 import Head from 'next/head'
 // 汎用OGP画像
-import siteImg from '../images/ogp.jpg'
+const siteImg = '/images/ogp.jpg'
 
 export default function Meta({
 	pageTitle,
@@ -28,9 +28,9 @@ export default function Meta({
 	const url = `${siteUrl}${pathname}`
 
 	// OGP画像
-	const img = pageImg || siteImg.src
-	const imgW = pageImgW || siteImg.width
-	const imgH = pageImgH || siteImg.height
+	const img = pageImg || siteImg
+	const imgW = pageImgW || 1200
+	const imgH = pageImgH || 630
 	const imgUrl = img.startsWith('https') ? img : `${siteUrl}${img}`
 
 	return (
