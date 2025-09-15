@@ -278,7 +278,7 @@ export default function EditBlogForm({
 												ファイルサイズは最大5MBです
 											</FormDescription>
 											<Input
-												id="eyecatch"
+												// id="eyecatch"
 												type="file"
 												accept="image/*"
 												onChange={handleImageChange}

@@ -2,12 +2,13 @@
 
 import { usePathname, useSearchParams } from 'next/navigation'
 import Script from 'next/script'
-import { useEffect } from 'react'
+import { useEffect, useId } from 'react'
 import * as gtag from '../lib/gtag'
 
 function GoogleAnalytics() {
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
+	const scriptId = useId()
 
 	useEffect(() => {
 		if (!gtag.IS_GATAG) {
@@ -23,7 +24,7 @@ function GoogleAnalytics() {
 				strategy="afterInteractive"
 				src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TAG_ID}`}
 			/>
-			<Script id="gtag-init" strategy="afterInteractive">
+			<Script id={scriptId} strategy="afterInteractive">
 				{`
         window.dataLayer=window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
