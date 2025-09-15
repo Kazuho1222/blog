@@ -26,13 +26,13 @@ jobs:
         run: npm ci
 
       - name: Run linting
-        run: npm run lint
+        run: npx eslint ./src --max-warnings=0
 
       - name: Run type checking
         run: npx tsc --noEmit
 
       - name: Run formatting check
-        run: npm run format:check
+        run: npx prettier --check ./src
 
   # セキュリティスキャン
   security:
