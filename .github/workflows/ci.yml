@@ -32,7 +32,7 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Run formatting check
-        run: npm run format -- --check
+        run: npm run format:check
 
   # セキュリティスキャン
   security:
