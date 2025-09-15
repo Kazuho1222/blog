@@ -11,9 +11,9 @@ updates:
     # セキュリティアップデートは即座に実行
     open-pull-requests-limit: 10
     reviewers:
-      - 'desti'
+      - 'Kazuho1222'
     assignees:
-      - 'desti'
+      - 'Kazuho1222'
     commit-message:
       prefix: 'chore'
       include: 'scope'
