@@ -6,8 +6,6 @@ updates:
     directory: '/'
     schedule:
       interval: 'weekly'
-      day: 'monday'
-      time: '09:00'
     # セキュリティアップデートは即座に実行
     open-pull-requests-limit: 10
     reviewers:
@@ -17,18 +15,10 @@ updates:
     commit-message:
       prefix: 'chore'
       include: 'scope'
-    # メジャーバージョンアップデートは手動確認
-    ignore:
-      - dependency-name: '@types/*'
-        update-types: ['version-update:semver-major']
-      - dependency-name: 'typescript'
-        update-types: ['version-update:semver-major']
-      - dependency-name: 'next'
-        update-types: ['version-update:semver-major']
-      - dependency-name: 'react'
-        update-types: ['version-update:semver-major']
-      - dependency-name: 'react-dom'
-        update-types: ['version-update:semver-major']
+    groups:
+      all-dependencies:
+        patterns:
+          - '*'
 
   # Enable version updates for Docker
   - package-ecosystem: 'docker'
