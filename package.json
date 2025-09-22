@@ -40,7 +40,7 @@
     "@tailwindcss/postcss": "^4.1.13",
     "@tailwindcss/typography": "^0.5.16",
     "@tiptap/extension-ordered-list": "^3.4.3",
-    "@tiptap/core": "^3.4.1",
+    "@tiptap/core": "^3.4.4",
     "@tiptap/extension-bold": "^3.4.3",
     "@tiptap/extension-blockquote": "^3.4.3",
     "@tiptap/extension-bullet-list": "^3.4.3",
