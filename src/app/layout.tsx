@@ -35,10 +35,6 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<head>
-				<link rel="preconnect" href="https://images.microcms-assets.io" crossOrigin="anonymous" />
-				<link rel="dns-prefetch" href="https://images.microcms-assets.io" />
-			</head>
 			<body className={inter.className}>
 				<Suspense>
 					<GoogleAnalytics />
