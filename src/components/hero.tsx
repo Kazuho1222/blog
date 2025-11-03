@@ -17,7 +17,7 @@ export default function Hero({
 				</p>
 			</div>
 			{imageOn && (
-				<div className="w-full max-w-sm flex-shrink-0 md:w-2/5 md:max-w-md">
+				<figure className="w-full max-w-sm flex-shrink-0 md:w-2/5 md:max-w-md">
 					<Image
 						src={cube}
 						alt="Hero image"
@@ -29,7 +29,7 @@ export default function Hero({
 						placeholder="blur"
 						className="h-auto w-full rounded-lg"
 					/>
-				</div>
+				</figure>
 			)}
 		</div>
 	)
