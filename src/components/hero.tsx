@@ -1,12 +1,5 @@
 import Image from 'next/image';
-// import cube from '../images/cube.jpg'
-
-const cube = {
-	src: 'https://images.microcms-assets.io/assets/93b42a5f4a114f00b170397593b04592/a79ac87ccafc4de0926773b09a954ae1/cube.jpg',
-	height: 1300,
-	width: 1500,
-	blurDataURL: 'data:image/jpeg;base64,',
-}
+import cube from '../../public/images/cube.jpg';
 
 export default function Hero({
 	title,
@@ -24,18 +17,19 @@ export default function Hero({
 				</p>
 			</div>
 			{imageOn && (
-				<figure className="w-full max-w-sm flex-shrink-0 md:w-2/5 md:max-w-md">
+				<div className="w-full max-w-sm flex-shrink-0 md:w-2/5 md:max-w-md">
 					<Image
 						src={cube}
 						alt="Hero image"
 						width={500}
 						height={400}
-						sizes="(min-width: 768px) 45vw, 300px"
+						sizes="(min-width: 1024px) 448px, (min-width: 768px) 384px, 300px"
 						priority
+						fetchPriority="high"
 						placeholder="blur"
 						className="h-auto w-full rounded-lg"
 					/>
-				</figure>
+				</div>
 			)}
 		</div>
 	)
