@@ -44,7 +44,7 @@ const BlogDeleteButton = ({ blogId }: { blogId: string }) => {
 	return (
 		<AlertDialog>
 			<AlertDialogTrigger asChild>
-				<Button variant="destructive">Delete</Button>
+				<Button variant="destructive" className="cursor-pointer hover:!bg-red-500 rounded-md hover:!text-white">Delete</Button>
 			</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader>

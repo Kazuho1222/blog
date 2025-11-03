@@ -51,8 +51,8 @@ export default async function Post(props: {
 				<div className="flex items-center justify-between">
 					<PostHeader title={title} subtitle="Blog Article" publish={publish} />
 					<div className="flex justify-end space-x-4">
-						<Link href={`/edit-blog/${post.slug}`} className="ml-40">
-							<Button>Edit</Button>
+						<Link href={`/edit-blog/${post.slug}`}>
+							<Button className="hover:cursor-pointer hover:!bg-green-500 rounded-md hover:!text-white">Edit</Button>
 						</Link>
 						<BlogDeleteButton blogId={id} />
 					</div>
