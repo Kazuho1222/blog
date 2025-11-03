@@ -26,9 +26,6 @@ export const metadata: Metadata = {
 	twitter: {
 		...twitterMetadata,
 	},
-	other: {
-		'link': 'https://images.microcms-assets.io; rel=preconnect; crossorigin=anonymous, https://images.microcms-assets.io; rel=dns-prefetch',
-	},
 }
 
 export default function RootLayout({
@@ -38,10 +35,10 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			{/* <head>
+			<head>
 				<link rel="preconnect" href="https://images.microcms-assets.io" crossOrigin="anonymous" />
 				<link rel="dns-prefetch" href="https://images.microcms-assets.io" />
-			</head> */}
+			</head>
 			<body className={inter.className}>
 				<Suspense>
 					<GoogleAnalytics />
