@@ -44,10 +44,12 @@ export default async function Blog() {
       {/* <Meta pageTitle='ブログ' pageDesc='ブログの記事一覧' /> */}
       <Hero title="Blog" subtitle="Recent Posts" imageOn={false} />
       {/* データが存在しない場合、エラーメッセージや空の状態を表示 */}
-      {posts.length > 0 ? (
+      {fetchError ? (
+        <p>投稿の取得に失敗しました。後でもう一度お試しください。</p>
+      ) : posts.length > 0 ? (
         <Posts posts={posts} />
       ) : (
-        <p>投稿の取得に失敗しました。後でもう一度お試しください。</p> // fallback コンテンツ
+        <p>まだ投稿がありません。</p>
       )}
     </Container>
   )
