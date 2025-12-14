@@ -46,10 +46,13 @@ export default async function Category({ params }: CategoryProps) {
           const { base64 } = await getPlaiceholder(imageBuffer)
           post.eyecatch.blurDataURL = base64
         } catch (error) {
-          console.error(`Failed to process image for post: ${post.slug || 'unknown'}`, error)
+          console.error(
+            `Failed to process image for post: ${post.slug || 'unknown'}`,
+            error,
+          )
           // Optionally set a fallback blur data URL or leave undefined
         }
-      })
+      }),
     )
   }
 

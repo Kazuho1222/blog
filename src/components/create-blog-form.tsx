@@ -145,7 +145,8 @@ export default function CreateBlogForm({
       console.error('エラー', error)
       toast({
         title: 'エラーが発生しました',
-        description: error instanceof Error ? error.message : '予期しないエラーです',
+        description:
+          error instanceof Error ? error.message : '予期しないエラーです',
         variant: 'destructive',
       })
     }
