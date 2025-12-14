@@ -32,23 +32,21 @@ export default async function Category({ params }: CategoryProps) {
     return <div>このカテゴリには投稿がありません。</div>
   }
 
-  if (posts) {
-    for (const post of posts) {
-      if (!post.eyecatch) {
-        post.eyecatch = { ...eyecatchLocal }
-      }
-      const imageBuffer = await getImageBuffer(post.eyecatch.url)
-      const { base64 } = await getPlaiceholder(imageBuffer)
-      post.eyecatch.blurDataURL = base64
+  for (const post of posts) {
+    if (!post.eyecatch) {
+      post.eyecatch = { ...eyecatchLocal }
     }
-
-    return (
-      <Container large={false}>
-        <PostHeader title={cat.name} subtitle="Blog Category" publish={''} />
-        <Posts posts={posts} />
-      </Container>
-    )
+    const imageBuffer = await getImageBuffer(post.eyecatch.url)
+    const { base64 } = await getPlaiceholder(imageBuffer)
+    post.eyecatch.blurDataURL = base64
   }
+
+  return (
+    <Container large={false}>
+      <PostHeader title={cat.name} subtitle="Blog Category" publish={''} />
+      <Posts posts={posts} />
+    </Container>
+  )
 
   // export const dynamicParams = false
   // export async function generateStaticParams() {
@@ -67,8 +65,8 @@ export default async function Category({ params }: CategoryProps) {
 // メタデータ
 export async function generateMetadata({ params }: CategoryProps) {
   const catSlug = (await params).slug
-  const allcats = await getAllCategories()
-  const cat = allcats?.find(({ slug }: { slug: string }) => slug === catSlug)
+  const allCats = await getAllCategories()
+  const cat = allCats?.find(({ slug }: { slug: string }) => slug === catSlug)
   if (!cat) {
     return null // or throw an error, depending on the desired behavior
   }

@@ -33,7 +33,7 @@ const BlogDeleteButton = ({ blogId }: { blogId: string }) => {
       }
 
       router.push('/')
-      router.refresh
+      router.refresh()
       toast({
         title: '投稿を削除しました！',
       })

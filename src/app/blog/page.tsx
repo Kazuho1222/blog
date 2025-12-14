@@ -48,7 +48,7 @@ export default async function Blog() {
       {posts.length > 0 ? (
         <Posts posts={posts} />
       ) : (
-        <p>No posts available. Please check back later.</p> // fallback コンテンツ
+        <p>投稿の取得に失敗しました。後でもう一度お試しください。</p> // fallback コンテンツ
       )}
     </Container>
   )

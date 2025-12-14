@@ -45,7 +45,7 @@ export default function Meta({
 
       <meta property="og:site_name" content={siteTitle} />
       <meta property="og:type" content={siteType} />
-      <meta property="og:local" content={siteLocale} />
+      <meta property="og:locale" content={siteLocale} />
 
       <link rel="icon" href={siteIcon} />
       <link rel="apple-touch-icon" href={siteIcon} />

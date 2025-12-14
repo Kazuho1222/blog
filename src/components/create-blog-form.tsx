@@ -136,13 +136,18 @@ export default function CreateBlogForm({
       if (response) {
         console.log('投稿に成功しました！')
         router.push('/')
-        router.refresh
+        router.refresh()
         toast({
           title: '投稿に成功しました！',
         })
       }
     } catch (error) {
       console.error('エラー', error)
+      toast({
+        title: 'エラーが発生しました',
+        description: error instanceof Error ? error.message : '予期しないエラーです',
+        variant: 'destructive',
+      })
     }
   }
 
@@ -175,6 +180,9 @@ export default function CreateBlogForm({
   }
 
   const handleRemoveImage = () => {
+    if (previewImage) {
+      URL.revokeObjectURL(previewImage)
+    }
     setPreviewImage(null)
     form.setValue('eyecatch', '')
     if (fileInputRef.current) {
@@ -286,7 +294,7 @@ export default function CreateBlogForm({
                               <FontAwesomeIcon
                                 icon={faCircleXmark}
                                 size="2x"
-                                style={{ display: 'hidden' }}
+                                style={{ display: 'none' }}
                               />
                             </button>
                           </div>

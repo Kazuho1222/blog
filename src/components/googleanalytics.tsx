@@ -14,7 +14,9 @@ function GoogleAnalytics() {
     if (!gtag.IS_GATAG) {
       return
     }
-    const url = pathname + searchParams.toString()
+    const searchString = searchParams.toString()
+    const url = searchString ? `${pathname}?${searchString}` : pathname
+    gtag.pageview(url)
     gtag.pageview(url)
   }, [pathname, searchParams])
 
