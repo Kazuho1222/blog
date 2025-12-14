@@ -8,9 +8,9 @@ import Footer from '../components/footer'
 import GoogleAnalytics from '../components/googleanalytics'
 import Header from '../components/header'
 import {
-	baseMetadata,
-	openGraphMetadata,
-	twitterMetadata,
+  baseMetadata,
+  openGraphMetadata,
+  twitterMetadata,
 } from '../lib/base-metadata'
 import './globals.css'
 
@@ -19,33 +19,33 @@ config.autoAddCss = false
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-	...baseMetadata,
-	openGraph: {
-		...openGraphMetadata,
-	},
-	twitter: {
-		...twitterMetadata,
-	},
+  ...baseMetadata,
+  openGraph: {
+    ...openGraphMetadata,
+  },
+  twitter: {
+    ...twitterMetadata,
+  },
 }
 
 export default function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode
+  children: React.ReactNode
 }>) {
-	return (
-		<html lang="en">
-			<body className={inter.className}>
-				<Suspense>
-					<GoogleAnalytics />
-				</Suspense>
-				{/* <Suspense fallback={<Loading />}> */}
-				<Header />
-				{children}
-				<Toaster />
-				<Footer />
-				{/* </Suspense> */}
-			</body>
-		</html>
-	)
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <Suspense>
+          <GoogleAnalytics />
+        </Suspense>
+        {/* <Suspense fallback={<Loading />}> */}
+        <Header />
+        {children}
+        <Toaster />
+        <Footer />
+        {/* </Suspense> */}
+      </body>
+    </html>
+  )
 }

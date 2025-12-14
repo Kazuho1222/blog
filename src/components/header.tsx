@@ -4,14 +4,14 @@ import Logo from './logo'
 import Nav from './nav'
 
 export default function Header() {
-	return (
-		<header>
-			<Container large={false}>
-				<div className={styles.flexContainer}>
-					<Logo boxOn />
-					<Nav />
-				</div>
-			</Container>
-		</header>
-	)
+  return (
+    <header>
+      <Container large={false}>
+        <div className={styles.flexContainer}>
+          <Logo boxOn />
+          <Nav />
+        </div>
+      </Container>
+    </header>
+  )
 }

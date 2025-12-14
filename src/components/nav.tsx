@@ -54,7 +54,7 @@ export default function Nav() {
 					<Button
 						asChild
 						variant="default"
-						className="!bg-gray-800 !text-white hover:!bg-red-500 hover:!text-white"
+						className="bg-gray-800 !text-white hover:bg-red-500 hover:text-white"
 					>
 						<Link href="/create-blog" onClick={closeNav}>
 							Create-Blog

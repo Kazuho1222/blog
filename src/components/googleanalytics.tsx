@@ -6,26 +6,26 @@ import { useEffect, useId } from 'react'
 import * as gtag from '../lib/gtag'
 
 function GoogleAnalytics() {
-	const pathname = usePathname()
-	const searchParams = useSearchParams()
-	const scriptId = useId()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const scriptId = useId()
 
-	useEffect(() => {
-		if (!gtag.IS_GATAG) {
-			return
-		}
-		const url = pathname + searchParams.toString()
-		gtag.pageview(url)
-	}, [pathname, searchParams])
+  useEffect(() => {
+    if (!gtag.IS_GATAG) {
+      return
+    }
+    const url = pathname + searchParams.toString()
+    gtag.pageview(url)
+  }, [pathname, searchParams])
 
-	return (
-		<>
-			<Script
-				strategy="afterInteractive"
-				src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TAG_ID}`}
-			/>
-			<Script id={scriptId} strategy="afterInteractive">
-				{`
+  return (
+    <>
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TAG_ID}`}
+      />
+      <Script id={scriptId} strategy="afterInteractive">
+        {`
         window.dataLayer=window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js',new Date());
@@ -33,9 +33,9 @@ function GoogleAnalytics() {
         page_path:window.location.pathname,
         });
       `}
-			</Script>
-		</>
-	)
+      </Script>
+    </>
+  )
 }
 
 export default GoogleAnalytics
