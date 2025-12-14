@@ -17,7 +17,6 @@ function GoogleAnalytics() {
     const searchString = searchParams.toString()
     const url = searchString ? `${pathname}?${searchString}` : pathname
     gtag.pageview(url)
-    gtag.pageview(url)
   }, [pathname, searchParams])
 
   return (

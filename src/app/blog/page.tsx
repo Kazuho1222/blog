@@ -12,15 +12,14 @@ const { siteTitle, siteUrl } = siteMeta
 
 export default async function Blog() {
   let posts: PostType[] = []
+  let fetchError = false
 
   try {
     // データ取得に成功した場合
     posts = (await getAllPosts()) || []
   } catch (error) {
     console.error('Error fetching posts:', error)
-    // データが取得できなかった場合の代替処理
-    return <div>投稿の取得に失敗しました。後でもう一度お試しください。</div>
-    // posts = []; // もしくは、fallback用のダミーデータをここで定義
+    fetchError = true
   }
 
   // 各ポストに対して画像処理

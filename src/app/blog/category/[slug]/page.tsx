@@ -32,14 +32,21 @@ export default async function Category({ params }: CategoryProps) {
     return <div>このカテゴリには投稿がありません。</div>
   }
 
-  for (const post of posts) {
-    if (!post.eyecatch) {
-      post.eyecatch = { ...eyecatchLocal }
-    }
-    const imageBuffer = await getImageBuffer(post.eyecatch.url)
-    const { base64 } = await getPlaiceholder(imageBuffer)
-    post.eyecatch.blurDataURL = base64
-  }
+  await Promise.all(
+    posts.map(async (post) => {
+      if (!post.eyecatch) {
+        post.eyecatch = { ...eyecatchLocal }
+      }
+      try {
+        const imageBuffer = await getImageBuffer(post.eyecatch.url)
+        const { base64 } = await getPlaiceholder(imageBuffer)
+        post.eyecatch.blurDataURL = base64
+      } catch (error) {
+        console.error(`Failed to process image for post: ${post.slug || 'unknown'}`, error)
+        // Optionally set a fallback blur data URL or leave undefined
+      }
+    })
+  )
 
   return (
     <Container large={false}>
