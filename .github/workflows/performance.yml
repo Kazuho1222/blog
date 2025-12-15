@@ -89,7 +89,7 @@ jobs:
           ANALYZE: true
 
       - name: Upload bundle analysis
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: bundle-analysis
           path: .next/analyze/
