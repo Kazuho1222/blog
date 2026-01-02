@@ -225,7 +225,7 @@ export default function EditBlogForm({
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -238,7 +238,7 @@ export default function EditBlogForm({
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -252,7 +252,7 @@ export default function EditBlogForm({
                     selectedDate={new Date(form.watch('publishDate'))}
                     onChange={handleDateChange}
                   />
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -265,7 +265,7 @@ export default function EditBlogForm({
                   <FormControl>
                     <TiptapEditor content={_content} onChange={_setContent} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -315,7 +315,7 @@ export default function EditBlogForm({
                       )}
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -356,7 +356,7 @@ export default function EditBlogForm({
                       </FormControl>
                     </FormItem>
                   ))}
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />

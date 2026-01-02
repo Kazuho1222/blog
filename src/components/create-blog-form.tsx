@@ -1,5 +1,6 @@
 'use client'
 
+import { createBlogAction, uploadImageAction } from '@/src/app/actions/create-blog'
 import { Button } from '@/src/components/ui/button'
 import { Checkbox } from '@/src/components/ui/checkbox'
 import {
@@ -15,7 +16,6 @@ import { Input } from '@/src/components/ui/input'
 import InputDateTime from '@/src/components/ui/inputdatetime'
 import { Label } from '@/src/components/ui/label'
 import { useToast } from '@/src/hooks/use-toast'
-import type { FormDataType } from '@/src/types/types'
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -74,73 +74,46 @@ export default function CreateBlogForm({
     },
   })
 
-  const uploadImage = async (file: File) => {
-    const formData = new FormData()
-    formData.append('file', file)
-
-    const response = await fetch(
-      'https://kazuho-blog.microcms-management.io/api/v1/media',
-      {
-        method: 'POST',
-        headers: {
-          'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY || '',
-        },
-        body: formData,
-      },
-    )
-
-    if (!response.ok) {
-      throw new Error('画像のアップロードに失敗しました')
-    }
-
-    const data = await response.json()
-    return data.url
-  }
-
-  const createBlog = async (formData: FormDataType, imageUrl: string) => {
-    const response = await fetch(
-      'https://kazuho-blog.microcms.io/api/v1/blogs',
-      {
-        method: 'POST',
-        headers: {
-          'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY || '',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          eyecatch: imageUrl,
-        }),
-      },
-    )
-
-    if (!response.ok) {
-      throw new Error('ブログの投稿に失敗しました')
-    }
-
-    const data = await response.json()
-    return data
-  }
-
-  const handleSubmit = async (formData: FormDataType) => {
+  const handleSubmit = async (
+    formData: z.infer<typeof FormSchema>,
+  ) => {
     try {
       const fileInput = fileInputRef.current
       const file = fileInput?.files?.[0]
 
       let imageUrl = ''
       if (file) {
-        imageUrl = await uploadImage(file)
+        const uploadResult = await uploadImageAction(file)
+        if (!uploadResult.success) {
+          toast({
+            title: 'エラーが発生しました',
+            description: uploadResult.error,
+            variant: 'destructive',
+          })
+          return
+        }
+        imageUrl = uploadResult.url
       }
 
-      const response = await createBlog(formData, imageUrl)
+      const result = await createBlogAction({
+        ...formData,
+        eyecatch: imageUrl,
+      })
 
-      if (response) {
-        console.log('投稿に成功しました！')
-        router.push('/')
-        router.refresh()
+      if (!result.success) {
         toast({
-          title: '投稿に成功しました！',
+          title: 'エラーが発生しました',
+          description: result.error,
+          variant: 'destructive',
         })
+        return
       }
+
+      toast({
+        title: '投稿に成功しました！',
+      })
+      router.push('/')
+      router.refresh()
     } catch (error) {
       console.error('エラー', error)
       toast({
@@ -209,7 +182,7 @@ export default function CreateBlogForm({
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -222,7 +195,7 @@ export default function CreateBlogForm({
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -236,7 +209,7 @@ export default function CreateBlogForm({
                     selectedDate={selectedDate}
                     onChange={handleDateChange}
                   />
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -254,7 +227,7 @@ export default function CreateBlogForm({
                       }
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -303,7 +276,7 @@ export default function CreateBlogForm({
                       )}
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
@@ -344,7 +317,7 @@ export default function CreateBlogForm({
                       </FormControl>
                     </FormItem>
                   ))}
-                  <FormMessage />
+                  <FormMessage className="text-red-500" />
                 </FormItem>
               )}
             />
