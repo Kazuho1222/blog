@@ -32,15 +32,15 @@ export async function POST(request: Request) {
           "X-MICROCMS-API-KEY": apiKey,
         },
         body: uploadFormData,
+        signal: AbortSignal.timeout(30000), // 30 second timeout
       }
     );
 
     if (!response.ok) {
-      const statusText = response.statusText || "Unknown error";
       return NextResponse.json(
         {
           success: false,
-          error: `画像のアップロードに失敗しました (${response.status}): ${statusText}`,
+          error: `画像のアップロードに失敗しました (${response.status})`,
         },
         { status: response.status }
       );
@@ -57,14 +57,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, url: String(imageUrl) });
   } catch (error) {
-    const errorMessage =
-      error instanceof Error
-        ? error.message.substring(0, 200)
-        : "予期しないエラーが発生しました";
+    // Log the full error server-side
+    console.error("Image upload error:", error);
+
     return NextResponse.json(
-      { success: false, error: errorMessage },
+      { success: false, error: "予期しないエラーが発生しました" },
       { status: 500 }
     );
   }
 }
-

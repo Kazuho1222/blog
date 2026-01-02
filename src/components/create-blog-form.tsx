@@ -90,6 +90,10 @@ export default function CreateBlogForm({
             method: 'POST',
             body: uploadFormData,
           })
+          if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`Upload failed: ${response.status} ${errorText}`)
+          }
           const uploadResult = await response.json()
           if (!uploadResult.success) {
             toast({

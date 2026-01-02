@@ -65,7 +65,13 @@ export async function createBlogAction(
     revalidatePath("/blog");
 
     // シリアライズ可能な形式で返す（IDのみ、文字列に変換）
-    const blogId = data?.id ? String(data.id) : "";
+    const blogId = data?.id ? String(data.id) : null;
+    if (!blogId) {
+      return {
+        success: false,
+        error: "ブログの作成に成功しましたが、IDを取得できませんでした",
+      };
+    }
     return { success: true, id: blogId };
   } catch (error) {
     // エラーメッセージを短く制限し、特殊文字を除去
