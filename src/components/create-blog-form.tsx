@@ -1,6 +1,6 @@
 'use client'
 
-import { createBlogAction, uploadImageAction } from '@/src/app/actions/create-blog'
+import { createBlogAction } from '@/src/app/actions/create-blog'
 import { Button } from '@/src/components/ui/button'
 import { Checkbox } from '@/src/components/ui/checkbox'
 import {
@@ -83,39 +83,70 @@ export default function CreateBlogForm({
 
       let imageUrl = ''
       if (file) {
-        const uploadResult = await uploadImageAction(file)
-        if (!uploadResult.success) {
+        try {
+          const uploadFormData = new FormData()
+          uploadFormData.append('file', file)
+          const response = await fetch('/api/upload-image', {
+            method: 'POST',
+            body: uploadFormData,
+          })
+          const uploadResult = await response.json()
+          if (!uploadResult.success) {
+            toast({
+              title: 'エラーが発生しました',
+              description: uploadResult.error,
+              variant: 'destructive',
+            })
+            return
+          }
+          imageUrl = uploadResult.url
+        } catch (uploadError) {
+          console.error('画像アップロードエラー:', uploadError)
           toast({
-            title: 'エラーが発生しました',
-            description: uploadResult.error,
+            title: '画像のアップロードに失敗しました',
+            description:
+              uploadError instanceof Error
+                ? uploadError.message
+                : '予期しないエラーです',
             variant: 'destructive',
           })
           return
         }
-        imageUrl = uploadResult.url
       }
 
-      const result = await createBlogAction({
-        ...formData,
-        eyecatch: imageUrl,
-      })
+      try {
+        const result = await createBlogAction({
+          ...formData,
+          eyecatch: imageUrl,
+        })
 
-      if (!result.success) {
+        if (!result.success) {
+          toast({
+            title: 'エラーが発生しました',
+            description: result.error,
+            variant: 'destructive',
+          })
+          return
+        }
+
         toast({
-          title: 'エラーが発生しました',
-          description: result.error,
+          title: '投稿に成功しました！',
+        })
+        router.push('/')
+        router.refresh()
+      } catch (createError) {
+        console.error('ブログ作成エラー:', createError)
+        toast({
+          title: 'ブログの作成に失敗しました',
+          description:
+            createError instanceof Error
+              ? createError.message
+              : '予期しないエラーです',
           variant: 'destructive',
         })
-        return
       }
-
-      toast({
-        title: '投稿に成功しました！',
-      })
-      router.push('/')
-      router.refresh()
     } catch (error) {
-      console.error('エラー', error)
+      console.error('予期しないエラー:', error)
       toast({
         title: 'エラーが発生しました',
         description:
@@ -268,7 +299,6 @@ export default function CreateBlogForm({
                               <FontAwesomeIcon
                                 icon={faCircleXmark}
                                 size="2x"
-                                style={{ display: 'none' }}
                               />
                             </button>
                           </div>

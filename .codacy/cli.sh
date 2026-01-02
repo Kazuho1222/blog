@@ -49,18 +49,23 @@ get_version_from_yaml() {
 get_latest_version() {
     local response
     if [ -n "$GH_TOKEN" ]; then
-        response=$(curl -Lq --header "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/codacy/codacy-cli-v2/releases/latest" 2>/dev/null)
+        response=$(curl -Lq --header "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/codacy/codacy-cli-v2/releases/latest")
     else
-        response=$(curl -Lq "https://api.github.com/repos/codacy/codacy-cli-v2/releases/latest" 2>/dev/null)
+        response=$(curl -Lq "https://api.github.com/repos/codacy/codacy-cli-v2/releases/latest")
     fi
 
     handle_rate_limit "$response"
     local version=$(echo "$response" | grep -m 1 tag_name | cut -d'"' -f4)
-    echo "$version"
-}
-
+    if [ -z "$version" ]; then
+        echo "Error: Failed to fetch latest version from GitHub API" >&2
+        return 1
 handle_rate_limit() {
     local response="$1"
+    if echo "$response" | grep -q "API rate limit exceeded"; then
+          echo "Error: GitHub API rate limit exceeded. Please try again later" >&2
+          exit 1
+    fi
+}
     if echo "$response" | grep -q "API rate limit exceeded"; then
           fatal "Error: GitHub API rate limit exceeded. Please try again later"
     fi
@@ -75,7 +80,8 @@ download_file() {
     elif command -v wget > /dev/null 2>&1; then
         wget "$url"
     else
-        fatal "Error: Could not find curl or wget, please install one."
+        echo "Error: Could not find curl or wget, please install one." >&2
+        exit 1
     fi
 }
 

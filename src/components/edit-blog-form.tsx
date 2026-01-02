@@ -307,7 +307,6 @@ export default function EditBlogForm({
                               <FontAwesomeIcon
                                 icon={faCircleXmark}
                                 size="2x"
-                                style={{ display: 'hidden' }}
                               />
                             </button>
                           </div>
