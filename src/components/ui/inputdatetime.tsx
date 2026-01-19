@@ -15,7 +15,7 @@ const InputDateTime: React.FC<InputDateTimeProps> = ({
     <DatePicker
       dateFormat="yyyy年MM月dd日 HH:mm"
       selected={selectedDate}
-      onChange={(date) => onChange(date)}
+      onChange={(date: Date | null) => onChange(date)}
       showTimeSelect
       timeFormat="HH:mm"
       timeIntervals={15}
