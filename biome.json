@@ -14,8 +14,8 @@
       "!dist",
       "!build",
       "!public",
-			"./src/**/*.js",
-			"./src/**/*.tsx"
+			"**/src/**/*.js",
+			"**/src/**/*.tsx"
     ]
   },
 

@@ -4,6 +4,7 @@ import { Button } from '@/src/components/ui/button'
 import Link from 'next/link'
 import { useState } from 'react'
 import styles from '../styles/nav.module.css'
+import { Command, CommandInput } from '@/components/ui/command'
 
 export default function Nav() {
   const [navIsOpen, setNavIsOpen] = useState(false)
@@ -36,6 +37,11 @@ export default function Nav() {
       </button>
       <ul className={styles.list}>
         <li>
+          <Command className="max-w-sm rounded-lg border">
+            <CommandInput placeholder="検索文字を入力..." />
+          </Command>
+        </li>
+        <li>
           <Link href="/" onClick={closeNav}>
             Home
           </Link>
@@ -54,7 +60,7 @@ export default function Nav() {
           <Button
             asChild
             variant="default"
-            className="bg-gray-800 !text-white hover:bg-red-500 hover:text-white"
+            className="bg-gray-800 text-white! hover:bg-red-500 hover:text-white"
           >
             <Link href="/create-blog" onClick={closeNav}>
               Create-Blog
