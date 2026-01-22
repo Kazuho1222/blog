@@ -124,3 +124,30 @@ export async function getAllPostsByCategory(
 		throw error
 	}
 }
+
+export async function searchPosts(
+	keyword: string,
+	limit = 10,
+	offset = 0,
+): Promise<{contents: PostType[]; totalCount:number}>{
+	try {
+		const res = await client.get({
+			endpoint: 'blogs',
+			queries:{
+				q:keyword,
+				limit,
+				offset,
+				fields:'title,slug,eyecatch',
+				orders:'-publishDate',
+			},
+		})
+
+		return {
+			contents:res.contents,
+			totalCount:res.totalCount,
+		}
+	} catch (error) {
+		console.error('Error searching posts:',error)
+		throw error
+	}
+}
