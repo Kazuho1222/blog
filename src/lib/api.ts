@@ -1,5 +1,5 @@
 import type { CategoryType, PostType } from '@/src/types/types'
-import { createClient } from 'microcms-js-sdk'
+import { createClient, MicroCMSListResponse } from 'microcms-js-sdk'
 
 if (!process.env.MICROCMS_SERVICE_DOMAIN || !process.env.MICROCMS_API_KEY) {
 	throw new Error('MICROCMS_SERVICE_DOMAINとMICROCMS_API_KEYは必須です。')
@@ -129,25 +129,31 @@ export async function searchPosts(
 	keyword: string,
 	limit = 10,
 	offset = 0,
-): Promise<{contents: PostType[]; totalCount:number}>{
+): Promise<MicroCMSListResponse<PostType>> {
+	if (!keyword) {
+		return {
+			totalCount: 0,
+			offset: 0,
+			limit,
+			contents: [],
+		}
+	}
+
 	try {
-		const res = await client.get({
+		const res = await client.get<MicroCMSListResponse<PostType>>({
 			endpoint: 'blogs',
-			queries:{
-				q:keyword,
+			queries: {
+				q: keyword,
 				limit,
 				offset,
-				fields:'title,slug,eyecatch',
-				orders:'-publishDate',
+				fields: 'title,slug,eyecatch,_content',
+				orders: '-publishDate',
 			},
 		})
 
-		return {
-			contents:res.contents,
-			totalCount:res.totalCount,
-		}
+		return res
 	} catch (error) {
-		console.error('Error searching posts:',error)
+		console.error('Error searching posts:', error)
 		throw error
 	}
 }
