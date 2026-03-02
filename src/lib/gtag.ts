@@ -12,9 +12,9 @@ export const GA_TAG_ID = process.env.NEXT_PUBLIC_GA_ID || ''
 export const IS_GATAG = GA_TAG_ID !== ''
 
 export const pageview = (path: string) => {
-	if (GA_TAG_ID) {
-		window.gtag('config', GA_TAG_ID, {
-			page_path: path,
-		})
-	}
+  if (GA_TAG_ID) {
+    window.gtag('config', GA_TAG_ID, {
+      page_path: path,
+    })
+  }
 }

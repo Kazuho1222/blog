@@ -1,5 +1,5 @@
-import type { PostType } from '@/src/types/types'
 import { getPlaiceholder } from 'plaiceholder'
+import type { PostType } from '@/src/types/types'
 import Container from '../../components/container'
 import Hero from '../../components/hero'
 import Posts from '../../components/posts'

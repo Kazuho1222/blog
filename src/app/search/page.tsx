@@ -1,12 +1,12 @@
 // src/app/search/page.tsx
 
+import { getPlaiceholder } from 'plaiceholder'
 import Container from '@/src/components/container'
 import Pagination from '@/src/components/pagination'
 import { PostCard } from '@/src/components/post-card'
 import { searchPosts } from '@/src/lib/api'
 import { eyecatchLocal } from '@/src/lib/constants'
 import { getImageBuffer } from '@/src/lib/get-image-buffer'
-import { getPlaiceholder } from 'plaiceholder'
 
 type SearchPageProps = {
   searchParams: Promise<{
@@ -17,7 +17,10 @@ type SearchPageProps = {
 
 const toPlainText = (html: string) => {
   if (!html) return ''
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+  return html
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
@@ -58,7 +61,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     const title = post.title.toLowerCase()
     const body = toPlainText(post._content).toLowerCase()
     // 入力された文字列そのもの（例: "aiueo"）をタイトルか本文テキストに含むものだけを残す
-    return lowerKeyword === '' || title.includes(lowerKeyword) || body.includes(lowerKeyword)
+    return (
+      lowerKeyword === '' ||
+      title.includes(lowerKeyword) ||
+      body.includes(lowerKeyword)
+    )
   })
 
   const totalCount = searchResult.totalCount ?? filteredPosts.length

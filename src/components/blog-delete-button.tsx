@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,7 +14,6 @@ import {
 } from '@/src/components/ui/alert-dialog'
 import { Button } from '@/src/components/ui/button'
 import { useToast } from '@/src/hooks/use-toast'
-import { useRouter } from 'next/navigation'
 
 const BlogDeleteButton = ({ blogId }: { blogId: string }) => {
   const router = useRouter()
@@ -44,7 +44,7 @@ const BlogDeleteButton = ({ blogId }: { blogId: string }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button className='hover:bg-red-500'>Delete</Button>
+        <Button className="hover:bg-red-500">Delete</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

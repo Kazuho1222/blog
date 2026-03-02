@@ -1,3 +1,4 @@
+import { getPlaiceholder } from 'plaiceholder'
 import Container from '@/src/components/container'
 import PostHeader from '@/src/components/post-header'
 import Posts from '@/src/components/posts'
@@ -6,7 +7,6 @@ import { openGraphMetadata, twitterMetadata } from '@/src/lib/base-metadata'
 import { eyecatchLocal, siteMeta } from '@/src/lib/constants'
 import { getImageBuffer } from '@/src/lib/get-image-buffer'
 import type { CategoryType, PostType } from '@/src/types/types'
-import { getPlaiceholder } from 'plaiceholder'
 
 const { siteTitle, siteUrl } = siteMeta
 

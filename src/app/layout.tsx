@@ -1,5 +1,5 @@
-import { Toaster } from '@/src/components/ui/toaster'
 import { config } from '@fortawesome/fontawesome-svg-core'
+import { Toaster } from '@/src/components/ui/toaster'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'

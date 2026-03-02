@@ -62,7 +62,7 @@
   .btn::after,
   .btn .bar {
     grid-area: 1 / 1;
-    content: '';
+    content: "";
     display: block;
     width: 32px;
     height: 1px;

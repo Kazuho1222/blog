@@ -1,8 +1,8 @@
 'use client'
 
-import { Command, CommandInput } from '@/components/ui/command'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { Command, CommandInput } from '@/components/ui/command'
 
 export function SearchInput() {
   const router = useRouter()

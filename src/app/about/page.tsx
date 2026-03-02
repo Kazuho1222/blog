@@ -12,6 +12,7 @@ import {
 } from '../../components/two-column'
 import { openGraphMetadata, twitterMetadata } from '../../lib/base-metadata'
 import { siteMeta } from '../../lib/constants'
+
 const { siteTitle, siteUrl } = siteMeta
 
 const eyecatch = {

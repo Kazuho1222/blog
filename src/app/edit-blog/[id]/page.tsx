@@ -1,5 +1,5 @@
-import EditBlogForm from '@/src/components/edit-blog-form'
 import type { JSX } from 'react'
+import EditBlogForm from '@/src/components/edit-blog-form'
 import { getAllCategories, getPostBySlug } from '../../../lib/api'
 
 export default async function EditBlogPage(props: {

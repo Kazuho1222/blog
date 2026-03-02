@@ -3,11 +3,13 @@
 // サイトに関する情報
 import { usePathname } from 'next/navigation'
 import { siteMeta } from '../lib/constants'
+
 const { siteTitle, siteDesc, siteUrl, siteLocale, siteType, siteIcon } =
   siteMeta
 
-import type { MetaType } from '@/src/types/types'
 import Head from 'next/head'
+import type { MetaType } from '@/src/types/types'
+
 // 汎用OGP画像
 const siteImg = '/images/ogp.jpg'
 

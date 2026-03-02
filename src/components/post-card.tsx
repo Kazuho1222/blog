@@ -1,4 +1,3 @@
-import type { PostType } from '@/src/types/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
@@ -9,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import type { PostType } from '@/src/types/types'
 import { Button } from './ui/button'
 
 const getPlainExcerpt = (html: string, maxLength = 90) => {

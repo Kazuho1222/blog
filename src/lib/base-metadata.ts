@@ -1,5 +1,6 @@
 // サイトに関する情報
 import { siteMeta } from './constants'
+
 const { siteTitle, siteDesc, siteUrl, siteLocale, siteType, siteIcon } =
   siteMeta
 

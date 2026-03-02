@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.4/schema.json",
 
   "vcs": {
     "enabled": true,
@@ -9,13 +9,14 @@
 
   "files": {
     "includes": [
+      "**",
       "!.next",
       "!node_modules",
       "!dist",
       "!build",
       "!public",
-			"**/src/**/*.js",
-			"**/src/**/*.tsx"
+      "**/src/**/*.js",
+      "**/src/**/*.tsx"
     ]
   },
 
@@ -31,6 +32,7 @@
       "recommended": true,
 
       "correctness": {
+        "noInvalidPositionAtImportRule": "off",
         "noUnusedImports": "warn",
         "noUnusedVariables": "warn"
       },
@@ -50,7 +52,8 @@
 
   "css": {
     "parser": {
-      "cssModules": true
+      "cssModules": true,
+      "tailwindDirectives": true
     }
   }
 }

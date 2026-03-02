@@ -1,6 +1,6 @@
-import type { PostType } from '@/src/types/types'
 import Image from 'next/image'
 import Link from 'next/link'
+import type { PostType } from '@/src/types/types'
 import styles from '../styles/posts.module.css'
 
 export default function Posts({ posts }: { posts: PostType[] | undefined }) {

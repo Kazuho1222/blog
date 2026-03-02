@@ -1,5 +1,14 @@
 'use client'
 
+import { faCircleXmark } from '@fortawesome/free-regular-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { zodResolver } from '@hookform/resolvers/zod'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import type React from 'react'
+import { useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { createBlogAction } from '@/src/app/actions/create-blog'
 import { Button } from '@/src/components/ui/button'
 import { Checkbox } from '@/src/components/ui/checkbox'
@@ -16,15 +25,6 @@ import { Input } from '@/src/components/ui/input'
 import InputDateTime from '@/src/components/ui/inputdatetime'
 import { Label } from '@/src/components/ui/label'
 import { useToast } from '@/src/hooks/use-toast'
-import { faCircleXmark } from '@fortawesome/free-regular-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { zodResolver } from '@hookform/resolvers/zod'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import type React from 'react'
-import { useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import Container from './container'
 import TiptapEditor from './tiptapeditor'
 
@@ -74,9 +74,7 @@ export default function CreateBlogForm({
     },
   })
 
-  const handleSubmit = async (
-    formData: z.infer<typeof FormSchema>,
-  ) => {
+  const handleSubmit = async (formData: z.infer<typeof FormSchema>) => {
     try {
       const fileInput = fileInputRef.current
       const file = fileInput?.files?.[0]
@@ -297,13 +295,10 @@ export default function CreateBlogForm({
                             />
                             <button
                               type="button"
-                              className="-translate-y-1/2 absolute top-0 right-0 translate-x-1/2 transform cursor-pointer rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                              className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 transform cursor-pointer rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                               onClick={handleRemoveImage}
                             >
-                              <FontAwesomeIcon
-                                icon={faCircleXmark}
-                                size="2x"
-                              />
+                              <FontAwesomeIcon icon={faCircleXmark} size="2x" />
                             </button>
                           </div>
                         </div>

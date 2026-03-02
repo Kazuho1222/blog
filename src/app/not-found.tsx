@@ -7,10 +7,8 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <>
-      <Container large={false}>
-        <Hero title="404" subtitle="ページが見つかりません" imageOn={false} />
-      </Container>
-    </>
+    <Container large={false}>
+      <Hero title="404" subtitle="ページが見つかりません" imageOn={false} />
+    </Container>
   )
 }
