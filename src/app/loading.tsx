@@ -22,7 +22,7 @@ export default function Loading() {
         <div className="grid gap-14 md:grid-cols-2 pt-10">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={`home-post-${i}`} className="space-y-3">
-              <Skeleton className="h-78 w-full rounded-lg" />
+              <Skeleton className="h-80 w-full rounded-lg" />
               <Skeleton className="h-8 w-3/4" />
             </div>
           ))}

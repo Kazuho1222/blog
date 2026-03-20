@@ -16,7 +16,7 @@ export default function Loading() {
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={`post-skeleton-${i}`} className="space-y-3">
               {/* 画像 */}
-              <Skeleton className="h-78 w-full rounded-lg" />
+              <Skeleton className="h-80 w-full rounded-lg" />
 
               {/* タイトル */}
               <Skeleton className="h-8 w-3/4" />

@@ -6,7 +6,7 @@ export default function Loading() {
     <div className="m-4">
       <Container large={false}>
         <div className="py-4 space-y-8">
-          <Skeleton className="mx-auto h-12 w-90" />
+          <Skeleton className="mx-auto h-12 w-96" />
           {/* タイトル */}
           <div className="space-y-2">
             <Skeleton className="h-5 w-24" />
