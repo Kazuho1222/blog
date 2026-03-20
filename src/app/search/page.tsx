@@ -40,20 +40,26 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const posts = searchResult.contents
 
   // 各ポストに対して画像処理（デフォルト画像の設定とブラー画像の生成）
-  for (const post of posts) {
-    try {
-      if (!post.eyecatch) {
-        post.eyecatch = { ...eyecatchLocal }
-      }
-      const imageBuffer = await getImageBuffer(post.eyecatch.url)
-      const { base64 } = await getPlaiceholder(imageBuffer)
-      post.eyecatch.blurDataURL = base64
-    } catch (error) {
-      console.error('Error processing eyecatch for post:', post.slug, error)
-      if (post.eyecatch) {
-        post.eyecatch.blurDataURL = '' // 画像処理に失敗した場合の代替値
-      }
-    }
+  const batchSize = 5
+  for (let i = 0; i < posts.length; i += batchSize) {
+    const batch = posts.slice(i, i + batchSize)
+    await Promise.all(
+      batch.map(async (post) => {
+        try {
+          if (!post.eyecatch) {
+            post.eyecatch = { ...eyecatchLocal }
+          }
+          const imageBuffer = await getImageBuffer(post.eyecatch.url)
+          const { base64 } = await getPlaiceholder(imageBuffer)
+          post.eyecatch.blurDataURL = base64
+        } catch (error) {
+          console.error('Error processing eyecatch for post:', post.slug, error)
+          if (post.eyecatch) {
+            post.eyecatch.blurDataURL = '' // 画像処理に失敗した場合の代替値
+          }
+        }
+      }),
+    )
   }
 
   const lowerKeyword = keyword.toLowerCase()

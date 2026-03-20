@@ -39,12 +39,10 @@ export default function RootLayout({
         <Suspense>
           <GoogleAnalytics />
         </Suspense>
-        {/* <Suspense fallback={<Loading />}> */}
         <Header />
         {children}
         <Toaster />
         <Footer />
-        {/* </Suspense> */}
       </body>
     </html>
   )
