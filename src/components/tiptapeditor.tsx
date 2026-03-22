@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import Blockquote from '@tiptap/extension-blockquote'
 import Bold from '@tiptap/extension-bold'
