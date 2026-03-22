@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid'
 import { Skeleton } from '@/components/ui/skeleton'
 import Container from '@/src/components/container'
 
@@ -42,7 +43,7 @@ export default function Loading() {
             <Skeleton className="h-5 w-24" />
             <div className="space-y-2">
               {Array.from({ length: 4 }).map((_, i) => (
-                <Skeleton key={`cat-${i}`} className="h-5 w-40" />
+                <Skeleton key={nanoid()} className="h-5 w-40" />
               ))}
             </div>
           </div>

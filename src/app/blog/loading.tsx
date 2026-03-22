@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid'
 import { Skeleton } from '@/components/ui/skeleton'
 import Container from '@/src/components/container'
 
@@ -14,7 +15,7 @@ export default function Loading() {
         {/* Posts（カード一覧） */}
         <div className="grid gap-14 md:grid-cols-2 pt-14">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={`post-skeleton-${i}`} className="space-y-3">
+            <div key={nanoid()} className="space-y-3">
               {/* 画像 */}
               <Skeleton className="h-80 w-full rounded-lg" />
 
