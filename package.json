@@ -8,6 +8,8 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "biome lint --write ./src",
+    "check": "biome check ./src",
+    "ci-check": "npm run check && npm run type-check && npm run build",
     "format": "biome format ./src --write",
     "format:check": "biome format ./src --check",
     "audit": "npm audit --audit-level=moderate",
