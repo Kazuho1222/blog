@@ -25,8 +25,13 @@ import { Input } from '@/src/components/ui/input'
 import InputDateTime from '@/src/components/ui/inputdatetime'
 import { Label } from '@/src/components/ui/label'
 import { useToast } from '@/src/hooks/use-toast'
+import dynamic from 'next/dynamic'
 import Container from './container'
-import TiptapEditor from './tiptapeditor'
+
+const TiptapEditor = dynamic(() => import('./tiptapeditor'), {
+  ssr: false,
+  loading: () => <p>Loading Editor...</p>,
+})
 
 const pattern = /^[\u0021-\u007e]+$/
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024
