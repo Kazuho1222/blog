@@ -38,8 +38,7 @@
       "correctness": {
         "noInvalidPositionAtImportRule": "off",
         "noUnusedImports": "warn",
-        "noUnusedVariables": "warn",
-        "organizeImports": "off"
+        "noUnusedVariables": "warn"
       },
 
       "nursery": {
