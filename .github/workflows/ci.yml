@@ -100,7 +100,7 @@ jobs:
       - name: Build application
         run: npm run build
 
-      - name: Deploy to Vercel
+      - name: Vercel Action
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
