@@ -21,7 +21,7 @@ export default function Loading() {
 
         {/* Posts */}
         <div className="grid gap-14 md:grid-cols-2 pt-10">
-          {Array.from({ length: 4 }).map((_, i) => (
+          {Array.from({ length: 4 }).map((_, _i) => (
             <div key={nanoid()} className="space-y-3">
               <Skeleton className="h-80 w-full rounded-lg" />
               <Skeleton className="h-8 w-3/4" />

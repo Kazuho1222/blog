@@ -14,7 +14,7 @@ export default function Loading() {
 
         {/* カード一覧 */}
         <div className="grid gap-14 md:grid-cols-2 pt-10">
-          {Array.from({ length: 6 }).map((_, i) => (
+          {Array.from({ length: 6 }).map((_, _i) => (
             <div key={nanoid()} className="space-y-3">
               <Skeleton className="h-80 w-full rounded-lg" />
               <Skeleton className="h-8 w-3/4" />

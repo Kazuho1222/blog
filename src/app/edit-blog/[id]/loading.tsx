@@ -42,7 +42,7 @@ export default function Loading() {
           <div className="space-y-2">
             <Skeleton className="h-5 w-24" />
             <div className="space-y-2">
-              {Array.from({ length: 4 }).map((_, i) => (
+              {Array.from({ length: 4 }).map((_, _i) => (
                 <Skeleton key={nanoid()} className="h-5 w-40" />
               ))}
             </div>
