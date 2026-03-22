@@ -31,6 +31,10 @@
     "rules": {
       "recommended": true,
 
+      "suspicious": {
+        "noArrayIndexKey": "warn"
+      },
+
       "correctness": {
         "noInvalidPositionAtImportRule": "off",
         "noUnusedImports": "warn",
