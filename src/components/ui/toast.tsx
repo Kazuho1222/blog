@@ -1,9 +1,9 @@
 'use client'
 
-import { Cross2Icon } from '@radix-ui/react-icons'
-import * as ToastPrimitives from '@radix-ui/react-toast'
-import { cva, type VariantProps } from 'class-variance-authority'
 import * as React from 'react'
+import { cva, type VariantProps } from 'class-variance-authority'
+import * as ToastPrimitives from '@radix-ui/react-toast'
+import { Cross2Icon } from '@radix-ui/react-icons'
 
 import { cn } from '@/src/lib/utils'
 
@@ -119,11 +119,11 @@ type ToastActionElement = React.ReactElement<typeof ToastAction>
 export {
   Toast,
   ToastAction,
+  type ToastActionElement,
   ToastClose,
   ToastDescription,
+  type ToastProps,
   ToastProvider,
   ToastTitle,
   ToastViewport,
-  type ToastActionElement,
-  type ToastProps,
 }
