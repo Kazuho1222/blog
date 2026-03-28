@@ -74,6 +74,9 @@ jobs:
 
   bundle-analysis:
     runs-on: ubuntu-latest
+    env:
+      MICROCMS_SERVICE_DOMAIN: ${{ secrets.MICROCMS_SERVICE_DOMAIN }}
+      MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
     steps:
       - uses: actions/checkout@v6
 
