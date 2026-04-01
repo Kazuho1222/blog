@@ -1,12 +1,12 @@
-// declare global {
-//   interface Window {
-//     gtag: (
-//       command: string,
-//       measurementId: string,
-//       config?: { [key: string]: unknown }
-//     ) => void
-//   }
-// }
+declare global {
+  interface Window {
+    gtag: (
+      command: string,
+      measurementId: string,
+      config?: { [key: string]: unknown },
+    ) => void
+  }
+}
 
 export const GA_TAG_ID = process.env.NEXT_PUBLIC_GA_ID || ''
 export const IS_GATAG = GA_TAG_ID !== ''
