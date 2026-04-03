@@ -8,8 +8,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Button } from './ui/button'
 import type { PostType } from '@/src/types/post'
+import { Button } from './ui/button'
 
 const getPlainExcerpt = (html: string, maxLength = 90) => {
   if (!html) return ''

@@ -1,6 +1,7 @@
 import { createClient, type MicroCMSListResponse } from 'microcms-js-sdk'
 import type { CategoryType } from '../types/category'
 import type { PostType } from '../types/post'
+
 if (!process.env.MICROCMS_SERVICE_DOMAIN || !process.env.MICROCMS_API_KEY) {
   throw new Error('MICROCMS_SERVICE_DOMAINとMICROCMS_API_KEYは必須です。')
 }

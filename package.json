@@ -7,11 +7,12 @@
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "lint": "biome lint --write ./src",
+    "lint": "biome lint ./src",
+    "lint:fix": "biome lint --write ./src",
     "check": "biome check ./src",
-    "ci-check": "npm run check && npm run type-check && npm run build",
     "format": "biome format ./src --write",
     "format:check": "biome format ./src --check",
+    "ci-check": "biome check ./src && tsc --noEmit && next build",
     "audit": "npm audit --audit-level=moderate",
     "audit:fix": "npm audit fix",
     "update": "npm update",
@@ -23,7 +24,14 @@
     "analyze": "ANALYZE=true npm run build",
     "scripts": {
       "build:deploy": "npm run build && git add public/sitemap-0.xml && git commit -m 'Update sitemap' && git push"
-    }
+    },
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "biome lint --write",
+      "biome format --write"
+    ]
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
@@ -94,6 +102,8 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "baseline-browser-mapping": "^2.10.12",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "postcss": "^8.5.8",
     "typescript": "^6.0.2"
   }
