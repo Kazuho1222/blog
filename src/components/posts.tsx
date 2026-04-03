@@ -2,8 +2,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../styles/posts.module.css'
 import type { PostType } from '../types/post'
+import type { PostListItem } from '../types/ui'
 
-export default function Posts({ posts }: { posts: PostType[] | undefined }) {
+export default function Posts({
+  posts,
+}: {
+  posts: PostListItem[] | undefined
+}) {
   if (!posts) {
     return <div>投稿がありません。</div>
   }

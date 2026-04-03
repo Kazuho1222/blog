@@ -11,9 +11,18 @@ export const client = createClient({
   apiKey: process.env.MICROCMS_API_KEY,
 })
 
+// 一覧用
+type PostSummary = Pick<PostType, 'title' | 'slug' | 'eyecatch' | 'publishDate'>
+
+// slug用
+type PostSlug = Pick<PostType, 'title' | 'slug'>
+
+// カテゴリ一覧用
+type PostCard = Pick<PostType, 'title' | 'slug' | 'eyecatch'>
+
 export async function getPostBySlug(slug: string): Promise<PostType | null> {
   try {
-    const post = await client.get({
+    const post = await client.get<MicroCMSListResponse<PostType>>({
       endpoint: 'blogs',
       queries: { filters: `slug[equals]${slug}` },
     })
@@ -21,43 +30,37 @@ export async function getPostBySlug(slug: string): Promise<PostType | null> {
       return null
     }
     return post.contents[0]
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching post:', error)
     throw error
   }
 }
 
-export async function getAllSlugs(limit = 100): Promise<PostType[]> {
+export async function getAllSlugs(limit = 100): Promise<PostSlug[]> {
   try {
-    const slugs = await client.get({
+    const slugs = await client.get<MicroCMSListResponse<PostType>>({
       endpoint: 'blogs',
       queries: { fields: 'title,slug', orders: '-publishDate', limit: limit },
     })
-    if (!slugs) {
-      throw new Error('AllSlugs not found')
-    }
     return slugs.contents
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching AllSlugs:', error)
     throw error
   }
 }
 
-export async function getAllPosts(limit = 100): Promise<PostType[]> {
+export async function getAllPosts(limit = 100): Promise<PostSummary[]> {
   try {
-    const posts = await client.get({
+    const posts = await client.get<MicroCMSListResponse<PostType>>({
       endpoint: 'blogs',
       queries: {
-        fields: 'title,slug,eyecatch,publishedAt',
+        fields: 'title,slug,eyecatch,publishDate',
         orders: '-publishDate',
         limit: limit,
       },
     })
-    if (!posts) {
-      throw new Error('AllPosts not found')
-    }
     return posts.contents
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching AllPosts:', error)
     throw error
   }
@@ -65,18 +68,15 @@ export async function getAllPosts(limit = 100): Promise<PostType[]> {
 
 export async function getAllCategories(limit = 100): Promise<CategoryType[]> {
   try {
-    const categories = await client.get({
+    const categories = await client.get<MicroCMSListResponse<CategoryType>>({
       endpoint: 'categories',
       queries: {
         fields: 'name,id,slug',
         limit: limit,
       },
     })
-    if (!categories) {
-      throw new Error('AllCategories not found')
-    }
     return categories.contents
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching AllCategories:', error)
     throw error
   }
@@ -85,9 +85,9 @@ export async function getAllCategories(limit = 100): Promise<CategoryType[]> {
 export async function getAllPostsByCategory(
   catID: string,
   limit = 100,
-): Promise<PostType[]> {
+): Promise<PostCard[]> {
   try {
-    const posts = await client.get({
+    const posts = await client.get<MicroCMSListResponse<PostType>>({
       endpoint: 'blogs',
       queries: {
         filters: `categories[contains]${catID}`,
@@ -96,11 +96,8 @@ export async function getAllPostsByCategory(
         limit: limit,
       },
     })
-    if (!posts) {
-      throw new Error('AllPostsByCategory not found')
-    }
     return posts.contents
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching AllPostsbyCategory:', error)
     throw error
   }
@@ -133,7 +130,7 @@ export async function searchPosts(
     })
 
     return res
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error searching posts:', error)
     throw error
   }

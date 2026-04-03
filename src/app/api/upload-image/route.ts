@@ -56,7 +56,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true, url: String(imageUrl) })
-  } catch (error) {
+  } catch (error: unknown) {
     // Log the full error server-side
     console.error('Image upload error:', error)
 

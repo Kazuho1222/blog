@@ -21,9 +21,7 @@ export default async function Category({ params }: CategoryProps) {
   const catSlug = (await params).slug
   const allCats: CategoryType[] | undefined = await getAllCategories()
   const cat = allCats?.find(({ slug }: { slug: string }) => slug === catSlug)
-  const posts: PostType[] | undefined = cat
-    ? await getAllPostsByCategory(cat.id)
-    : undefined
+  const posts = cat ? await getAllPostsByCategory(cat.id) : undefined
 
   if (!cat) {
     return <div>カテゴリが見つかりません。</div>
@@ -46,7 +44,7 @@ export default async function Category({ params }: CategoryProps) {
           const imageBuffer = await getImageBuffer(post.eyecatch.url)
           const { base64 } = await getPlaiceholder(imageBuffer)
           post.eyecatch.blurDataURL = base64
-        } catch (error) {
+        } catch (error: unknown) {
           console.error(
             `Failed to process image for post: ${post.slug || 'unknown'}`,
             error,

@@ -7,17 +7,18 @@ import { getAllPosts } from '../../lib/api'
 import { openGraphMetadata, twitterMetadata } from '../../lib/base-metadata'
 import { eyecatchLocal, siteMeta } from '../../lib/constants'
 import { getImageBuffer } from '../../lib/get-image-buffer'
+import type { PostListItem } from '@/src/types/ui'
 
 const { siteTitle, siteUrl } = siteMeta
 
 export default async function Blog() {
-  let posts: PostType[] = []
+  let posts: PostListItem[] = []
   let fetchError = false
 
   try {
     // データ取得に成功した場合
     posts = (await getAllPosts()) || []
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error fetching posts:', error)
     fetchError = true
   }
@@ -35,7 +36,7 @@ export default async function Blog() {
           const imageBuffer = await getImageBuffer(post.eyecatch.url)
           const { base64 } = await getPlaiceholder(imageBuffer)
           post.eyecatch.blurDataURL = base64
-        } catch (error) {
+        } catch (error: unknown) {
           console.error('Error processing eyecatch for post:', post.slug, error)
           if (post.eyecatch) {
             post.eyecatch.blurDataURL = '' // 画像処理に失敗した場合の代替値

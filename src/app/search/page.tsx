@@ -52,7 +52,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           const imageBuffer = await getImageBuffer(post.eyecatch.url)
           const { base64 } = await getPlaiceholder(imageBuffer)
           post.eyecatch.blurDataURL = base64
-        } catch (error) {
+        } catch (error: unknown) {
           console.error('Error processing eyecatch for post:', post.slug, error)
           if (post.eyecatch) {
             post.eyecatch.blurDataURL = '' // 画像処理に失敗した場合の代替値

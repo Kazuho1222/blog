@@ -153,7 +153,7 @@ export default function CreateBlogForm({
           variant: 'destructive',
         })
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('予期しないエラー:', error)
       toast({
         title: 'エラーが発生しました',
