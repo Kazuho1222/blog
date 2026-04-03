@@ -1,6 +1,6 @@
 import { getAllCategories, getAllSlugs } from '../lib/api'
 import { siteMeta } from '../lib/constants'
-import type { PostType } from '../types/post'
+import type { PostListItem } from '../types/ui'
 
 const { siteUrl } = siteMeta
 
@@ -13,7 +13,7 @@ export default async function sitemap() {
   // 各記事のURL
   const posts = await getAllSlugs()
   if (!posts) return []
-  const postFields = posts.map((post: PostType) => {
+  const postFields = posts.map((post: PostListItem) => {
     return {
       url: new URL(`/blog/${post.slug}`, siteUrl).toString(),
       lastModified: new Date(),
