@@ -2,11 +2,20 @@
 
 import { revalidatePath } from 'next/cache'
 
-export type CreateBlogFormData = {
+type CreateBlogFormData = {
   title: string
   slug: string
   _content: string
   eyecatch: string
+  categories: string[]
+  publishDate: string
+}
+
+type CreateBlogRequest = {
+  title: string
+  slug: string
+  _content: string
+  eyecatch?: string
   categories: string[]
   publishDate: string
 }
@@ -30,7 +39,7 @@ export async function createBlogAction(
     const endpoint = 'https://kazuho-blog.microcms.io/api/v1/blogs'
 
     const { _content: content, eyecatch, ...rest } = formData
-    const newBody: Record<string, unknown> = {
+    const newBody: CreateBlogRequest = {
       ...rest,
       _content: content,
     }
@@ -58,7 +67,7 @@ export async function createBlogAction(
       }
     }
 
-    const data = await res.json()
+    const data: { id: string } = await res.json()
 
     // キャッシュを再検証
     revalidatePath('/')
@@ -73,7 +82,7 @@ export async function createBlogAction(
       }
     }
     return { success: true, id: blogId }
-  } catch (error) {
+  } catch (error: unknown) {
     // エラーメッセージを短く制限し、特殊文字を除去
     let errorMessage = '予期しないエラーが発生しました'
     if (error instanceof Error) {
