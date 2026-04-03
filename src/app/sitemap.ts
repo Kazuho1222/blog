@@ -1,6 +1,6 @@
-import type { PostType } from '@/src/types/types'
 import { getAllCategories, getAllSlugs } from '../lib/api'
 import { siteMeta } from '../lib/constants'
+import type { PostType } from '../types/post'
 
 const { siteUrl } = siteMeta
 

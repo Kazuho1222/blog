@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import type { PostType } from '@/src/types/types'
 import styles from '../styles/posts.module.css'
+import type { PostType } from '../types/post'
 
 export default function Posts({ posts }: { posts: PostType[] | undefined }) {
   if (!posts) {

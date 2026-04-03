@@ -26,8 +26,10 @@ import { Input } from '@/src/components/ui/input'
 import InputDateTime from '@/src/components/ui/inputdatetime'
 import { Label } from '@/src/components/ui/label'
 import { useToast } from '@/src/hooks/use-toast'
-import type { CategoryType, FormDataType, PostType } from '@/src/types/types'
 import Container from './container'
+import type { CategoryType } from '@/src/types/category'
+import type { FormDataType } from '@/src/types/form'
+import type { PostType } from '@/src/types/post'
 
 const TiptapEditor = dynamic(() => import('./tiptapeditor'), {
   ssr: false,

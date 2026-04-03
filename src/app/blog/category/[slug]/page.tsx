@@ -6,7 +6,8 @@ import { getAllCategories, getAllPostsByCategory } from '@/src/lib/api'
 import { openGraphMetadata, twitterMetadata } from '@/src/lib/base-metadata'
 import { eyecatchLocal, siteMeta } from '@/src/lib/constants'
 import { getImageBuffer } from '@/src/lib/get-image-buffer'
-import type { CategoryType, PostType } from '@/src/types/types'
+import type { PostType } from '@/src/types/post'
+import type { CategoryType } from '@/src/types/category'
 
 const { siteTitle, siteUrl } = siteMeta
 
