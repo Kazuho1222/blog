@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import styles from '../styles/posts.module.css'
-import type { PostType } from '../types/post'
 import type { PostListItem } from '../types/ui'
 
 export default function Posts({

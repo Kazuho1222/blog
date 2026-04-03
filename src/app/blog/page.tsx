@@ -1,5 +1,5 @@
 import { getPlaiceholder } from 'plaiceholder'
-import type { PostType } from '@/src/types/post'
+import type { PostListItem } from '@/src/types/ui'
 import Container from '../../components/container'
 import Hero from '../../components/hero'
 import Posts from '../../components/posts'
@@ -7,7 +7,6 @@ import { getAllPosts } from '../../lib/api'
 import { openGraphMetadata, twitterMetadata } from '../../lib/base-metadata'
 import { eyecatchLocal, siteMeta } from '../../lib/constants'
 import { getImageBuffer } from '../../lib/get-image-buffer'
-import type { PostListItem } from '@/src/types/ui'
 
 const { siteTitle, siteUrl } = siteMeta
 
