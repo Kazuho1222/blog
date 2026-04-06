@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import type React from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -29,6 +29,7 @@ import { useToast } from '@/src/hooks/use-toast'
 import type { CategoryType } from '@/src/types/category'
 import type { FormDataType } from '@/src/types/form'
 import type { PostType } from '@/src/types/post'
+import { editBlog, uploadImage } from '../app/actions/edit-blog'
 import Container from './container'
 
 const TiptapEditor = dynamic(() => import('./tiptapeditor'), {
@@ -87,53 +88,6 @@ export default function EditBlogForm({
     },
   })
 
-  const uploadImage = async (file: File) => {
-    const formData = new FormData()
-    formData.append('file', file)
-
-    const response = await fetch(
-      'https://kazuho-blog.microcms-management.io/api/v1/media',
-      {
-        method: 'POST',
-        headers: {
-          'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY || '',
-        },
-        body: formData,
-      },
-    )
-
-    if (!response.ok) {
-      throw new Error('画像のアップロードに失敗しました')
-    }
-
-    const data = await response.json()
-    return data.url
-  }
-
-  const editBlog = async (formData: FormDataType, imageUrl: string) => {
-    const response = await fetch(
-      `https://kazuho-blog.microcms.io/api/v1/blogs/${post.id}`,
-      {
-        method: 'PATCH',
-        headers: {
-          'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY || '',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          eyecatch: imageUrl,
-        }),
-      },
-    )
-
-    if (!response.ok) {
-      throw new Error('ブログの投稿に失敗しました')
-    }
-
-    const data = await response.json()
-    return data
-  }
-
   const extractFileNameFromUrl = (url: string) => {
     return url.split('/').pop() || ''
   }
@@ -156,15 +110,13 @@ export default function EditBlogForm({
         form.setValue('eyecatch', fileName)
       }
 
-      const response = await editBlog(formData, imageUrl)
+      const response = await editBlog(post, formData, imageUrl)
 
       if (response) {
-        console.log('投稿に成功しました！')
-        router.push('/')
-        router.refresh()
         toast({
           title: '投稿に成功しました！',
         })
+        router.push('/')
       }
     } catch (error: unknown) {
       console.error('エラー', error)
