@@ -27,7 +27,6 @@ import InputDateTime from '@/src/components/ui/inputdatetime'
 import { Label } from '@/src/components/ui/label'
 import { useToast } from '@/src/hooks/use-toast'
 import type { CategoryType } from '@/src/types/category'
-import type { FormDataType } from '@/src/types/form'
 import type { PostType } from '@/src/types/post'
 import { editBlog, uploadImage } from '../app/actions/edit-blog'
 import Container from './container'
@@ -92,7 +91,9 @@ export default function EditBlogForm({
     return url.split('/').pop() || ''
   }
 
-  const handleSubmit = async (formData: FormDataType) => {
+  type EditBlogInput = z.infer<typeof FormSchema>
+
+  const handleSubmit = async (formData: EditBlogInput) => {
     try {
       const fileInput = fileInputRef.current
       const file = fileInput?.files?.[0]
@@ -100,7 +101,7 @@ export default function EditBlogForm({
       let imageUrl =
         typeof formData.eyecatch === 'string'
           ? formData.eyecatch
-          : formData.eyecatch?.url || ''
+          : formData.eyecatch || ''
       if (file) {
         imageUrl = await uploadImage(file)
         const fileName = file.name
