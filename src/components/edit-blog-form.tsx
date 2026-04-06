@@ -175,11 +175,6 @@ export default function EditBlogForm({
   const [previewImage, setPreviewImage] = useState<string | null>(
     post.eyecatch?.url || null,
   )
-  const [_content, _setContent] = useState(post._content)
-
-  useEffect(() => {
-    form.setValue('_content', _content)
-  }, [_content, form])
 
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -271,7 +266,10 @@ export default function EditBlogForm({
                 <FormItem>
                   <FormLabel>内容</FormLabel>
                   <FormControl>
-                    <TiptapEditor content={_content} onChange={_setContent} />
+                    <TiptapEditor
+                      content={form.watch('_content')}
+                      onChange={(val) => form.setValue('_content', val)}
+                    />
                   </FormControl>
                   <FormMessage className="text-red-500" />
                 </FormItem>
