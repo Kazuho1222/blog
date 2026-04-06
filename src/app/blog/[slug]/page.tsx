@@ -95,19 +95,19 @@ export default async function Post(props: {
   )
 }
 
-export const dynamicParams = false
-export async function generateStaticParams() {
-  const allSlugs = await getAllSlugs()
+// export const dynamicParams = false
+// export async function generateStaticParams() {
+//   const allSlugs = await getAllSlugs()
 
-  if (!allSlugs || allSlugs.length === 0) {
-    return []
-  }
-  return allSlugs.map(({ slug }: { slug: string }) => {
-    return { slug: slug }
-  })
-}
+//   if (!allSlugs || allSlugs.length === 0) {
+//     return []
+//   }
+//   return allSlugs.map(({ slug }: { slug: string }) => {
+//     return { slug: slug }
+//   })
+// }
 
-export const revalidate = 0
+// export const revalidate = 0
 
 // メタデータ
 export async function generateMetadata(props: {

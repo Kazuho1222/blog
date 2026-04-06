@@ -55,7 +55,7 @@ export async function getAllPosts(limit = 100): Promise<PostSummary[]> {
       endpoint: 'blogs',
       queries: {
         fields: 'title,slug,eyecatch,publishDate',
-        orders: '-publishDate',
+        orders: '-publishDate,-createdAt',
         limit: limit,
       },
     })
@@ -92,7 +92,7 @@ export async function getAllPostsByCategory(
       queries: {
         filters: `categories[contains]${catID}`,
         fields: 'title,slug,eyecatch',
-        orders: '-publishDate',
+        orders: '-publishDate,-createdAt',
         limit: limit,
       },
     })
@@ -125,7 +125,7 @@ export async function searchPosts(
         limit,
         offset,
         fields: 'title,slug,eyecatch,_content',
-        orders: '-publishDate',
+        orders: '-publishDate,-createdAt',
       },
     })
 
