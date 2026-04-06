@@ -76,9 +76,11 @@ export async function createBlogAction(
           detail = raw.slice(0, 400)
         }
       }
+      // Log full detail for debugging
+      console.error(`MicroCMS API error (${res.status}):`, detail)
       return {
         success: false,
-        error: `MicroCMS Error (${res.status}): ${detail}`,
+        error: `MicroCMS Error (${res.status}): ブログの作成に失敗しました`,
       }
     }
 

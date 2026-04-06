@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const SLUG_PATTERN = /^[\u0021-\u007e]+$/
+export const SLUG_PATTERN = /^[a-zA-Z0-9-]+$/
 
 export const MAX_BLOG_IMAGE_BYTES = 5 * 1024 * 1024
 

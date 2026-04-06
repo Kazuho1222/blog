@@ -157,6 +157,7 @@ export function BlogPostFormFields({
                         type="button"
                         className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 transform cursor-pointer rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                         onClick={handleRemoveClick}
+                        aria-label="画像を削除"
                       >
                         <FontAwesomeIcon icon={faCircleXmark} size="2x" />
                       </button>
@@ -183,7 +184,7 @@ export function BlogPostFormFields({
                       checked={form.watch('categories').includes(category.id)}
                       onCheckedChange={(checked) => {
                         const selectedCategories = form.getValues('categories')
-                        if (checked) {
+                        if (checked === true) {
                           form.setValue('categories', [
                             ...selectedCategories,
                             category.id,
