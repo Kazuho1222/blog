@@ -59,11 +59,26 @@ export async function createBlogAction(
     })
 
     if (!res.ok) {
-      // エラーメッセージを短く制限（Server Actionsのシリアライズ制限を考慮）
-      const statusText = res.statusText || 'Unknown error'
+      const raw = await res.text()
+      let detail = res.statusText || 'Unknown error'
+      try {
+        const parsed = JSON.parse(raw) as {
+          message?: string
+          errors?: { message?: string }[]
+        }
+        detail =
+          parsed.message ||
+          parsed.errors?.[0]?.message ||
+          raw.slice(0, 400) ||
+          detail
+      } catch {
+        if (raw) {
+          detail = raw.slice(0, 400)
+        }
+      }
       return {
         success: false,
-        error: `MicroCMS Error (${res.status}): ${statusText}`,
+        error: `MicroCMS Error (${res.status}): ${detail}`,
       }
     }
 

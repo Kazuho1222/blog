@@ -1,65 +1,24 @@
 'use client'
 
-import { faCircleXmark } from '@fortawesome/free-regular-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { zodResolver } from '@hookform/resolvers/zod'
-import dynamic from 'next/dynamic'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import type React from 'react'
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 
-import { Button } from '@/src/components/ui/button'
-import { Checkbox } from '@/src/components/ui/checkbox'
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/src/components/ui/form'
-import { Input } from '@/src/components/ui/input'
-import InputDateTime from '@/src/components/ui/inputdatetime'
-import { Label } from '@/src/components/ui/label'
+import { Form } from '@/src/components/ui/form'
 import { useToast } from '@/src/hooks/use-toast'
 import type { CategoryType } from '@/src/types/category'
 import type { PostType } from '@/src/types/post'
 import { editBlog, uploadImage } from '../app/actions/edit-blog'
+
+import { BlogPostFormFields } from './blog-form/blog-post-form-fields'
+import {
+  type BlogPostFormValues,
+  blogPostFormSchema,
+  MAX_BLOG_IMAGE_BYTES,
+} from './blog-form/blog-post-form-schema'
 import Container from './container'
-
-const TiptapEditor = dynamic(() => import('./tiptapeditor'), {
-  ssr: false,
-  loading: () => <p>Loading Editor...</p>,
-})
-
-const pattern = /^[\u0021-\u007e]+$/
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024
-
-const FormSchema = z.object({
-  title: z.string().min(1, {
-    message: '必須項目です',
-  }),
-  slug: z
-    .string()
-    .min(1, {
-      message: '必須項目です',
-    })
-    .regex(pattern, '半角英数字で入力してください'),
-  publishDate: z.string().min(1, {
-    message: '必須項目です',
-  }),
-  _content: z.string().min(1, {
-    message: '必須項目です',
-  }),
-  eyecatch: z.string(),
-  categories: z.array(z.string()).min(1, {
-    message: 'カテゴリを1つ以上選択してください',
-  }),
-})
 
 export default function EditBlogForm({
   post,
@@ -71,16 +30,14 @@ export default function EditBlogForm({
   const { toast } = useToast()
   const router = useRouter()
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<BlogPostFormValues>({
+    resolver: zodResolver(blogPostFormSchema),
     defaultValues: {
       title: post.title,
       slug: post.slug,
       _content: post._content,
-      eyecatch: post.eyecatch?.url,
-      categories: post.categories.map(
-        (category: { id: string }) => category.id,
-      ),
+      eyecatch: post.eyecatch?.url ?? '',
+      categories: post.categories.map((c) => c.id),
       publishDate: post.publishDate
         ? new Date(post.publishDate).toISOString()
         : '',
@@ -91,17 +48,12 @@ export default function EditBlogForm({
     return url.split('/').pop() || ''
   }
 
-  type EditBlogInput = z.infer<typeof FormSchema>
-
-  const handleSubmit = async (formData: EditBlogInput) => {
+  const handleSubmit = async (formData: BlogPostFormValues) => {
     try {
       const fileInput = fileInputRef.current
       const file = fileInput?.files?.[0]
 
-      let imageUrl =
-        typeof formData.eyecatch === 'string'
-          ? formData.eyecatch
-          : formData.eyecatch || ''
+      let imageUrl = formData.eyecatch
       if (file) {
         imageUrl = await uploadImage(file)
         const fileName = file.name
@@ -124,7 +76,6 @@ export default function EditBlogForm({
     }
   }
 
-  const [_selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(
     post.eyecatch?.url || null,
   )
@@ -132,7 +83,6 @@ export default function EditBlogForm({
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date)
     const isoString = date ? date.toISOString() : ''
     form.setValue('publishDate', isoString)
   }
@@ -141,7 +91,7 @@ export default function EditBlogForm({
     const file = event.target.files?.[0]
 
     if (file) {
-      if (file.size > MAX_IMAGE_SIZE) {
+      if (file.size > MAX_BLOG_IMAGE_BYTES) {
         alert('ファイルサイズは最大5MBです')
         form.setValue('eyecatch', '')
         if (fileInputRef.current) {
@@ -163,6 +113,9 @@ export default function EditBlogForm({
     }
   }
 
+  const previewW = post.eyecatch?.width || 500
+  const previewH = post.eyecatch?.height || 500
+
   return (
     <div className="m-4">
       <Container large={false}>
@@ -172,152 +125,18 @@ export default function EditBlogForm({
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-8"
           >
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>タイトル</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage className="text-red-500" />
-                </FormItem>
-              )}
+            <BlogPostFormFields
+              form={form}
+              categories={categories}
+              fileInputRef={fileInputRef}
+              previewImage={previewImage}
+              previewImageWidth={previewW}
+              previewImageHeight={previewH}
+              onDateChange={handleDateChange}
+              onImageChange={handleImageChange}
+              onRemoveImage={handleRemoveImage}
+              submitLabel="更新"
             />
-            <FormField
-              control={form.control}
-              name="slug"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>スラッグ</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage className="text-red-500" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="publishDate"
-              render={() => (
-                <FormItem className="relative mt-4">
-                  <FormLabel className="mt-4 flex">投稿日</FormLabel>
-                  <InputDateTime
-                    selectedDate={new Date(form.watch('publishDate'))}
-                    onChange={handleDateChange}
-                  />
-                  <FormMessage className="text-red-500" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="_content"
-              render={() => (
-                <FormItem>
-                  <FormLabel>内容</FormLabel>
-                  <FormControl>
-                    <TiptapEditor
-                      content={form.watch('_content')}
-                      onChange={(val) => form.setValue('_content', val)}
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red-500" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="eyecatch"
-              render={() => (
-                <FormItem>
-                  <FormControl>
-                    <div>
-                      <Label htmlFor="eyecatch">アイキャッチ</Label>
-                      <FormDescription>
-                        ファイルサイズは最大5MBです
-                      </FormDescription>
-                      <Input
-                        // id="eyecatch"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        ref={fileInputRef}
-                      />
-
-                      {previewImage && (
-                        <div className="relative mt-4">
-                          <Label className="mb-2 flex">プレビュー</Label>
-                          <div className="group relative inline-block hover:opacity-80">
-                            <Image
-                              src={previewImage}
-                              alt="アイキャッチプレビュー"
-                              className="h-auto max-w-xs"
-                              width={post.eyecatch?.width || 500} // 元の幅を使用
-                              height={post.eyecatch?.height || 500} // 元の高さを使用
-                            />
-                            <button
-                              type="button"
-                              className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 transform cursor-pointer rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                              onClick={handleRemoveImage}
-                            >
-                              <FontAwesomeIcon icon={faCircleXmark} size="2x" />
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </FormControl>
-                  <FormMessage className="text-red-500" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="categories"
-              render={() => (
-                <FormItem>
-                  <FormLabel> カテゴリ</FormLabel>
-                  {categories.map((category) => (
-                    <FormItem key={category.id}>
-                      <FormControl>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={form
-                              .watch('categories')
-                              .includes(category.slug)}
-                            onCheckedChange={(checked) => {
-                              const selectedCategories =
-                                form.getValues('categories')
-                              if (checked) {
-                                form.setValue('categories', [
-                                  ...selectedCategories,
-                                  category.slug,
-                                ])
-                              } else {
-                                form.setValue(
-                                  'categories',
-                                  selectedCategories.filter(
-                                    (slug) => slug !== category.slug,
-                                  ),
-                                )
-                              }
-                            }}
-                          />
-                          <Label>{category.slug}</Label>
-                        </div>
-                      </FormControl>
-                    </FormItem>
-                  ))}
-                  <FormMessage className="text-red-500" />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="hover:bg-red-500">
-              更新
-            </Button>
           </form>
         </Form>
       </Container>
