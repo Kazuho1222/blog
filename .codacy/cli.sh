@@ -3,6 +3,11 @@
 
 set -e +o pipefail
 
+fatal() {
+    echo "$1" >&2
+    exit 1
+}
+
 # Set up paths first
 bin_name="codacy-cli-v2"
 
@@ -46,6 +51,13 @@ get_version_from_yaml() {
     return 1
 }
 
+handle_rate_limit() {
+    local response="$1"
+    if echo "$response" | grep -q "API rate limit exceeded"; then
+        fatal "Error: GitHub API rate limit exceeded. Please try again later"
+    fi
+}
+
 get_latest_version() {
     local response
     if [ -n "$GH_TOKEN" ]; then
@@ -55,20 +67,13 @@ get_latest_version() {
     fi
 
     handle_rate_limit "$response"
-    local version=$(echo "$response" | grep -m 1 tag_name | cut -d'"' -f4)
+    local version
+    version=$(echo "$response" | grep -m 1 tag_name | cut -d'"' -f4)
     if [ -z "$version" ]; then
         echo "Error: Failed to fetch latest version from GitHub API" >&2
         return 1
-handle_rate_limit() {
-    local response="$1"
-    if echo "$response" | grep -q "API rate limit exceeded"; then
-          echo "Error: GitHub API rate limit exceeded. Please try again later" >&2
-          exit 1
     fi
-}
-    if echo "$response" | grep -q "API rate limit exceeded"; then
-          fatal "Error: GitHub API rate limit exceeded. Please try again later"
-    fi
+    echo "$version"
 }
 
 download_file() {
