@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import z from 'zod'
+import { UploadResponseSchema } from '@/src/lib/schemas/upload'
 
 export async function POST(request: Request) {
   try {
@@ -46,11 +46,6 @@ export async function POST(request: Request) {
         { status: response.status },
       )
     }
-
-    const UploadResponseSchema = z.object({
-      url: z.string().optional(),
-      id: z.string().optional(),
-    })
 
     const data = UploadResponseSchema.parse(await response.json())
 

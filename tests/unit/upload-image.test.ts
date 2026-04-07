@@ -1,10 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { z } from 'zod'
-
-const UploadResponseSchema = z.object({
-  url: z.string().optional(),
-  id: z.string().optional(),
-})
+import { UploadResponseSchema } from '@/src/lib/schemas/upload'
 
 describe('UploadResponseSchema', () => {
   it('urlがある場合はOK', () => {
