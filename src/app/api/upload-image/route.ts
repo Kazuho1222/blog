@@ -1,11 +1,6 @@
 import { NextResponse } from 'next/server'
 import z from 'zod'
 
-type UploadResponse = {
-  url?: string
-  id?: string
-}
-
 export async function POST(request: Request) {
   try {
     const formData = await request.formData()
