@@ -10,8 +10,8 @@ import { Form } from '@/src/components/ui/form'
 import { useToast } from '@/src/hooks/use-toast'
 import type { CategoryType } from '@/src/types/category'
 import type { PostType } from '@/src/types/post'
-import { editBlog, uploadImage } from '../app/actions/edit-blog'
-
+import { editBlogAction } from '../app/actions/edit-blog'
+import { uploadImageAction } from '../app/actions/upload-image'
 import { BlogPostFormFields } from './blog-form/blog-post-form-fields'
 import {
   type BlogPostFormValues,
@@ -55,15 +55,16 @@ export default function EditBlogForm({
 
       let imageUrl = formData.eyecatch
       if (file) {
-        imageUrl = await uploadImage(file)
-        const fileName = file.name
-        form.setValue('eyecatch', fileName)
-      } else if (imageUrl) {
-        const fileName = extractFileNameFromUrl(imageUrl)
-        form.setValue('eyecatch', fileName)
+        const uploadResult = await uploadImageAction(file)
+
+        if (!uploadResult.success || !uploadResult.url) {
+          throw new Error('画像アップロード失敗')
+        }
+
+        imageUrl = uploadResult.url
       }
 
-      const response = await editBlog(post, formData, imageUrl)
+      const response = await editBlogAction(post, formData, imageUrl)
 
       if (response) {
         toast({

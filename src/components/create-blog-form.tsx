@@ -17,6 +17,7 @@ import {
   MAX_BLOG_IMAGE_BYTES,
 } from './blog-form/blog-post-form-schema'
 import Container from './container'
+import { uploadImageAction } from '../app/actions/upload-image'
 
 export default function CreateBlogForm({
   categories,
@@ -47,25 +48,17 @@ export default function CreateBlogForm({
       let imageUrl = ''
       if (file) {
         try {
-          const uploadFormData = new FormData()
-          uploadFormData.append('file', file)
-          const response = await fetch('/api/upload-image', {
-            method: 'POST',
-            body: uploadFormData,
-          })
-          if (!response.ok) {
-            const errorText = await response.text()
-            throw new Error(`Upload failed: ${response.status} ${errorText}`)
-          }
-          const uploadResult = await response.json()
+          const uploadResult = await uploadImageAction(file)
+
           if (!uploadResult.success) {
             toast({
-              title: 'エラーが発生しました',
+              title: '画像のアップロードに失敗しました',
               description: uploadResult.error,
               variant: 'destructive',
             })
             return
           }
+
           imageUrl = uploadResult.url
         } catch (uploadError) {
           console.error('画像アップロードエラー:', uploadError)

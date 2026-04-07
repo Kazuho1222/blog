@@ -18,9 +18,10 @@ describe('UploadResponseSchema', () => {
     expect(result.id).toBe('abc123')
   })
 
-  it('どちらもない場合はOK（optionalのため）', () => {
-    const result = UploadResponseSchema.parse({})
-    expect(result).toEqual({})
+  it('どちらもない場合はNG', () => {
+    expect(() => UploadResponseSchema.parse({})).toThrow(
+      "Either 'url' or 'id' must be provided",
+    )
   })
 
   it('型が違うとエラー', () => {
