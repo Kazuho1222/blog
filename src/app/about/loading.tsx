@@ -1,5 +1,5 @@
-import { Skeleton } from '@/components/ui/skeleton'
 import Container from '@/src/components/container'
+import { Skeleton } from '@/src/components/ui/skeleton'
 
 export default function Loading() {
   return (

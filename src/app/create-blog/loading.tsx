@@ -1,3 +1,3 @@
 export default function Loading() {
-  return null
+  return <div>読み込み中...</div>
 }

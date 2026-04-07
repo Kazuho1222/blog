@@ -1,13 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Badge } from '@/components/ui/badge'
+import { Badge } from '@/src/components/ui/badge'
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/src/components/ui/card'
 import type { PostType } from '@/src/types/post'
 import { Button } from './ui/button'
 

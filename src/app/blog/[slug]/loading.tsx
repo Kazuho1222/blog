@@ -1,10 +1,10 @@
-import { Skeleton } from '@/components/ui/skeleton'
 import Container from '@/src/components/container'
 import {
   TwoColumn,
   TwoColumnMain,
   TwoColumnSidebar,
 } from '@/src/components/two-column'
+import { Skeleton } from '@/src/components/ui/skeleton'
 
 export default function Loading() {
   return (
