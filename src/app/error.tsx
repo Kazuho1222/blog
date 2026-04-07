@@ -4,10 +4,6 @@ import { useEffect } from 'react'
 import Container from '../components/container'
 import Hero from '../components/hero'
 
-export const metadata = {
-  title: 'エラー: エラーが発生しました',
-}
-
 export default function ErrorPage({
   error,
   unstable_retry,
@@ -16,6 +12,7 @@ export default function ErrorPage({
   unstable_retry: () => void
 }) {
   useEffect(() => {
+    document.title = 'エラー: エラーが発生しました'
     // Log the error to an error reporting service
     console.error(error)
   }, [error])
