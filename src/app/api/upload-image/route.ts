@@ -1,4 +1,10 @@
 import { NextResponse } from 'next/server'
+import z from 'zod'
+
+type UploadResponse = {
+  url?: string
+  id?: string
+}
 
 export async function POST(request: Request) {
   try {
@@ -46,8 +52,14 @@ export async function POST(request: Request) {
       )
     }
 
-    const data = await response.json()
-    const imageUrl = data?.url || data?.id
+    const UploadResponseSchema = z.object({
+      url: z.string().optional(),
+      id: z.string().optional(),
+    })
+
+    const data = UploadResponseSchema.parse(await response.json())
+
+    const imageUrl = data.url ?? data.id
     if (!imageUrl || typeof imageUrl !== 'string') {
       return NextResponse.json(
         { success: false, error: '画像URLが取得できませんでした' },
@@ -57,9 +69,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, url: String(imageUrl) })
   } catch (error: unknown) {
-    // Log the full error server-side
-    console.error('Image upload error:', error)
-
+    if (error instanceof Error) {
+      console.error(error.message)
+    } else {
+      console.error(error)
+    }
     return NextResponse.json(
       { success: false, error: '予期しないエラーが発生しました' },
       { status: 500 },

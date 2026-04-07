@@ -1,8 +1,14 @@
 import { NextResponse } from 'next/server'
+import z from 'zod'
 
 export async function DELETE(req: Request) {
   try {
-    const { id } = await req.json()
+    const DeleteSchema = z.object({
+      id: z.string(),
+    })
+
+    const body = DeleteSchema.parse(await req.json())
+    const { id } = body
 
     if (!id) {
       return NextResponse.json(
