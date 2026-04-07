@@ -1,22 +1,14 @@
 import { NextResponse } from 'next/server'
 import z from 'zod'
 
+const DeleteSchema = z.object({
+  id: z.string().min(1, 'IDが指定されていません'),
+})
+
 export async function DELETE(req: Request) {
   try {
-    const DeleteSchema = z.object({
-      id: z.string(),
-    })
-
     const body = DeleteSchema.parse(await req.json())
     const { id } = body
-
-    if (!id) {
-      return NextResponse.json(
-        { error: 'IDが指定されていません' },
-        { status: 400 },
-      )
-    }
-
     const apiKey = process.env.MICROCMS_API_KEY
     const endpoint = `https://kazuho-blog.microcms.io/api/v1/blogs/${id}`
 
@@ -38,7 +30,13 @@ export async function DELETE(req: Request) {
       { message: 'ブログが正常に削除されました' },
       { status: 200 },
     )
-  } catch (_error) {
+  } catch (error: unknown) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: error.issues[0]?.message ?? 'バリデーションエラー' },
+        { status: 400 },
+      )
+    }
     return NextResponse.json(
       { error: 'サーバーエラーが発生しました' },
       { status: 500 },
