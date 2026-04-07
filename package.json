@@ -25,7 +25,9 @@
     "scripts": {
       "build:deploy": "npm run build && git add public/sitemap-0.xml && git commit -m 'Update sitemap' && git push"
     },
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "vitest",
+    "test:ui": "vitest --ui"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
@@ -96,6 +98,8 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.10",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/gtag.js": "^0.0.20",
     "@types/html-to-text": "^9.0.4",
     "@types/node": "^25.5.2",
@@ -103,8 +107,10 @@
     "@types/react-dom": "^19.2.3",
     "baseline-browser-mapping": "^2.10.16",
     "husky": "^9.1.7",
+    "jsdom": "^29.0.2",
     "lint-staged": "^16.4.0",
     "postcss": "^8.5.8",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.2"
   }
 }

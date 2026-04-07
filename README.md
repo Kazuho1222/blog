@@ -31,7 +31,7 @@
 - **開発環境の準備**: Node.js, git
 - **ヘッドレスCMS**: microCMS
 - **デザイン**: CSS Modules, styled-jsx, TailwindCSS
-- **その他**: Vercel（デプロイ）, Cusor（エディター）
+- **その他**: Vercel（デプロイ）, Cursor（エディター）
 
 ---
 
