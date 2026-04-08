@@ -3,7 +3,7 @@
 import z from 'zod'
 
 const DeleteSchema = z.object({
-  id: z.string().min(1, 'IDを取得できませんでした'),
+  id: z.string().min(1, 'IDが指定されていません'),
 })
 
 export async function deleteBlogAction(id: string) {

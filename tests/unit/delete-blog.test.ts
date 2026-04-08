@@ -29,8 +29,11 @@ describe('deleteBlogAction', () => {
     publishDate: '2026-01-01',
   }
 
+  const originalApiKey = process.env.MICROCMS_API_KEY
+
   beforeEach(() => {
     vi.clearAllMocks()
+    process.env.MICROCMS_API_KEY = originalApiKey
   })
 
   it('成功時：success true', async () => {
@@ -79,7 +82,7 @@ describe('deleteBlogAction', () => {
 
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toContain('IDを取得できませんでした')
+      expect(result.error).toContain('IDが指定されていません')
     }
   })
 
