@@ -33,7 +33,11 @@ describe('deleteBlogAction', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    process.env.MICROCMS_API_KEY = originalApiKey
+    if (originalApiKey === undefined) {
+      delete process.env.MICROCMS_API_KEY
+    } else {
+      process.env.MICROCMS_API_KEY = originalApiKey
+    }
   })
 
   it('成功時：success true', async () => {
