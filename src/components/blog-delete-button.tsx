@@ -32,8 +32,16 @@ const BlogDeleteButton = ({ blogId }: { blogId: string }) => {
         return
       }
       console.error(response.error)
+      toast({
+        title: '削除に失敗しました',
+        variant: 'destructive',
+      })
     } catch (error: unknown) {
       console.error('エラー', error)
+      toast({
+        title: '削除に失敗しました',
+        variant: 'destructive',
+      })
     }
   }
   return (

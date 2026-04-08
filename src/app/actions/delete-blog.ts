@@ -1,6 +1,6 @@
 'use server'
 
-import z from 'zod'
+import z, { success } from 'zod'
 
 const DeleteSchema = z.object({
   id: z.string().min(1, 'IDが指定されていません'),
@@ -10,12 +10,20 @@ export async function deleteBlogAction(id: string) {
   try {
     const parsed = DeleteSchema.parse({ id })
     const apiKey = process.env.MICROCMS_API_KEY
+
+    if (!apiKey) {
+      return {
+        success: false,
+        error: 'API設定エラーが発生しました',
+      }
+    }
+
     const endpoint = `https://kazuho-blog.microcms.io/api/v1/blogs/${parsed.id}`
 
     const res = await fetch(endpoint, {
       method: 'DELETE',
       headers: {
-        'X-MICROCMS-API-KEY': apiKey as string,
+        'X-MICROCMS-API-KEY': apiKey,
       },
     })
 
