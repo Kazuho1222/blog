@@ -14,6 +14,7 @@ import {
 } from '@/src/components/ui/alert-dialog'
 import { Button } from '@/src/components/ui/button'
 import { useToast } from '@/src/hooks/use-toast'
+import { deleteBlogAction } from '../app/actions/delete-blog'
 
 const BlogDeleteButton = ({ blogId }: { blogId: string }) => {
   const router = useRouter()
@@ -21,23 +22,18 @@ const BlogDeleteButton = ({ blogId }: { blogId: string }) => {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch('/api/delete-blog', {
-        method: 'DELETE',
-        body: JSON.stringify({ id: blogId }),
-      })
+      const response = await deleteBlogAction(blogId)
 
-      if (!res.ok) {
-        const errorData = await res.json()
-        console.error(errorData.error || '削除に失敗しました')
+      if (response.success) {
+        toast({
+          title: '投稿を削除しました！',
+        })
+        router.push('/')
         return
       }
-
-      toast({
-        title: '投稿を削除しました！',
-      })
-      router.push('/')
-    } catch (_error) {
-      console.error('サーバーエラーが発生しました')
+      console.error(response.error)
+    } catch (error: unknown) {
+      console.error('エラー', error)
     }
   }
   return (
