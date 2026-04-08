@@ -29,20 +29,29 @@ export default async function Post(props: {
 }) {
   const params = await props.params
   const slug = params.slug
-  const post = await getPostBySlug(slug)
+
+  // 複数の await を Promise.all で1回にまとめる
+  const [post, allSlugs] = await Promise.all([
+    getPostBySlug(slug),
+    getAllSlugs(),
+  ])
 
   if (!post) {
     notFound()
   }
+
   const { id, title, publishDate: publish, _content, categories } = post
   const eyecatch = post.eyecatch ?? eyecatchLocal
+
+  // 画像処理も1回にまとめる
+  const imageBuffer = await getImageBuffer(eyecatch.url)
+  const { base64 } = await getPlaiceholder(imageBuffer)
+
   if (!post.eyecatch) {
     post.eyecatch = { ...eyecatchLocal }
   }
-  const imageBuffer = await getImageBuffer(eyecatch.url)
-  const { base64 } = await getPlaiceholder(imageBuffer)
   post.eyecatch.blurDataURL = base64
-  const allSlugs = await getAllSlugs()
+
   if (!allSlugs) notFound()
   const [prevPost, nextPost] = prevNextPost(allSlugs, slug)
 
@@ -116,18 +125,20 @@ export async function generateMetadata(props: {
   const params = await props.params
   const slug = params.slug
   const post = await getPostBySlug(slug)
-  if (!post) {
-    notFound()
-  }
-  const { title: pageTitle, _content } = post
 
+  // データがない場合は最低限のメタデータを返す（notFoundはPageコンポーネントに任せる）
+  if (!post) {
+    return { title: 'Not Found' }
+  }
+
+  const { title: pageTitle, _content } = post
   const pageDesc = extractText(_content)
   const eyecatch = post.eyecatch ?? eyecatchLocal
 
   const ogpTitle = `${pageTitle} | ${siteTitle}`
   const ogpUrl = new URL(`/blog/${slug}`, siteUrl).toString()
 
-  const metadata = {
+  return {
     title: pageTitle,
     description: pageDesc,
     openGraph: {
@@ -150,5 +161,4 @@ export async function generateMetadata(props: {
       images: [eyecatch.url],
     },
   }
-  return metadata
 }

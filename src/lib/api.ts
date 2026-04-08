@@ -17,26 +17,30 @@ type PostSummary = Pick<PostType, 'title' | 'slug' | 'eyecatch' | 'publishDate'>
 // slug用
 type PostSlug = Pick<PostType, 'title' | 'slug'>
 
-// カテゴリ一覧用
-type PostCard = Pick<PostType, 'title' | 'slug' | 'eyecatch'>
+import { cache } from 'react'
+import type { PostCardProps } from '../components/post-card'
 
-export async function getPostBySlug(slug: string): Promise<PostType | null> {
-  try {
-    const post = await client.get<MicroCMSListResponse<PostType>>({
-      endpoint: 'blogs',
-      queries: { filters: `slug[equals]${slug}` },
-    })
-    if (!post.contents.length) {
-      return null
+// ... (rest of imports and client initialization)
+
+export const getPostBySlug = cache(
+  async (slug: string): Promise<PostType | null> => {
+    try {
+      const post = await client.get<MicroCMSListResponse<PostType>>({
+        endpoint: 'blogs',
+        queries: { filters: `slug[equals]${slug}` },
+      })
+      if (!post.contents.length) {
+        return null
+      }
+      return post.contents[0]
+    } catch (error: unknown) {
+      console.error('Error fetching post:', error)
+      throw error
     }
-    return post.contents[0]
-  } catch (error: unknown) {
-    console.error('Error fetching post:', error)
-    throw error
-  }
-}
+  },
+)
 
-export async function getAllSlugs(limit = 100): Promise<PostSlug[]> {
+export const getAllSlugs = cache(async (limit = 100): Promise<PostSlug[]> => {
   try {
     const slugs = await client.get<MicroCMSListResponse<PostType>>({
       endpoint: 'blogs',
@@ -47,7 +51,7 @@ export async function getAllSlugs(limit = 100): Promise<PostSlug[]> {
     console.error('Error fetching AllSlugs:', error)
     throw error
   }
-}
+})
 
 export async function getAllPosts(limit = 100): Promise<PostSummary[]> {
   try {
@@ -85,7 +89,7 @@ export async function getAllCategories(limit = 100): Promise<CategoryType[]> {
 export async function getAllPostsByCategory(
   catID: string,
   limit = 100,
-): Promise<PostCard[]> {
+): Promise<PostCardProps[]> {
   try {
     const posts = await client.get<MicroCMSListResponse<PostType>>({
       endpoint: 'blogs',
