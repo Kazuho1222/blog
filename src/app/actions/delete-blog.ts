@@ -1,9 +1,9 @@
 'use server'
 
-import z, { success } from 'zod'
+import z from 'zod'
 
 const DeleteSchema = z.object({
-  id: z.string().min(1, 'IDが指定されていません'),
+  id: z.string().min(1, 'IDを取得できませんでした'),
 })
 
 export async function deleteBlogAction(id: string) {
@@ -14,7 +14,7 @@ export async function deleteBlogAction(id: string) {
     if (!apiKey) {
       return {
         success: false,
-        error: 'API設定エラーが発生しました',
+        error: 'APIキーが設定されていません',
       }
     }
 
