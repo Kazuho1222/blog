@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createBlogAction } from '@/src/app/actions/create-blog'
+import type { CreateBlogFormData } from '@/src/types/createblogformdata'
 
 vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
@@ -8,7 +9,7 @@ vi.mock('next/cache', () => ({
 global.fetch = vi.fn() as unknown as typeof fetch
 
 describe('createBlogAction', () => {
-  const mockFormData = {
+  const mockFormData: CreateBlogFormData = {
     title: 'テスト記事',
     slug: 'test-post',
     _content: '本文',

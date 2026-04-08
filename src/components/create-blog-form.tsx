@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form'
 import { createBlogAction } from '@/src/app/actions/create-blog'
 import { Form } from '@/src/components/ui/form'
 import { useToast } from '@/src/hooks/use-toast'
-
+import { uploadImageAction } from '../app/actions/upload-image'
 import { BlogPostFormFields } from './blog-form/blog-post-form-fields'
 import {
   type BlogPostFormValues,
@@ -17,7 +17,6 @@ import {
   MAX_BLOG_IMAGE_BYTES,
 } from './blog-form/blog-post-form-schema'
 import Container from './container'
-import { uploadImageAction } from '../app/actions/upload-image'
 
 export default function CreateBlogForm({
   categories,

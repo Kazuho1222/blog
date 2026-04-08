@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { createBlogAction } from '@/src/app/actions/create-blog'
 import { editBlogAction } from '@/src/app/actions/edit-blog'
+import type { FormDataType } from '@/src/types/form'
+import type { PostType } from '@/src/types/post'
 
 vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
@@ -9,7 +10,27 @@ vi.mock('next/cache', () => ({
 global.fetch = vi.fn() as unknown as typeof fetch
 
 describe('editBlogAction', () => {
-  const mockFormData = {
+  const mockPostData: PostType = {
+    id: '1',
+    title: 'テスト記事',
+    slug: 'test-post',
+    _content: 'あいうえお',
+    eyecatch: {
+      url: 'https://example.com/image.png',
+      width: 123,
+      height: 123,
+    },
+    categories: [
+      {
+        id: '1',
+        name: 'test',
+        slug: 'test',
+      },
+    ],
+    publishDate: '2026-01-01',
+  }
+
+  const mockFormData: FormDataType = {
     title: 'テスト記事',
     slug: 'test-post',
     _content: '本文',
@@ -17,6 +38,8 @@ describe('editBlogAction', () => {
     categories: ['test'],
     publishDate: '2026-01-01',
   }
+
+  const imageUrl = 'aiueo'
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -30,7 +53,7 @@ describe('editBlogAction', () => {
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
-    const result = await editBlogAction(mockFormData)
+    const result = await editBlogAction(mockPostData, mockFormData, imageUrl)
 
     expect(result).toEqual({
       success: true,
@@ -51,7 +74,7 @@ describe('editBlogAction', () => {
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
-    const result = await createBlogAction(mockFormData)
+    const result = await editBlogAction(mockPostData, mockFormData, imageUrl)
 
     expect(result.success).toBe(false)
     if (!result.success) {
@@ -67,7 +90,7 @@ describe('editBlogAction', () => {
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
-    const result = await createBlogAction(mockFormData)
+    const result = await editBlogAction(mockPostData, mockFormData, imageUrl)
 
     expect(result.success).toBe(false)
     if (!result.success) {
@@ -78,7 +101,7 @@ describe('editBlogAction', () => {
   it('APIキーがない場合：エラー', async () => {
     delete process.env.MICROCMS_API_KEY
 
-    const result = await createBlogAction(mockFormData)
+    const result = await editBlogAction(mockPostData, mockFormData, imageUrl)
 
     expect(result.success).toBe(false)
     if (!result.success) {
@@ -91,11 +114,60 @@ describe('editBlogAction', () => {
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
-    const result = await createBlogAction(mockFormData)
+    const result = await editBlogAction(mockPostData, mockFormData, imageUrl)
 
     expect(result.success).toBe(false)
     if (!result.success) {
       expect(result.error).toContain('network error')
     }
+  })
+
+  it('URLが正しいか', async () => {
+    ;(fetch as any).mockResolvedValue({
+      ok: true,
+      json: async () => ({ id: '1' }),
+    })
+
+    process.env.MICROCMS_API_KEY = 'test-key'
+
+    await editBlogAction(mockPostData, mockFormData, imageUrl)
+
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining(`/blogs/${mockPostData.id}`),
+      expect.any(Object),
+    )
+  })
+
+  it('methodがPATCHか', async () => {
+    ;(fetch as any).mockResolvedValue({
+      ok: true,
+      json: async () => ({ id: '1' }),
+    })
+
+    process.env.MICROCMS_API_KEY = 'test-key'
+
+    await editBlogAction(mockPostData, mockFormData, imageUrl)
+
+    expect(fetch).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        method: 'PATCH',
+      }),
+    )
+  })
+
+  it('eyecatchが上書きされているか', async () => {
+    ;(fetch as any).mockResolvedValue({
+      ok: true,
+      json: async () => ({ id: '1' }),
+    })
+
+    process.env.MICROCMS_API_KEY = 'test-key'
+
+    await editBlogAction(mockPostData, mockFormData, imageUrl)
+
+    const body = JSON.parse((fetch as any).mock.calls[0][1].body)
+
+    expect(body.eyecatch).toBe(imageUrl)
   })
 })

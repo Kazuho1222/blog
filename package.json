@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "deploy": "npm run build:deploy",
+    "build:deploy": "npm run build && git add public/sitemap-0.xml && git commit -m 'Update sitemap' && git push",
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "biome lint ./src",
@@ -22,9 +24,6 @@
     "type-check": "tsc --noEmit",
     "test:build": "npm run build && npm run start",
     "analyze": "ANALYZE=true npm run build",
-    "scripts": {
-      "build:deploy": "npm run build && git add public/sitemap-0.xml && git commit -m 'Update sitemap' && git push"
-    },
     "prepare": "husky",
     "test": "vitest",
     "test:ui": "vitest --ui"

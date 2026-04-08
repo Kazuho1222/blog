@@ -1,5 +1,3 @@
-import { MicroCMSImageSchema } from '../schemas/microcmsImage'
-
 export const uploadImageToMicroCMS = async (file: File) => {
   const formData = new FormData()
   formData.append('file', file)

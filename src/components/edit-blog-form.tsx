@@ -44,9 +44,9 @@ export default function EditBlogForm({
     },
   })
 
-  const extractFileNameFromUrl = (url: string) => {
-    return url.split('/').pop() || ''
-  }
+  // const extractFileNameFromUrl = (url: string) => {
+  //   return url.split('/').pop() || ''
+  // }
 
   const handleSubmit = async (formData: BlogPostFormValues) => {
     try {
