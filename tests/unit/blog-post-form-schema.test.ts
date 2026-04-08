@@ -39,7 +39,9 @@ describe('blogPostFormSchema', () => {
     const result = blogPostFormSchema.safeParse(data)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error.issues[0].message).toBe('半角英数字で入力してください')
+      expect(result.error.issues[0].message).toBe(
+        '半角英数字で入力してください',
+      )
     }
   })
 
@@ -48,7 +50,9 @@ describe('blogPostFormSchema', () => {
     const result = blogPostFormSchema.safeParse(data)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error.issues[0].message).toBe('半角英数字で入力してください')
+      expect(result.error.issues[0].message).toBe(
+        '半角英数字で入力してください',
+      )
     }
   })
 
@@ -75,7 +79,9 @@ describe('blogPostFormSchema', () => {
     const result = blogPostFormSchema.safeParse(data)
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error.issues[0].message).toBe('カテゴリを1つ以上選択してください')
+      expect(result.error.issues[0].message).toBe(
+        'カテゴリを1つ以上選択してください',
+      )
     }
   })
 

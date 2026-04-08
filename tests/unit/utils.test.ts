@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { cn } from '@/src/lib/utils'
 import extractText from '@/src/lib/extract-text'
 import { prevNextPost } from '@/src/lib/prev-next-post'
+import { cn } from '@/src/lib/utils'
 
 describe('cn (Utility)', () => {
   it('クラス名を正しく結合する', () => {
@@ -9,7 +9,9 @@ describe('cn (Utility)', () => {
   })
 
   it('条件付きクラスを正しく処理する', () => {
-    expect(cn('base', true && 'is-active', false && 'hidden')).toBe('base is-active')
+    expect(cn('base', true && 'is-active', false && 'hidden')).toBe(
+      'base is-active',
+    )
   })
 
   it('Tailwind CSS の競合を解消する (twMerge)', () => {
