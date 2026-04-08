@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "deploy": "npm run build:deploy",
-    "build:deploy": "npm run build && git add public/sitemap-0.xml && git commit -m 'Update sitemap' && git push",
+    "build:deploy": "npm run build && git add public/sitemap-0.xml && (git diff --cached --quiet || git commit -m 'Update sitemap' && git push)",
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "biome lint ./src",
