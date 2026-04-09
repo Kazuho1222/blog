@@ -25,7 +25,7 @@ describe('searchPosts', () => {
 
   it('キーワードが空の場合、APIを叩かずに空のレスポンスを返す', async () => {
     const result = await searchPosts('')
-    
+
     expect(result).toEqual({
       totalCount: 0,
       offset: 0,
