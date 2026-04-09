@@ -29,6 +29,7 @@ const BlogDeleteButton = ({ blogId }: { blogId: string }) => {
           title: '投稿を削除しました！',
         })
         router.push('/')
+        router.refresh()
         return
       }
       console.error(response.error)

@@ -71,6 +71,7 @@ export default function EditBlogForm({
           title: '投稿に成功しました！',
         })
         router.push('/')
+        router.refresh()
       }
     } catch (error: unknown) {
       console.error('エラー', error)

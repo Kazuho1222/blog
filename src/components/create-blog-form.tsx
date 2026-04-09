@@ -92,6 +92,7 @@ export default function CreateBlogForm({
           title: '投稿に成功しました！',
         })
         router.push('/')
+        router.refresh()
       } catch (createError) {
         console.error('ブログ作成エラー:', createError)
         toast({
