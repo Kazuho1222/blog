@@ -14,9 +14,9 @@ vi.mock('@/src/components/search-input', () => ({
 // next/image をモック化
 vi.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => {
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img {...props} fill={props.fill ? 'true' : undefined} />
+    return <img {...props} alt={props.alt || ''} />
   },
 }))
 
