@@ -5,6 +5,8 @@ if (!process.env.MICROCMS_SERVICE_DOMAIN || !process.env.MICROCMS_API_KEY) {
   throw new Error('MICROCMS_SERVICE_DOMAINとMICROCMS_API_KEYは必須です。')
 }
 
+const API_KEY = process.env.MICROCMS_API_KEY as string
+
 const BASE_URL = `https://${process.env.MICROCMS_SERVICE_DOMAIN}.microcms.io/api/v1`
 
 async function fetcher<T>(
@@ -22,7 +24,7 @@ async function fetcher<T>(
 
   const res = await fetch(url.toString(), {
     headers: {
-      'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY!,
+      'X-MICROCMS-API-KEY': API_KEY,
     },
     next: { tags: options?.tags ?? ['posts'] },
   })
@@ -41,6 +43,7 @@ type PostSummary = Pick<PostType, 'title' | 'slug' | 'eyecatch' | 'publishDate'>
 type PostSlug = Pick<PostType, 'title' | 'slug'>
 
 import type { PostCardProps } from '../components/post-card'
+import type { SearchResponse } from '../types/searchresponce'
 
 export async function getPostBySlug(slug: string): Promise<PostType | null> {
   try {
@@ -138,7 +141,7 @@ export async function searchPosts(keyword: string, limit = 10, offset = 0) {
   }
 
   try {
-    const data = await fetcher<any>('blogs', {
+    const data = await fetcher<SearchResponse>('blogs', {
       q: keyword,
       limit: String(limit),
       offset: String(offset),

@@ -87,9 +87,9 @@ export async function createBlogAction(
     const data: { id: string } = await res.json()
 
     // タグベースでキャッシュ再検証
-    revalidateTag('posts')
-    revalidateTag('slugs')
-    revalidateTag('categories')
+    revalidateTag('posts', 'max')
+    revalidateTag('slugs', 'max')
+    revalidateTag('categories', 'max')
 
     // シリアライズ可能な形式で返す（IDのみ、文字列に変換）
     const blogId = data?.id ? String(data.id) : null

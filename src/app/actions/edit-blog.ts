@@ -51,9 +51,9 @@ export const editBlogAction = async (
     }
 
     // タグベースでキャッシュ再検証
-    revalidateTag('posts')
-    revalidateTag('slugs')
-    revalidateTag('categories')
+    revalidateTag('posts', 'max')
+    revalidateTag('slugs', 'max')
+    revalidateTag('categories', 'max')
 
     return {
       success: true,
