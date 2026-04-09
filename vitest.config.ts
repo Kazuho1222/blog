@@ -6,6 +6,9 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: './vitest.setup.ts',
+    css: {
+      include: [], // CSSを処理対象外にする
+    },
   },
   resolve: {
     alias: {
