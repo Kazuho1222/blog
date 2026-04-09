@@ -8,6 +8,7 @@ on:
 
 env:
   NODE_VERSION: '24'
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
   # コード品質チェック
@@ -98,14 +99,9 @@ jobs:
         run: npm run build
 
       - name: Vercel Action
-        uses: amondnet/vercel-action@v25
+        uses: amondnet/vercel-action@v26
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
-      vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
-ROJECT_ID }}
           vercel-args: '--prod'
