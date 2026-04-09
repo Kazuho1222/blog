@@ -2,6 +2,7 @@
 
 import type { FormDataType } from '@/src/types/form'
 import type { PostType } from '../../types/post'
+import { revalidatePath } from 'next/cache'
 
 type EditBlogResponse =
   | { success: true; id: string }
@@ -48,6 +49,11 @@ export const editBlogAction = async (
         error: 'IDを取得できませんでした',
       }
     }
+
+    // キャッシュを再検証
+    revalidatePath('/')
+    revalidatePath('/blog')
+    revalidatePath(`/blog/${post.id}`)
 
     return {
       success: true,

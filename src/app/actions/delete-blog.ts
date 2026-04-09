@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import z from 'zod'
 
 const DeleteSchema = z.object({
@@ -33,6 +34,11 @@ export async function deleteBlogAction(id: string) {
         error: '削除に失敗しました',
       }
     }
+
+    // キャッシュを再検証
+    revalidatePath('/')
+    revalidatePath('/blog')
+    revalidatePath(`/blog/${id}`)
 
     return {
       success: true,
