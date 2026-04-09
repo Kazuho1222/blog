@@ -1,8 +1,8 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import type { FormDataType } from '@/src/types/form'
 import type { PostType } from '../../types/post'
-import { revalidatePath } from 'next/cache'
 
 type EditBlogResponse =
   | { success: true; id: string }
