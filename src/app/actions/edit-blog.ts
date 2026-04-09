@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidateTag } from 'next/cache'
 import type { FormDataType } from '@/src/types/form'
 import type { PostType } from '../../types/post'
 
@@ -50,10 +50,10 @@ export const editBlogAction = async (
       }
     }
 
-    // キャッシュを再検証
-    revalidatePath('/')
-    revalidatePath('/blog')
-    revalidatePath(`/blog/${post.id}`)
+    // タグベースでキャッシュ再検証
+    revalidateTag('posts')
+    revalidateTag('slugs')
+    revalidateTag('categories')
 
     return {
       success: true,

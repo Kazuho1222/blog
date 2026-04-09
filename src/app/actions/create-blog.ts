@@ -1,6 +1,6 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { revalidateTag } from 'next/cache'
 
 type CreateBlogFormData = {
   title: string
@@ -86,9 +86,10 @@ export async function createBlogAction(
 
     const data: { id: string } = await res.json()
 
-    // キャッシュを再検証
-    revalidatePath('/')
-    revalidatePath('/blog')
+    // タグベースでキャッシュ再検証
+    revalidateTag('posts')
+    revalidateTag('slugs')
+    revalidateTag('categories')
 
     // シリアライズ可能な形式で返す（IDのみ、文字列に変換）
     const blogId = data?.id ? String(data.id) : null
