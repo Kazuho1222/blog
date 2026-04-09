@@ -9,6 +9,10 @@ export default defineConfig({
     css: {
       include: [], // CSSを処理対象外にする
     },
+    env: {
+      MICROCMS_SERVICE_DOMAIN: 'test-domain',
+      MICROCMS_API_KEY: 'test-key',
+    },
   },
   resolve: {
     alias: {
