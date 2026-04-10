@@ -18,26 +18,25 @@ export const editBlogAction = async (
       return { success: false, error: 'APIキーが設定されていません' }
     }
 
-    const id = post.id
-    // 1. IDの形式を正規表現でバリデーション
-    if (!/^[a-zA-Z0-9_-]+$/.test(id)) {
+    const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
+    if (!serviceDomain || !/^[a-zA-Z0-9-]+$/.test(serviceDomain)) {
+      throw new Error('Invalid service domain')
+    }
+
+    const validatedId = post.id
+    if (!/^[a-zA-Z0-9_-]+$/.test(validatedId)) {
       throw new Error('Invalid ID format')
     }
 
-    const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
-    const url = new URL(
-      `https://${serviceDomain}.microcms.io/api/v1/blogs/${id}`,
-    )
+    const baseUrl = `https://${serviceDomain}.microcms.io/api/v1/blogs/`
+    const url = new URL(validatedId, baseUrl)
 
-    // 2. ドメインの厳格な検証
-    if (
-      !url.hostname.endsWith('.microcms.io') ||
-      url.hostname !== `${serviceDomain}.microcms.io`
-    ) {
-      throw new Error('Invalid host origin')
+    // プレフィックス・チェック: 構築されたURLが期待されるブログエンドポイントで始まっているか確認
+    if (!url.href.startsWith(baseUrl)) {
+      throw new Error('Invalid URL construction')
     }
 
-    const response = await fetch(url, {
+    const response = await fetch(url.href, {
       method: 'PATCH',
       headers: {
         'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY,

@@ -19,26 +19,25 @@ export async function deleteBlogAction(id: string) {
       }
     }
 
+    const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
+    if (!serviceDomain || !/^[a-zA-Z0-9-]+$/.test(serviceDomain)) {
+      throw new Error('Invalid service domain')
+    }
+
     const validatedId = parsed.id
-    // 1. IDの形式を正規表現でバリデーション
     if (!/^[a-zA-Z0-9_-]+$/.test(validatedId)) {
       throw new Error('Invalid ID format')
     }
 
-    const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
-    const url = new URL(
-      `https://${serviceDomain}.microcms.io/api/v1/blogs/${validatedId}`,
-    )
+    const baseUrl = `https://${serviceDomain}.microcms.io/api/v1/blogs/`
+    const url = new URL(validatedId, baseUrl)
 
-    // 2. ドメインの厳格な検証
-    if (
-      !url.hostname.endsWith('.microcms.io') ||
-      url.hostname !== `${serviceDomain}.microcms.io`
-    ) {
-      throw new Error('Invalid host origin')
+    // プレフィックス・チェック: 構築されたURLが期待されるブログエンドポイントで始まっているか確認
+    if (!url.href.startsWith(baseUrl)) {
+      throw new Error('Invalid URL construction')
     }
 
-    const res = await fetch(url, {
+    const res = await fetch(url.href, {
       method: 'DELETE',
       headers: {
         'X-MICROCMS-API-KEY': apiKey,

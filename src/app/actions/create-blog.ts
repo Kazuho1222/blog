@@ -37,7 +37,12 @@ export async function createBlogAction(
     }
 
     const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
-    const url = new URL(`https://${serviceDomain}.microcms.io/api/v1/blogs`)
+    if (!serviceDomain || !/^[a-zA-Z0-9-]+$/.test(serviceDomain)) {
+      throw new Error('Invalid service domain')
+    }
+
+    const baseUrl = `https://${serviceDomain}.microcms.io/api/v1/blogs`
+    const url = new URL(baseUrl)
 
     // セキュリティ対策: ドメインの厳格な検証
     if (
@@ -58,7 +63,7 @@ export async function createBlogAction(
       newBody.eyecatch = eyecatch
     }
 
-    const res = await fetch(url, {
+    const res = await fetch(url.href, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
