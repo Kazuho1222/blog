@@ -5,6 +5,7 @@ import type { PostType } from '@/src/types/post'
 
 vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
+  updateTag: vi.fn(),
 }))
 
 global.fetch = vi.fn() as unknown as typeof fetch
@@ -132,10 +133,9 @@ describe('editBlogAction', () => {
 
     await editBlogAction(mockPostData, mockFormData, imageUrl)
 
-    expect(fetch).toHaveBeenCalledWith(
-      expect.stringContaining(`/blogs/${mockPostData.id}`),
-      expect.any(Object),
-    )
+    const call = vi.mocked(fetch).mock.calls[0][0]
+    const urlString = call instanceof URL ? call.toString() : (call as string)
+    expect(urlString).toContain(`/blogs/${mockPostData.id}`)
   })
 
   it('methodがPATCHか', async () => {
@@ -149,7 +149,7 @@ describe('editBlogAction', () => {
     await editBlogAction(mockPostData, mockFormData, imageUrl)
 
     expect(fetch).toHaveBeenCalledWith(
-      expect.any(String),
+      expect.anything(),
       expect.objectContaining({
         method: 'PATCH',
       }),

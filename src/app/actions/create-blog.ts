@@ -1,6 +1,7 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { updateTag } from 'next/cache'
+import { BASE_URL } from '@/src/lib/api'
 
 type CreateBlogFormData = {
   title: string
@@ -36,7 +37,13 @@ export async function createBlogAction(
       }
     }
 
-    const endpoint = 'https://kazuho-blog.microcms.io/api/v1/blogs'
+    // BASE_URLをベースにエンドポイントを構築
+    const url = new URL('blogs', BASE_URL)
+
+    // セキュリティ対策: 期待されるベースURLで始まっているか確認
+    if (!url.href.startsWith(BASE_URL)) {
+      throw new Error('Invalid URL construction')
+    }
 
     const { _content: content, eyecatch, ...rest } = formData
     const newBody: CreateBlogRequest = {
@@ -49,7 +56,7 @@ export async function createBlogAction(
       newBody.eyecatch = eyecatch
     }
 
-    const res = await fetch(endpoint, {
+    const res = await fetch(url.href, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -86,9 +93,10 @@ export async function createBlogAction(
 
     const data: { id: string } = await res.json()
 
-    // キャッシュを再検証
-    revalidatePath('/')
-    revalidatePath('/blog')
+    // タグベースでキャッシュ再検証
+    updateTag('posts')
+    updateTag('slugs')
+    updateTag('categories')
 
     // シリアライズ可能な形式で返す（IDのみ、文字列に変換）
     const blogId = data?.id ? String(data.id) : null

@@ -1,6 +1,7 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { updateTag } from 'next/cache'
+import { BASE_URL } from '@/src/lib/api'
 import type { FormDataType } from '@/src/types/form'
 import type { PostType } from '../../types/post'
 
@@ -18,20 +19,32 @@ export const editBlogAction = async (
       return { success: false, error: 'APIキーが設定されていません' }
     }
 
-    const response = await fetch(
-      `https://kazuho-blog.microcms.io/api/v1/blogs/${post.id}`,
-      {
-        method: 'PATCH',
-        headers: {
-          'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          eyecatch: imageUrl,
-        }),
+    const validatedId = post.id
+    if (!/^[a-zA-Z0-9_-]+$/.test(validatedId)) {
+      throw new Error('Invalid ID format')
+    }
+
+    // BASE_URLをベースにエンドポイントを構築
+    const blogsUrl = new URL('blogs/', BASE_URL)
+    const url = new URL(validatedId, blogsUrl)
+
+    // セキュリティ対策: 期待されるベースURLで始まっているか確認
+    if (!url.href.startsWith(blogsUrl.href)) {
+      throw new Error('Invalid URL construction')
+    }
+
+    // URLオブジェクトを直接渡すことで安全性を担保
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY,
+        'Content-Type': 'application/json',
       },
-    )
+      body: JSON.stringify({
+        ...formData,
+        eyecatch: imageUrl,
+      }),
+    })
 
     if (!response.ok) {
       const errorText = await response.text()
@@ -50,10 +63,10 @@ export const editBlogAction = async (
       }
     }
 
-    // キャッシュを再検証
-    revalidatePath('/')
-    revalidatePath('/blog')
-    revalidatePath(`/blog/${post.id}`)
+    // タグベースでキャッシュ再検証
+    updateTag('posts')
+    updateTag('slugs')
+    updateTag('categories')
 
     return {
       success: true,

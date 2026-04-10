@@ -1,7 +1,8 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
+import { updateTag } from 'next/cache'
 import z from 'zod'
+import { BASE_URL } from '@/src/lib/api'
 
 const DeleteSchema = z.object({
   id: z.string().min(1, 'IDが指定されていません'),
@@ -19,9 +20,21 @@ export async function deleteBlogAction(id: string) {
       }
     }
 
-    const endpoint = `https://kazuho-blog.microcms.io/api/v1/blogs/${parsed.id}`
+    const validatedId = parsed.id
+    if (!/^[a-zA-Z0-9_-]+$/.test(validatedId)) {
+      throw new Error('Invalid ID format')
+    }
 
-    const res = await fetch(endpoint, {
+    // BASE_URLをベースにエンドポイントを構築
+    const blogsUrl = new URL('blogs/', BASE_URL)
+    const url = new URL(validatedId, blogsUrl)
+
+    // セキュリティ対策: 期待されるベースURLで始まっているか確認
+    if (!url.href.startsWith(blogsUrl.href)) {
+      throw new Error('Invalid URL construction')
+    }
+
+    const res = await fetch(url.href, {
       method: 'DELETE',
       headers: {
         'X-MICROCMS-API-KEY': apiKey,
@@ -35,10 +48,10 @@ export async function deleteBlogAction(id: string) {
       }
     }
 
-    // キャッシュを再検証
-    revalidatePath('/')
-    revalidatePath('/blog')
-    revalidatePath(`/blog/${id}`)
+    // タグベースでキャッシュ再検証
+    updateTag('posts')
+    updateTag('slugs')
+    updateTag('categories')
 
     return {
       success: true,
