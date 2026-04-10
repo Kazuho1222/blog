@@ -45,6 +45,46 @@ async function fetcher<T>(
   return res.json() as Promise<T>
 }
 
+// 共通のレスポンス型
+type MicroCMSResponse<T> = {
+  contents: T[]
+  totalCount: number
+  offset: number
+  limit: number
+}
+
+// 全件取得用の共通関数
+async function fetchAll<T>(
+  path: 'blogs' | 'categories',
+  params: Record<string, string> = {},
+  options?: { tags?: string[] },
+): Promise<T[]> {
+  const limit = 100
+  let offset = 0
+  let allContents: T[] = []
+
+  while (true) {
+    const data = await fetcher<MicroCMSResponse<T>>(
+      path,
+      {
+        ...params,
+        limit: String(limit),
+        offset: String(offset),
+      },
+      options,
+    )
+
+    allContents = [...allContents, ...data.contents]
+    offset += limit
+
+    if (offset >= data.totalCount) {
+      break
+    }
+  }
+
+  return allContents
+}
+
 // 一覧用
 type PostSummary = Pick<PostType, 'title' | 'slug' | 'eyecatch' | 'publishDate'>
 
@@ -68,52 +108,71 @@ export async function getPostBySlug(slug: string): Promise<PostType | null> {
   }
 }
 
-export async function getAllSlugs(limit = 100): Promise<PostSlug[]> {
+export async function getAllSlugs(limit?: number): Promise<PostSlug[]> {
   try {
-    const data = await fetcher<{ contents: PostSlug[] }>(
-      'blogs',
-      {
-        fields: 'title,slug',
-        orders: '-publishDate',
-        limit: String(limit),
-      },
-      { tags: ['slugs'] },
-    )
-
-    return data.contents
+    const params: Record<string, string> = {
+      fields: 'title,slug',
+      orders: '-publishDate',
+    }
+    if (limit) {
+      const data = await fetcher<MicroCMSResponse<PostSlug>>(
+        'blogs',
+        {
+          ...params,
+          limit: String(limit),
+        },
+        { tags: ['slugs'] },
+      )
+      return data.contents
+    }
+    return await fetchAll<PostSlug>('blogs', params, { tags: ['slugs'] })
   } catch (error) {
     console.error('Error fetching AllSlugs:', error)
     throw error
   }
 }
 
-export async function getAllPosts(limit = 100): Promise<PostSummary[]> {
+export async function getAllPosts(limit?: number): Promise<PostSummary[]> {
   try {
-    const data = await fetcher<{ contents: PostSummary[] }>('blogs', {
+    const params: Record<string, string> = {
       fields: 'title,slug,eyecatch,publishDate',
       orders: '-publishDate,-createdAt',
-      limit: String(limit),
-    })
-
-    return data.contents
+    }
+    if (limit) {
+      const data = await fetcher<MicroCMSResponse<PostSummary>>('blogs', {
+        ...params,
+        limit: String(limit),
+      })
+      return data.contents
+    }
+    return await fetchAll<PostSummary>('blogs', params)
   } catch (error) {
     console.error('Error fetching AllPosts:', error)
     throw error
   }
 }
 
-export async function getAllCategories(limit = 100): Promise<CategoryType[]> {
+export async function getAllCategories(
+  limit?: number,
+): Promise<CategoryType[]> {
   try {
-    const data = await fetcher<{ contents: CategoryType[] }>(
-      'categories',
-      {
-        fields: 'name,id,slug',
-        limit: String(limit),
-      },
-      { tags: ['categories'] },
-    )
-
-    return data.contents
+    const params: Record<string, string> = {
+      fields: 'name,id,slug',
+    }
+    if (limit) {
+      const data = await fetcher<MicroCMSResponse<CategoryType>>(
+        'categories',
+        {
+          ...params,
+          limit: String(limit),
+        },
+        { tags: ['categories'] },
+      )
+      return data.contents
+    }
+    return await fetchAll<CategoryType>('categories', params, {
+      tags: ['categories'],
+    })
   } catch (error) {
     console.error('Error fetching AllCategories:', error)
     throw error
@@ -122,17 +181,22 @@ export async function getAllCategories(limit = 100): Promise<CategoryType[]> {
 
 export async function getAllPostsByCategory(
   catID: string,
-  limit = 100,
+  limit?: number,
 ): Promise<PostCardProps[]> {
   try {
-    const data = await fetcher<{ contents: PostCardProps[] }>('blogs', {
+    const params: Record<string, string> = {
       filters: `categories[contains]${catID}`,
       fields: 'title,slug,eyecatch',
       orders: '-publishDate,-createdAt',
-      limit: String(limit),
-    })
-
-    return data.contents
+    }
+    if (limit) {
+      const data = await fetcher<MicroCMSResponse<PostCardProps>>('blogs', {
+        ...params,
+        limit: String(limit),
+      })
+      return data.contents
+    }
+    return await fetchAll<PostCardProps>('blogs', params)
   } catch (error) {
     console.error('Error fetching AllPostsbyCategory:', error)
     throw error
