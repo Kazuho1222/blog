@@ -4,6 +4,7 @@ import type { PostType } from '@/src/types/post'
 
 vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
+  updateTag: vi.fn(),
 }))
 
 global.fetch = vi.fn() as unknown as typeof fetch

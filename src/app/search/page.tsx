@@ -7,7 +7,7 @@ import { PostCard } from '@/src/components/post-card'
 import { searchPosts } from '@/src/lib/api'
 import { eyecatchLocal } from '@/src/lib/constants'
 import { getImageBuffer } from '@/src/lib/get-image-buffer'
-import type { PostType } from '@/src/types/post'
+import type { SearchPostSummary } from '@/src/types/searchpostsummary'
 
 type SearchPageProps = {
   searchParams: Promise<{
@@ -45,7 +45,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   for (let i = 0; i < posts.length; i += batchSize) {
     const batch = posts.slice(i, i + batchSize)
     await Promise.all(
-      batch.map(async (post: PostType) => {
+      batch.map(async (post: SearchPostSummary) => {
         try {
           if (!post.eyecatch) {
             post.eyecatch = { ...eyecatchLocal }
@@ -64,7 +64,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   }
 
   const lowerKeyword = keyword.toLowerCase()
-  const filteredPosts = posts.filter((post: PostType) => {
+  const filteredPosts = posts.filter((post: SearchPostSummary) => {
     const title = post.title.toLowerCase()
     const body = toPlainText(post._content).toLowerCase()
     // 入力された文字列そのもの（例: "aiueo"）をタイトルか本文テキストに含むものだけを残す
@@ -101,7 +101,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       {filteredPosts.length > 0 && (
         <>
           <div className="mt-8 mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredPosts.map((post: PostType) => (
+            {filteredPosts.map((post: SearchPostSummary) => (
               <PostCard
                 id={post.id}
                 title={post.title}

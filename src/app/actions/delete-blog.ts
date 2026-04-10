@@ -1,7 +1,8 @@
 'use server'
 
-import { revalidateTag } from 'next/cache'
+import { updateTag } from 'next/cache'
 import z from 'zod'
+import { BASE_URL } from '@/src/lib/api'
 
 const DeleteSchema = z.object({
   id: z.string().min(1, 'IDが指定されていません'),
@@ -19,7 +20,7 @@ export async function deleteBlogAction(id: string) {
       }
     }
 
-    const endpoint = `https://kazuho-blog.microcms.io/api/v1/blogs/${parsed.id}`
+    const endpoint = `${BASE_URL}/blogs/${parsed.id}`
 
     const res = await fetch(endpoint, {
       method: 'DELETE',
@@ -36,9 +37,9 @@ export async function deleteBlogAction(id: string) {
     }
 
     // タグベースでキャッシュ再検証
-    revalidateTag('posts', 'max')
-    revalidateTag('slugs', 'max')
-    revalidateTag('categories', 'max')
+    updateTag('posts')
+    updateTag('slugs')
+    updateTag('categories')
 
     return {
       success: true,

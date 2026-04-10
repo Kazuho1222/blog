@@ -1,6 +1,7 @@
 'use server'
 
-import { revalidateTag } from 'next/cache'
+import { updateTag } from 'next/cache'
+import { BASE_URL } from '@/src/lib/api'
 
 type CreateBlogFormData = {
   title: string
@@ -36,7 +37,7 @@ export async function createBlogAction(
       }
     }
 
-    const endpoint = 'https://kazuho-blog.microcms.io/api/v1/blogs'
+    const endpoint = `${BASE_URL}/blogs`
 
     const { _content: content, eyecatch, ...rest } = formData
     const newBody: CreateBlogRequest = {
@@ -87,9 +88,9 @@ export async function createBlogAction(
     const data: { id: string } = await res.json()
 
     // タグベースでキャッシュ再検証
-    revalidateTag('posts', 'max')
-    revalidateTag('slugs', 'max')
-    revalidateTag('categories', 'max')
+    updateTag('posts')
+    updateTag('slugs')
+    updateTag('categories')
 
     // シリアライズ可能な形式で返す（IDのみ、文字列に変換）
     const blogId = data?.id ? String(data.id) : null

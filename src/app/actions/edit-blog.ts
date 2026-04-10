@@ -1,6 +1,7 @@
 'use server'
 
-import { revalidateTag } from 'next/cache'
+import { updateTag } from 'next/cache'
+import { BASE_URL } from '@/src/lib/api'
 import type { FormDataType } from '@/src/types/form'
 import type { PostType } from '../../types/post'
 
@@ -18,20 +19,17 @@ export const editBlogAction = async (
       return { success: false, error: 'APIキーが設定されていません' }
     }
 
-    const response = await fetch(
-      `https://kazuho-blog.microcms.io/api/v1/blogs/${post.id}`,
-      {
-        method: 'PATCH',
-        headers: {
-          'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          eyecatch: imageUrl,
-        }),
+    const response = await fetch(`${BASE_URL}/blogs/${post.id}`, {
+      method: 'PATCH',
+      headers: {
+        'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY,
+        'Content-Type': 'application/json',
       },
-    )
+      body: JSON.stringify({
+        ...formData,
+        eyecatch: imageUrl,
+      }),
+    })
 
     if (!response.ok) {
       const errorText = await response.text()
@@ -51,9 +49,9 @@ export const editBlogAction = async (
     }
 
     // タグベースでキャッシュ再検証
-    revalidateTag('posts', 'max')
-    revalidateTag('slugs', 'max')
-    revalidateTag('categories', 'max')
+    updateTag('posts')
+    updateTag('slugs')
+    updateTag('categories')
 
     return {
       success: true,

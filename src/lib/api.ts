@@ -7,7 +7,7 @@ if (!process.env.MICROCMS_SERVICE_DOMAIN || !process.env.MICROCMS_API_KEY) {
 
 const API_KEY = process.env.MICROCMS_API_KEY as string
 
-const BASE_URL = `https://${process.env.MICROCMS_SERVICE_DOMAIN}.microcms.io/api/v1`
+export const BASE_URL = `https://${process.env.MICROCMS_SERVICE_DOMAIN}.microcms.io/api/v1`
 
 async function fetcher<T>(
   path: string,
@@ -15,6 +15,11 @@ async function fetcher<T>(
   options?: { tags?: string[] },
 ) {
   const url = new URL(`${BASE_URL}/${path}`)
+
+  // セキュリティ対策: URLが期待されるベースURLで始まっているかを確認
+  if (!url.toString().startsWith(BASE_URL)) {
+    throw new Error('Invalid URL')
+  }
 
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
@@ -145,7 +150,7 @@ export async function searchPosts(keyword: string, limit = 10, offset = 0) {
       q: keyword,
       limit: String(limit),
       offset: String(offset),
-      fields: 'title,slug,eyecatch,_content',
+      fields: 'id,title,slug,eyecatch,_content,categories',
       orders: '-publishDate,-createdAt',
     })
 

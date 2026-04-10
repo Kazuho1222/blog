@@ -8,7 +8,7 @@ vi.stubEnv('MICROCMS_API_KEY', 'test-key')
 describe('searchPosts', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    global.fetch = vi.fn()
+    vi.stubGlobal('fetch', vi.fn())
   })
 
   it('キーワードが空の場合、APIを叩かない', async () => {
@@ -21,7 +21,7 @@ describe('searchPosts', () => {
       contents: [],
     })
 
-    expect(global.fetch).not.toHaveBeenCalled()
+    expect(fetch).not.toHaveBeenCalled()
   })
 
   it('キーワードが指定された場合、正しいクエリでAPIを呼び出す', async () => {
@@ -32,34 +32,34 @@ describe('searchPosts', () => {
       limit: 10,
     }
 
-    ;(global.fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: true,
       json: async () => mockResponse,
-    })
+    } as Response)
 
     const result = await searchPosts('テスト')
 
-    expect(global.fetch).toHaveBeenCalled()
+    expect(fetch).toHaveBeenCalled()
     expect(result).toEqual(mockResponse)
   })
 
   it('リミットとオフセットが正しく渡される', async () => {
-    ;(global.fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: true,
       json: async () => ({ contents: [], totalCount: 0 }),
-    })
+    } as Response)
 
     await searchPosts('検索', 20, 40)
 
-    const call = (global.fetch as any).mock.calls[0][0]
+    const call = vi.mocked(fetch).mock.calls[0][0] as string
     expect(call).toContain('limit=20')
     expect(call).toContain('offset=40')
   })
 
   it('APIエラー時にエラーをスローする', async () => {
-    ;(global.fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: false,
-    })
+    } as Response)
 
     // エラーがスローされることを確認
     await expect(searchPosts('エラー')).rejects.toThrow()

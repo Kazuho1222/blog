@@ -1,7 +1,7 @@
-import type { PostType } from './post'
+import type { SearchPostSummary } from './searchpostsummary'
 
 export type SearchResponse = {
-  contents: PostType[]
+  contents: SearchPostSummary[]
   totalCount: number
   offset: number
   limit: number
