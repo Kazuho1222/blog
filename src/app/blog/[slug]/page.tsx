@@ -116,7 +116,7 @@ export default async function Post(props: {
 //   })
 // }
 
-// export const revalidate = 0
+export const revalidate = 60
 
 // メタデータ
 export async function generateMetadata(props: {
