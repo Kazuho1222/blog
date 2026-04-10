@@ -19,7 +19,15 @@ export const editBlogAction = async (
       return { success: false, error: 'APIキーが設定されていません' }
     }
 
-    const response = await fetch(`${BASE_URL}/blogs/${post.id}`, {
+    const url = new URL(`${BASE_URL}/blogs/${post.id}`)
+    const expectedBase = new URL(BASE_URL)
+
+    // セキュリティ対策: オリジンのバリデーション
+    if (url.origin !== expectedBase.origin) {
+      throw new Error('Invalid URL origin')
+    }
+
+    const response = await fetch(url, {
       method: 'PATCH',
       headers: {
         'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY,

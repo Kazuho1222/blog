@@ -10,14 +10,18 @@ const API_KEY = process.env.MICROCMS_API_KEY as string
 export const BASE_URL = `https://${process.env.MICROCMS_SERVICE_DOMAIN}.microcms.io/api/v1`
 
 async function fetcher<T>(
-  path: string,
+  path: 'blogs' | 'categories',
   params?: Record<string, string>,
   options?: { tags?: string[] },
 ) {
   const url = new URL(`${BASE_URL}/${path}`)
+  const expectedBase = new URL(BASE_URL)
 
-  // セキュリティ対策: URLが期待されるベースURLで始まっているかを確認
-  if (!url.toString().startsWith(BASE_URL)) {
+  // セキュリティ対策: オリジンとパスのプレフィックスを厳格にチェック
+  if (
+    url.origin !== expectedBase.origin ||
+    !url.pathname.startsWith(expectedBase.pathname)
+  ) {
     throw new Error('Invalid URL')
   }
 
@@ -27,7 +31,7 @@ async function fetcher<T>(
     })
   }
 
-  const res = await fetch(url.toString(), {
+  const res = await fetch(url, {
     headers: {
       'X-MICROCMS-API-KEY': API_KEY,
     },

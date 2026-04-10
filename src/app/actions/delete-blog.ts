@@ -20,9 +20,15 @@ export async function deleteBlogAction(id: string) {
       }
     }
 
-    const endpoint = `${BASE_URL}/blogs/${parsed.id}`
+    const url = new URL(`${BASE_URL}/blogs/${parsed.id}`)
+    const expectedBase = new URL(BASE_URL)
 
-    const res = await fetch(endpoint, {
+    // セキュリティ対策: オリジンのバリデーション
+    if (url.origin !== expectedBase.origin) {
+      throw new Error('Invalid URL origin')
+    }
+
+    const res = await fetch(url, {
       method: 'DELETE',
       headers: {
         'X-MICROCMS-API-KEY': apiKey,

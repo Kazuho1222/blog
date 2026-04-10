@@ -51,9 +51,10 @@ describe('searchPosts', () => {
 
     await searchPosts('検索', 20, 40)
 
-    const call = vi.mocked(fetch).mock.calls[0][0] as string
-    expect(call).toContain('limit=20')
-    expect(call).toContain('offset=40')
+    const call = vi.mocked(fetch).mock.calls[0][0]
+    const urlString = call instanceof URL ? call.toString() : (call as string)
+    expect(urlString).toContain('limit=20')
+    expect(urlString).toContain('offset=40')
   })
 
   it('APIエラー時にエラーをスローする', async () => {

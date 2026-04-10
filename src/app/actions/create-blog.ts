@@ -37,7 +37,13 @@ export async function createBlogAction(
       }
     }
 
-    const endpoint = `${BASE_URL}/blogs`
+    const url = new URL(`${BASE_URL}/blogs`)
+    const expectedBase = new URL(BASE_URL)
+
+    // セキュリティ対策: オリジンのバリデーション
+    if (url.origin !== expectedBase.origin) {
+      throw new Error('Invalid URL origin')
+    }
 
     const { _content: content, eyecatch, ...rest } = formData
     const newBody: CreateBlogRequest = {
@@ -50,7 +56,7 @@ export async function createBlogAction(
       newBody.eyecatch = eyecatch
     }
 
-    const res = await fetch(endpoint, {
+    const res = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
