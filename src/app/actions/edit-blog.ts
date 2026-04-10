@@ -1,6 +1,7 @@
 'use server'
 
 import { updateTag } from 'next/cache'
+import { BASE_URL } from '@/src/lib/api'
 import type { FormDataType } from '@/src/types/form'
 import type { PostType } from '../../types/post'
 
@@ -18,21 +19,17 @@ export const editBlogAction = async (
       return { success: false, error: 'APIキーが設定されていません' }
     }
 
-    const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
-    if (!serviceDomain || !/^[a-zA-Z0-9-]+$/.test(serviceDomain)) {
-      throw new Error('Invalid service domain')
-    }
-
     const validatedId = post.id
     if (!/^[a-zA-Z0-9_-]+$/.test(validatedId)) {
       throw new Error('Invalid ID format')
     }
 
-    const baseUrl = `https://${serviceDomain}.microcms.io/api/v1/blogs/`
-    const url = new URL(validatedId, baseUrl)
+    // BASE_URLをベースにエンドポイントを構築
+    const blogsUrl = new URL('blogs/', BASE_URL)
+    const url = new URL(validatedId, blogsUrl)
 
-    // プレフィックス・チェック: 構築されたURLが期待されるブログエンドポイントで始まっているか確認
-    if (!url.href.startsWith(baseUrl)) {
+    // セキュリティ対策: 期待されるベースURLで始まっているか確認
+    if (!url.href.startsWith(blogsUrl.href)) {
       throw new Error('Invalid URL construction')
     }
 

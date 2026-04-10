@@ -1,6 +1,7 @@
 'use server'
 
 import { updateTag } from 'next/cache'
+import { BASE_URL } from '@/src/lib/api'
 
 type CreateBlogFormData = {
   title: string
@@ -36,20 +37,12 @@ export async function createBlogAction(
       }
     }
 
-    const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
-    if (!serviceDomain || !/^[a-zA-Z0-9-]+$/.test(serviceDomain)) {
-      throw new Error('Invalid service domain')
-    }
+    // BASE_URLをベースにエンドポイントを構築
+    const url = new URL('blogs', BASE_URL)
 
-    const baseUrl = `https://${serviceDomain}.microcms.io/api/v1/blogs`
-    const url = new URL(baseUrl)
-
-    // セキュリティ対策: ドメインの厳格な検証
-    if (
-      !url.hostname.endsWith('.microcms.io') ||
-      url.hostname !== `${serviceDomain}.microcms.io`
-    ) {
-      throw new Error('Invalid host origin')
+    // セキュリティ対策: 期待されるベースURLで始まっているか確認
+    if (!url.href.startsWith(BASE_URL)) {
+      throw new Error('Invalid URL construction')
     }
 
     const { _content: content, eyecatch, ...rest } = formData

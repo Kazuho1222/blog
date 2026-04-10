@@ -6,25 +6,25 @@ if (!process.env.MICROCMS_SERVICE_DOMAIN || !process.env.MICROCMS_API_KEY) {
 }
 
 const API_KEY = process.env.MICROCMS_API_KEY as string
+const SERVICE_DOMAIN = process.env.MICROCMS_SERVICE_DOMAIN
 
-export const BASE_URL = `https://${process.env.MICROCMS_SERVICE_DOMAIN}.microcms.io/api/v1`
+// サービスドメインのバリデーションを1箇所で実施
+if (!SERVICE_DOMAIN || !/^[a-zA-Z0-9-]+$/.test(SERVICE_DOMAIN)) {
+  throw new Error('Invalid MICROCMS_SERVICE_DOMAIN')
+}
+
+// 信頼できるベースURLをエクスポート
+export const BASE_URL = `https://${SERVICE_DOMAIN}.microcms.io/api/v1/`
 
 async function fetcher<T>(
   path: 'blogs' | 'categories',
   params?: Record<string, string>,
   options?: { tags?: string[] },
 ) {
-  const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
-  if (!serviceDomain || !/^[a-zA-Z0-9-]+$/.test(serviceDomain)) {
-    throw new Error('Invalid service domain')
-  }
-
-  const baseUrl = `https://${serviceDomain}.microcms.io/api/v1/`
-  const url = new URL(path, baseUrl)
+  const url = new URL(path, BASE_URL)
 
   // ホワイトリスト・チェック: 構築されたURLが期待されるベースURLで始まっているか確認
-  // これにより、path引数によるディレクトリトラバーサルやドメイン偽装を防止する
-  if (!url.href.startsWith(baseUrl)) {
+  if (!url.href.startsWith(BASE_URL)) {
     throw new Error('Invalid URL construction')
   }
 
