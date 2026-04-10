@@ -1,7 +1,6 @@
 'use server'
 
 import { updateTag } from 'next/cache'
-import { BASE_URL } from '@/src/lib/api'
 import type { FormDataType } from '@/src/types/form'
 import type { PostType } from '../../types/post'
 
@@ -19,12 +18,23 @@ export const editBlogAction = async (
       return { success: false, error: 'APIキーが設定されていません' }
     }
 
-    const url = new URL(`${BASE_URL}/blogs/${post.id}`)
-    const expectedBase = new URL(BASE_URL)
+    const id = post.id
+    // 1. IDの形式を正規表現でバリデーション
+    if (!/^[a-zA-Z0-9_-]+$/.test(id)) {
+      throw new Error('Invalid ID format')
+    }
 
-    // セキュリティ対策: オリジンのバリデーション
-    if (url.origin !== expectedBase.origin) {
-      throw new Error('Invalid URL origin')
+    const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
+    const url = new URL(
+      `https://${serviceDomain}.microcms.io/api/v1/blogs/${id}`,
+    )
+
+    // 2. ドメインの厳格な検証
+    if (
+      !url.hostname.endsWith('.microcms.io') ||
+      url.hostname !== `${serviceDomain}.microcms.io`
+    ) {
+      throw new Error('Invalid host origin')
     }
 
     const response = await fetch(url, {

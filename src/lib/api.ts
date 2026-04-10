@@ -14,15 +14,22 @@ async function fetcher<T>(
   params?: Record<string, string>,
   options?: { tags?: string[] },
 ) {
-  const url = new URL(`${BASE_URL}/${path}`)
-  const expectedBase = new URL(BASE_URL)
+  // 1. パスのバリデーション (ホワイトリスト)
+  const allowedPaths = ['blogs', 'categories']
+  if (!allowedPaths.includes(path)) {
+    throw new Error('Invalid path')
+  }
 
-  // セキュリティ対策: オリジンとパスのプレフィックスを厳格にチェック
+  const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
+  const url = new URL(`https://${serviceDomain}.microcms.io/api/v1/${path}`)
+
+  // 2. ドメインの厳格な検証 (ハードコードされたサフィックスとの比較)
+  // 静的解析ツールが「許可されたドメインへのリクエスト」であることを認識しやすくする
   if (
-    url.origin !== expectedBase.origin ||
-    !url.pathname.startsWith(expectedBase.pathname)
+    !url.hostname.endsWith('.microcms.io') ||
+    url.hostname !== `${serviceDomain}.microcms.io`
   ) {
-    throw new Error('Invalid URL')
+    throw new Error('Invalid host')
   }
 
   if (params) {

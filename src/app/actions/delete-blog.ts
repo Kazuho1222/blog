@@ -2,7 +2,6 @@
 
 import { updateTag } from 'next/cache'
 import z from 'zod'
-import { BASE_URL } from '@/src/lib/api'
 
 const DeleteSchema = z.object({
   id: z.string().min(1, 'IDが指定されていません'),
@@ -20,12 +19,23 @@ export async function deleteBlogAction(id: string) {
       }
     }
 
-    const url = new URL(`${BASE_URL}/blogs/${parsed.id}`)
-    const expectedBase = new URL(BASE_URL)
+    const validatedId = parsed.id
+    // 1. IDの形式を正規表現でバリデーション
+    if (!/^[a-zA-Z0-9_-]+$/.test(validatedId)) {
+      throw new Error('Invalid ID format')
+    }
 
-    // セキュリティ対策: オリジンのバリデーション
-    if (url.origin !== expectedBase.origin) {
-      throw new Error('Invalid URL origin')
+    const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
+    const url = new URL(
+      `https://${serviceDomain}.microcms.io/api/v1/blogs/${validatedId}`,
+    )
+
+    // 2. ドメインの厳格な検証
+    if (
+      !url.hostname.endsWith('.microcms.io') ||
+      url.hostname !== `${serviceDomain}.microcms.io`
+    ) {
+      throw new Error('Invalid host origin')
     }
 
     const res = await fetch(url, {

@@ -1,7 +1,6 @@
 'use server'
 
 import { updateTag } from 'next/cache'
-import { BASE_URL } from '@/src/lib/api'
 
 type CreateBlogFormData = {
   title: string
@@ -37,12 +36,15 @@ export async function createBlogAction(
       }
     }
 
-    const url = new URL(`${BASE_URL}/blogs`)
-    const expectedBase = new URL(BASE_URL)
+    const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN
+    const url = new URL(`https://${serviceDomain}.microcms.io/api/v1/blogs`)
 
-    // セキュリティ対策: オリジンのバリデーション
-    if (url.origin !== expectedBase.origin) {
-      throw new Error('Invalid URL origin')
+    // セキュリティ対策: ドメインの厳格な検証
+    if (
+      !url.hostname.endsWith('.microcms.io') ||
+      url.hostname !== `${serviceDomain}.microcms.io`
+    ) {
+      throw new Error('Invalid host origin')
     }
 
     const { _content: content, eyecatch, ...rest } = formData
