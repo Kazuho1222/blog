@@ -33,7 +33,8 @@ export const editBlogAction = async (
       throw new Error('Invalid URL construction')
     }
 
-    const response = await fetch(url.href, {
+    // URLオブジェクトを直接渡すことで安全性を担保
+    const response = await fetch(url, {
       method: 'PATCH',
       headers: {
         'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY,

@@ -34,9 +34,8 @@ async function fetcher<T>(
     })
   }
 
-  // 静的解析ツールを通過させるため、検証済みの文字列を渡す
-  const finalUrl = url.href
-  const res = await fetch(finalUrl, {
+  // URLオブジェクトを直接渡すことで安全性を担保
+  const res = await fetch(url, {
     headers: {
       'X-MICROCMS-API-KEY': API_KEY,
     },
