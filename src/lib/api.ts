@@ -119,7 +119,7 @@ export async function getAllSlugs(limit?: number): Promise<PostSlug[]> {
       fields: 'title,slug',
       orders: '-publishDate',
     }
-    if (limit) {
+    if (limit !== undefined) {
       const data = await fetcher<MicroCMSResponse<PostSlug>>(
         'blogs',
         {
@@ -143,7 +143,7 @@ export async function getAllPosts(limit?: number): Promise<PostSummary[]> {
       fields: 'title,slug,eyecatch,publishDate',
       orders: '-publishDate,-createdAt',
     }
-    if (limit) {
+    if (limit !== undefined) {
       const data = await fetcher<MicroCMSResponse<PostSummary>>('blogs', {
         ...params,
         limit: String(limit),
@@ -164,7 +164,7 @@ export async function getAllCategories(
     const params: Record<string, string> = {
       fields: 'name,id,slug',
     }
-    if (limit) {
+    if (limit !== undefined) {
       const data = await fetcher<MicroCMSResponse<CategoryType>>(
         'categories',
         {
@@ -194,7 +194,7 @@ export async function getAllPostsByCategory(
       fields: 'title,slug,eyecatch',
       orders: '-publishDate,-createdAt',
     }
-    if (limit) {
+    if (limit !== undefined) {
       const data = await fetcher<MicroCMSResponse<PostCardProps>>('blogs', {
         ...params,
         limit: String(limit),
