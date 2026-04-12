@@ -8,8 +8,8 @@ if (!process.env.MICROCMS_SERVICE_DOMAIN || !process.env.MICROCMS_API_KEY) {
 const API_KEY = process.env.MICROCMS_API_KEY as string
 const SERVICE_DOMAIN = process.env.MICROCMS_SERVICE_DOMAIN
 
-// サービスドメインのバリデーションを1箇所で実施
 if (!SERVICE_DOMAIN || !/^[a-zA-Z0-9-]+$/.test(SERVICE_DOMAIN)) {
+  // サービスドメインのバリデーションを1箇所で実施
   throw new Error('Invalid MICROCMS_SERVICE_DOMAIN')
 }
 
@@ -230,5 +230,25 @@ export async function searchPosts(keyword: string, limit = 10, offset = 0) {
   } catch (error) {
     console.error('Error searching posts:', error)
     throw error
+  }
+}
+
+export async function getAdjacentPosts(publishDate: string) {
+  const [prev, next] = await Promise.all([
+    fetcher<MicroCMSResponse<PostSlug>>('blogs', {
+      filters: `publishDate[less_than]${publishDate}`,
+      orders: '-publishDate',
+      limit: '1',
+    }),
+    fetcher<MicroCMSResponse<PostSlug>>('blogs', {
+      filters: `publishDate[greater_than]${publishDate}`,
+      orders: 'publishDate',
+      limit: '1',
+    }),
+  ])
+
+  return {
+    prev: prev.contents[0] ?? null,
+    next: next.contents[0] ?? null,
   }
 }

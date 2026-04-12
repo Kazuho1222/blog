@@ -15,25 +15,25 @@ import {
   TwoColumnSidebar,
 } from '@/src/components/two-column'
 import { Button } from '@/src/components/ui/button'
-import { getAllSlugs, getPostBySlug } from '@/src/lib/api'
+import { getAdjacentPosts, getPostBySlug } from '@/src/lib/api'
 import { openGraphMetadata, twitterMetadata } from '@/src/lib/base-metadata'
 import { eyecatchLocal, siteMeta } from '@/src/lib/constants'
 import extractText from '@/src/lib/extract-text'
 import { getImageBuffer } from '@/src/lib/get-image-buffer'
-import { prevNextPost } from '@/src/lib/prev-next-post'
 
 const { siteTitle, siteUrl } = siteMeta
 
 export default async function Post(props: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string; publishDate: string }>
 }) {
   const params = await props.params
   const slug = params.slug
+  const publishDate = params.publishDate
 
   // 複数の await を Promise.all で1回にまとめる
-  const [post, allSlugs] = await Promise.all([
+  const [post, adjacentPosts] = await Promise.all([
     getPostBySlug(slug),
-    getAllSlugs(),
+    getAdjacentPosts(publishDate),
   ])
 
   if (!post) {
@@ -52,8 +52,10 @@ export default async function Post(props: {
   }
   post.eyecatch.blurDataURL = base64
 
-  if (!allSlugs) notFound()
-  const [prevPost, nextPost] = prevNextPost(allSlugs, slug)
+  if (!adjacentPosts) notFound()
+
+  // getAdjacentPostsは { prev, next } を返すためそのまま分割代入
+  const { prev: prevPost, next: nextPost } = adjacentPosts
 
   return (
     <Container large={false}>
@@ -94,10 +96,10 @@ export default async function Post(props: {
           </TwoColumnSidebar>
         </TwoColumn>
         <Pagination
-          prevText={prevPost.title}
-          prevUrl={`/blog/${prevPost.slug}`}
-          nextText={nextPost.title}
-          nextUrl={`/blog/${nextPost.slug}`}
+          prevText={prevPost?.title ?? ''}
+          prevUrl={prevPost ? `/blog/${prevPost.slug}` : '#'}
+          nextText={nextPost?.title ?? ''}
+          nextUrl={nextPost ? `/blog/${nextPost.slug}` : '#'}
         />
       </article>
     </Container>
