@@ -24,21 +24,18 @@ import { getImageBuffer } from '@/src/lib/get-image-buffer'
 const { siteTitle, siteUrl } = siteMeta
 
 export default async function Post(props: {
-  params: Promise<{ slug: string; publishDate: string }>
+  params: Promise<{ slug: string }>
 }) {
   const params = await props.params
   const slug = params.slug
-  const publishDate = params.publishDate
 
-  // 複数の await を Promise.all で1回にまとめる
-  const [post, adjacentPosts] = await Promise.all([
-    getPostBySlug(slug),
-    getAdjacentPosts(publishDate),
-  ])
+  const post = await getPostBySlug(slug)
 
   if (!post) {
     notFound()
   }
+
+  const adjacentPosts = await getAdjacentPosts(post.publishDate)
 
   const { id, title, publishDate: publish, _content, categories } = post
   const eyecatch = post.eyecatch ?? eyecatchLocal
@@ -51,8 +48,6 @@ export default async function Post(props: {
     post.eyecatch = { ...eyecatchLocal }
   }
   post.eyecatch.blurDataURL = base64
-
-  if (!adjacentPosts) notFound()
 
   // getAdjacentPostsは { prev, next } を返すためそのまま分割代入
   const { prev: prevPost, next: nextPost } = adjacentPosts

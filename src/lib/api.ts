@@ -239,11 +239,13 @@ export async function getAdjacentPosts(publishDate: string) {
       filters: `publishDate[less_than]${publishDate}`,
       orders: '-publishDate',
       limit: '1',
+      fields: 'title,slug',
     }),
     fetcher<MicroCMSResponse<PostSlug>>('blogs', {
       filters: `publishDate[greater_than]${publishDate}`,
       orders: 'publishDate',
       limit: '1',
+      fields: 'title,slug',
     }),
   ])
 
