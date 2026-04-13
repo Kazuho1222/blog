@@ -1,7 +1,6 @@
 'use server'
 
-import { updateTag } from 'next/cache'
-import { BASE_URL } from '@/src/lib/api'
+import { BASE_URL, isSlugAvailable, revalidateBlogCache } from '@/src/lib/api'
 
 type CreateBlogFormData = {
   title: string
@@ -34,6 +33,16 @@ export async function createBlogAction(
       return {
         success: false,
         error: 'APIキーが設定されていません',
+      }
+    }
+
+    // スラッグの重複チェック
+    const isAvailable = await isSlugAvailable(formData.slug)
+    if (!isAvailable) {
+      return {
+        success: false,
+        error:
+          'このスラッグは既に使用されています。別のスラッグを入力してください。',
       }
     }
 
@@ -94,9 +103,7 @@ export async function createBlogAction(
     const data: { id: string } = await res.json()
 
     // タグベースでキャッシュ再検証
-    updateTag('posts')
-    updateTag('slugs')
-    updateTag('categories')
+    revalidateBlogCache()
 
     // シリアライズ可能な形式で返す（IDのみ、文字列に変換）
     const blogId = data?.id ? String(data.id) : null

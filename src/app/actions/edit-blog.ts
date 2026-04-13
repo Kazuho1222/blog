@@ -1,7 +1,6 @@
 'use server'
 
-import { updateTag } from 'next/cache'
-import { BASE_URL } from '@/src/lib/api'
+import { BASE_URL, isSlugAvailable, revalidateBlogCache } from '@/src/lib/api'
 import type { FormDataType } from '@/src/types/form'
 import type { PostType } from '../../types/post'
 
@@ -17,6 +16,16 @@ export const editBlogAction = async (
   try {
     if (!process.env.MICROCMS_API_KEY) {
       return { success: false, error: 'APIキーが設定されていません' }
+    }
+
+    // スラッグの重複チェック
+    const isAvailable = await isSlugAvailable(formData.slug, post.id)
+    if (!isAvailable) {
+      return {
+        success: false,
+        error:
+          'このスラッグは既に使用されています。別のスラッグを入力してください。',
+      }
     }
 
     const validatedId = post.id
@@ -64,9 +73,7 @@ export const editBlogAction = async (
     }
 
     // タグベースでキャッシュ再検証
-    updateTag('posts')
-    updateTag('slugs')
-    updateTag('categories')
+    revalidateBlogCache()
 
     return {
       success: true,

@@ -1,3 +1,4 @@
+import { updateTag } from 'next/cache'
 import type { CategoryType } from '../types/category'
 import type { PostType } from '../types/post'
 
@@ -15,6 +16,15 @@ if (!SERVICE_DOMAIN || !/^[a-zA-Z0-9-]+$/.test(SERVICE_DOMAIN)) {
 
 // 信頼できるベースURLをエクスポート
 export const BASE_URL = `https://${SERVICE_DOMAIN}.microcms.io/api/v1/`
+
+/**
+ * ブログに関連するキャッシュを再検証する
+ */
+export function revalidateBlogCache() {
+  updateTag('posts')
+  updateTag('slugs')
+  updateTag('categories')
+}
 
 async function fetcher<T>(
   path: 'blogs' | 'categories',
@@ -110,6 +120,27 @@ export async function getPostBySlug(slug: string): Promise<PostType | null> {
     console.error('Error fetching post:', error)
     throw error
   }
+}
+
+/**
+ * スラッグが使用可能かどうかをチェックする
+ * @param slug チェックするスラッグ
+ * @param excludeId 除外するID（編集時に自分のIDを無視する場合などに使用）
+ * @returns 使用可能であれば true, 既に使用されていれば false
+ */
+export async function isSlugAvailable(
+  slug: string,
+  excludeId?: string,
+): Promise<boolean> {
+  const existingPost = await getPostBySlug(slug)
+  if (!existingPost) {
+    return true
+  }
+  // 編集時などで、自分自身のIDと一致する場合は「使用可能」とみなす
+  if (excludeId && existingPost.id === excludeId) {
+    return true
+  }
+  return false
 }
 
 export async function getAllSlugs(limit?: number): Promise<PostSlug[]> {

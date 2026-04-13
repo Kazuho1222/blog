@@ -2,11 +2,21 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { editBlogAction } from '@/src/app/actions/edit-blog'
 import type { FormDataType } from '@/src/types/form'
 import type { PostType } from '@/src/types/post'
+import { isSlugAvailable, revalidateBlogCache } from '@/src/lib/api'
 
 vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
   updateTag: vi.fn(),
 }))
+
+vi.mock('@/src/lib/api', async () => {
+  const actual = await vi.importActual('@/src/lib/api')
+  return {
+    ...actual as any,
+    isSlugAvailable: vi.fn(),
+    revalidateBlogCache: vi.fn(),
+  }
+})
 
 global.fetch = vi.fn() as unknown as typeof fetch
 
@@ -44,6 +54,7 @@ describe('editBlogAction', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.mocked(isSlugAvailable).mockResolvedValue(true)
   })
 
   it('成功時：IDが返る', async () => {
@@ -60,6 +71,38 @@ describe('editBlogAction', () => {
       success: true,
       id: '123',
     })
+    expect(isSlugAvailable).toHaveBeenCalledWith(mockFormData.slug, mockPostData.id)
+    expect(revalidateBlogCache).toHaveBeenCalled()
+  })
+
+  it('スラッグが別の記事で既に使用されている場合：エラーを返す', async () => {
+    vi.mocked(isSlugAvailable).mockResolvedValue(false)
+
+    process.env.MICROCMS_API_KEY = 'test-key'
+
+    const result = await editBlogAction(mockPostData, mockFormData, imageUrl)
+
+    expect(result.success).toBe(false)
+    if (!result.success) {
+      expect(result.error).toBe('このスラッグは既に使用されています。別のスラッグを入力してください。')
+    }
+    expect(fetch).not.toHaveBeenCalled()
+  })
+
+  it('スラッグが自分自身の記事のものである場合：成功する', async () => {
+    // isSlugAvailableがtrueを返せば、内部でIDチェックが行われていようがいまいが成功するはず
+    vi.mocked(isSlugAvailable).mockResolvedValue(true)
+    ;(fetch as any).mockResolvedValue({
+      ok: true,
+      json: async () => ({ id: '1' }),
+    })
+
+    process.env.MICROCMS_API_KEY = 'test-key'
+
+    const result = await editBlogAction(mockPostData, mockFormData, imageUrl)
+
+    expect(result.success).toBe(true)
+    expect(fetch).toHaveBeenCalled()
   })
 
   it('APIエラー時：success false', async () => {
