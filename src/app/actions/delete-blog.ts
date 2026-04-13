@@ -1,8 +1,7 @@
 'use server'
 
-import { updateTag } from 'next/cache'
 import z from 'zod'
-import { BASE_URL } from '@/src/lib/api'
+import { BASE_URL, revalidateBlogCache } from '@/src/lib/api'
 
 const DeleteSchema = z.object({
   id: z.string().min(1, 'IDが指定されていません'),
@@ -48,10 +47,8 @@ export async function deleteBlogAction(id: string) {
       }
     }
 
-    // タグベースでキャッシュ再検証
-    updateTag('posts')
-    updateTag('slugs')
-    updateTag('categories')
+    // タグおよびパスベースでキャッシュ再検証
+    revalidateBlogCache()
 
     return {
       success: true,

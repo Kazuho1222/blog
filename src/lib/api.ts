@@ -1,4 +1,4 @@
-import { updateTag } from 'next/cache'
+import { revalidatePath, updateTag } from 'next/cache'
 import type { CategoryType } from '../types/category'
 import type { PostType } from '../types/post'
 
@@ -19,11 +19,23 @@ export const BASE_URL = `https://${SERVICE_DOMAIN}.microcms.io/api/v1/`
 
 /**
  * ブログに関連するキャッシュを再検証する
+ * @param slug 個別記事のパスを再検証する場合に指定
  */
-export function revalidateBlogCache() {
+export function revalidateBlogCache(slug?: string) {
+  // データ(Tags)の再検証
   updateTag('posts')
   updateTag('slugs')
   updateTag('categories')
+
+  // ページ(Paths)の再検証
+  revalidatePath('/')
+  revalidatePath('/blog')
+  revalidatePath('/blog/category/[slug]', 'page')
+  revalidatePath('/search')
+
+  if (slug) {
+    revalidatePath(`/blog/${slug}`)
+  }
 }
 
 async function fetcher<T>(

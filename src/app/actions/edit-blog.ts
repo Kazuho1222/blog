@@ -73,7 +73,7 @@ export const editBlogAction = async (
     }
 
     // タグベースでキャッシュ再検証
-    revalidateBlogCache()
+    revalidateBlogCache(formData.slug)
 
     return {
       success: true,

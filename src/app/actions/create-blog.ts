@@ -102,8 +102,8 @@ export async function createBlogAction(
 
     const data: { id: string } = await res.json()
 
-    // タグベースでキャッシュ再検証
-    revalidateBlogCache()
+    // タグおよびパスベースでキャッシュ再検証
+    revalidateBlogCache(formData.slug)
 
     // シリアライズ可能な形式で返す（IDのみ、文字列に変換）
     const blogId = data?.id ? String(data.id) : null
