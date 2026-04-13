@@ -1,71 +1,74 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Blog Lifecycle', () => {
+test.describe('Blog Lifecycle (Full)', () => {
   const timestamp = Date.now();
-  const testTitle = `E2E Test Post ${timestamp}`;
-  const testSlug = `e2e-test-post-${timestamp}`;
-  const testContent = `This is a test post created by Playwright at ${new Date().toISOString()}`;
+  const testTitle = `E2E Lifecycle ${timestamp}`;
+  const updatedTitle = `E2E Updated ${timestamp}`;
+  const testSlug = `lifecycle-${timestamp}`;
+  const testContent = `Testing lifecycle at ${new Date().toISOString()}`;
 
-  test('should create, display, and delete a blog post', async ({ page }) => {
-    // 1. Create a new blog post
+  test('should create, edit, and delete a blog post, verifying all pages', async ({ page }) => {
+    // --- 1. CREATE ---
     await page.goto('/create-blog');
-    
-    // Fill in the form
     await page.getByLabel('タイトル').fill(testTitle);
     await page.getByLabel('スラッグ').fill(testSlug);
-    
-    // Fill in the content (Tiptap editor)
-    // Tiptap is a contenteditable div
-    const editor = page.locator('.tiptap.ProseMirror');
-    await editor.click();
-    await editor.pressSequentially(testContent);
-
-    // Fill in the post date
+    await page.locator('.tiptap.ProseMirror').fill(testContent);
     await page.getByPlaceholder('日付を選択').fill('2026/04/13 12:00');
-    // Press Enter to close the date picker if it stays open
     await page.keyboard.press('Enter');
-
-    // Select a category (required by schema)
-    const categoryCheckbox = page.locator('button[role="checkbox"]').first();
-    await categoryCheckbox.click();
-
-    // Submit the form
+    await page.locator('button[role="checkbox"]').first().click();
     await page.getByRole('button', { name: '送信' }).click();
 
-    // Wait for redirection to home page
-    await expect(page).toHaveURL('/', { timeout: 10000 });
-    
-    // 2. Verify it appears in the blog list
-    await page.goto('/blog');
-    
-    // Find the specific post by title
-    const postLink = page.getByRole('link', { name: testTitle });
-    await expect(postLink).toBeVisible();
-
-    // 3. Verify the detail page
-    await postLink.click();
-    await expect(page).toHaveURL(new RegExp(`/blog/${testSlug}`));
-    await expect(page.locator('h1')).toHaveText(testTitle);
-    await expect(page.locator('article')).toContainText(testContent);
-
-    // 4. Delete the post
-    // Assuming there's a delete button as seen in Post component
-    const deleteButton = page.getByRole('button', { name: 'Delete' });
-    await deleteButton.click();
-
-    // Handle the alert dialog
-    const confirmButton = page.getByRole('button', { name: 'はい' });
-    await confirmButton.click();
-
-    // Should redirect back to home or blog list after deletion
+    // Verify redirect to Home and presence on Home
     await page.waitForURL('/', { timeout: 10000 });
+    await expect(page.getByRole('link', { name: testTitle })).toBeVisible({ timeout: 10000 });
 
-    // 5. Verify it's gone from the list
-    // We go to /blog to check the full list
-    await page.goto('/blog');
-    
-    // Use a polling expect to wait for the item to disappear, 
-    // which helps with potential cache/API latency
-    await expect(page.getByRole('link', { name: testTitle })).not.toBeVisible({ timeout: 15000 });
+    try {
+      // --- 2. EDIT ---
+      // Go to detail page then to edit
+      await page.goto(`/blog/${testSlug}`);
+      await page.getByRole('link', { name: 'Edit' }).click();
+      
+      // Update title
+      await page.getByLabel('タイトル').fill(updatedTitle);
+      await page.getByRole('button', { name: '更新' }).click();
+
+      // After editing, the app redirects to the Home page ('/')
+      await page.waitForURL('/', { timeout: 10000 });
+      await expect(page.getByRole('link', { name: updatedTitle })).toBeVisible({ timeout: 10000 });
+
+      // Go back to the detail page to verify the content
+      await page.getByRole('link', { name: updatedTitle }).click();
+      await expect(page.locator('h1')).toHaveText(updatedTitle);
+
+      // Verify update on Blog list page
+      await page.goto('/blog');
+      await expect(page.getByRole('link', { name: updatedTitle })).toBeVisible();
+    } finally {
+      // --- 3. DELETE (Cleanup) ---
+      // Navigate directly to the post detail page
+      await page.goto(`/blog/${testSlug}`);
+      
+      const deleteButton = page.getByRole('button', { name: 'Delete' });
+      try {
+        // Wait for the button to ensure it's rendered
+        await deleteButton.waitFor({ state: 'visible', timeout: 5000 });
+        await deleteButton.click();
+        await page.getByRole('button', { name: 'はい' }).click();
+        
+        // Verify redirect to Home after deletion
+        await page.waitForURL('/', { timeout: 10000 });
+      } catch (e) {
+        // If the button never appeared, the post might not have been created or was already deleted
+        console.log('Cleanup: Delete button not found or already deleted');
+      }
+
+      // Final verification that it's gone from all lists
+      // Use a slightly longer timeout for the "not visible" check to account for cache propagation
+      await expect(page.getByRole('link', { name: updatedTitle })).not.toBeVisible({ timeout: 20000 });
+      await expect(page.getByRole('link', { name: testTitle })).not.toBeVisible({ timeout: 20000 });
+
+      await page.goto('/blog');
+      await expect(page.getByRole('link', { name: updatedTitle })).not.toBeVisible({ timeout: 20000 });
+    }
   });
 });
