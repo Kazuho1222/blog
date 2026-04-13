@@ -17,7 +17,8 @@ test.describe('Blog Lifecycle', () => {
     // Fill in the content (Tiptap editor)
     // Tiptap is a contenteditable div
     const editor = page.locator('.tiptap.ProseMirror');
-    await editor.fill(testContent);
+    await editor.click();
+    await editor.pressSequentially(testContent);
 
     // Fill in the post date
     await page.getByPlaceholder('日付を選択').fill('2026/04/13 12:00');
@@ -57,12 +58,14 @@ test.describe('Blog Lifecycle', () => {
     await confirmButton.click();
 
     // Should redirect back to home or blog list after deletion
-    // Looking at delete-blog.ts, it doesn't redirect itself, but components might
-    // Let's check the BlogDeleteButton component if possible, but for now wait for redirection
-    await page.waitForURL('/');
+    await page.waitForURL('/', { timeout: 10000 });
 
     // 5. Verify it's gone from the list
+    // We go to /blog to check the full list
     await page.goto('/blog');
-    await expect(page.locator('body')).not.toContainText(testTitle);
+    
+    // Use a polling expect to wait for the item to disappear, 
+    // which helps with potential cache/API latency
+    await expect(page.getByRole('link', { name: testTitle })).not.toBeVisible({ timeout: 15000 });
   });
 });
