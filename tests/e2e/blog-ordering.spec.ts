@@ -1,0 +1,112 @@
+import { test, expect } from '@playwright/test';
+
+test.describe('Blog Ordering', () => {
+  const timestamp = Date.now();
+  const sameDate = '2026/04/13 12:00';
+  
+  const postA = {
+    title: `Order Test A ${timestamp}`,
+    slug: `order-test-a-${timestamp}`,
+    content: 'First created post with same date'
+  };
+  
+  const postB = {
+    title: `Order Test B ${timestamp}`,
+    slug: `order-test-b-${timestamp}`,
+    content: 'Second created post with same date'
+  };
+
+  async function createPost(page: any, post: { title: string, slug: string, content: string }, date: string) {
+    await page.goto('/create-blog');
+    await page.getByLabel('タイトル').fill(post.title);
+    await page.getByLabel('スラッグ').fill(post.slug);
+    await page.locator('.tiptap.ProseMirror').fill(post.content);
+    await page.getByPlaceholder('日付を選択').fill(date);
+    await page.keyboard.press('Enter');
+    await page.locator('button[role="checkbox"]').first().click();
+    await page.getByRole('button', { name: '送信' }).click();
+    await page.waitForURL('/', { timeout: 10000 });
+  }
+
+  async function deletePost(page: any, slug: string, title: string) {
+    await page.goto(`/blog/${slug}`);
+    await page.getByRole('button', { name: 'Delete' }).click();
+    await page.getByRole('button', { name: 'はい' }).click();
+    await page.waitForURL('/', { timeout: 10000 });
+    // Verify it's gone
+    await page.goto('/blog');
+    await expect(page.getByRole('link', { name: title })).not.toBeVisible({ timeout: 10000 });
+  }
+
+  test('should display later created post first when publish dates are identical', async ({ page }) => {
+    // 1. Create Post A
+    await createPost(page, postA, sameDate);
+    
+    // Wait a bit to ensure createdAt difference in microCMS
+    await page.waitForTimeout(2000);
+
+    // 2. Create Post B (same publishDate)
+    await createPost(page, postB, sameDate);
+
+    // 3. Verify ordering on /blog page
+    await page.goto('/blog');
+    
+    // Get all article titles
+    const titles = page.locator('article h2');
+    
+    // Find indexes of Post A and Post B in the list
+    const allTitles = await titles.allTextContents();
+    const indexA = allTitles.indexOf(postA.title);
+    const indexB = allTitles.indexOf(postB.title);
+
+    console.log(`Found titles: A at ${indexA}, B at ${indexB}`);
+    
+    expect(indexA).not.toBe(-1);
+    expect(indexB).not.toBe(-1);
+    
+    // Post B should be before Post A (index should be smaller)
+    expect(indexB).toBeLessThan(indexA);
+
+    // 4. Cleanup
+    await deletePost(page, postB.slug, postB.title);
+    await deletePost(page, postA.slug, postA.title);
+  });
+
+  test('should display later time first when dates are same but times are different', async ({ page }) => {
+    const postC = {
+      title: `Time Test C ${timestamp}`,
+      slug: `time-test-c-${timestamp}`,
+      content: 'Early time post'
+    };
+    const postD = {
+      title: `Time Test D ${timestamp}`,
+      slug: `time-test-d-${timestamp}`,
+      content: 'Later time post'
+    };
+
+    // 1. Create Post C (12:00)
+    await createPost(page, postC, '2026/04/13 12:00');
+    
+    // 2. Create Post D (13:00)
+    await createPost(page, postD, '2026/04/13 13:00');
+
+    // 3. Verify ordering
+    await page.goto('/blog');
+    const allTitles = await page.locator('article h2').allTextContents();
+    
+    const indexC = allTitles.indexOf(postC.title);
+    const indexD = allTitles.indexOf(postD.title);
+
+    console.log(`Found titles: C at ${indexC}, D at ${indexD}`);
+    
+    expect(indexC).not.toBe(-1);
+    expect(indexD).not.toBe(-1);
+    
+    // Post D (13:00) should be before Post C (12:00)
+    expect(indexD).toBeLessThan(indexC);
+
+    // 4. Cleanup
+    await deletePost(page, postD.slug, postD.title);
+    await deletePost(page, postC.slug, postC.title);
+  });
+});
