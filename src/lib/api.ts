@@ -186,6 +186,7 @@ export async function getAllPosts(limit?: number): Promise<PostSummary[]> {
   try {
     const params: Record<string, string> = {
       fields: 'title,slug,eyecatch,publishDate',
+      // 公開日の降順、次に作成日時の降順
       orders: '-publishDate,-createdAt',
     }
     if (limit !== undefined) {
