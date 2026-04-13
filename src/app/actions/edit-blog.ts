@@ -72,8 +72,13 @@ export const editBlogAction = async (
       }
     }
 
-    // タグベースでキャッシュ再検証
-    revalidateBlogCache(formData.slug)
+    // タグおよびパスベースでキャッシュ再検証
+    // スラッグが変更された場合、新旧両方のパスを再検証する
+    const slugsToRevalidate = [formData.slug]
+    if (post.slug && post.slug !== formData.slug) {
+      slugsToRevalidate.push(post.slug)
+    }
+    await revalidateBlogCache(slugsToRevalidate)
 
     return {
       success: true,

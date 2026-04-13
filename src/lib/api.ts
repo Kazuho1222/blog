@@ -19,9 +19,9 @@ export const BASE_URL = `https://${SERVICE_DOMAIN}.microcms.io/api/v1/`
 
 /**
  * ブログに関連するキャッシュを再検証する
- * @param slug 個別記事のパスを再検証する場合に指定
+ * @param slugs 個別記事のパス（単一または配列）を再検証する場合に指定
  */
-export function revalidateBlogCache(slug?: string) {
+export async function revalidateBlogCache(slugs?: string | string[]) {
   // データ(Tags)の再検証
   updateTag('posts')
   updateTag('slugs')
@@ -33,8 +33,11 @@ export function revalidateBlogCache(slug?: string) {
   revalidatePath('/blog/category/[slug]', 'page')
   revalidatePath('/search')
 
-  if (slug) {
-    revalidatePath(`/blog/${slug}`)
+  if (slugs) {
+    const slugList = Array.isArray(slugs) ? slugs : [slugs]
+    for (const slug of slugList) {
+      revalidatePath(`/blog/${slug}`)
+    }
   }
 }
 

@@ -48,7 +48,7 @@ export async function deleteBlogAction(id: string) {
     }
 
     // タグおよびパスベースでキャッシュ再検証
-    revalidateBlogCache()
+    await revalidateBlogCache()
 
     return {
       success: true,
