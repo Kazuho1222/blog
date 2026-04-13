@@ -10,8 +10,6 @@ import { getImageBuffer } from '../../lib/get-image-buffer'
 
 const { siteTitle, siteUrl } = siteMeta
 
-export const revalidate = 0
-
 export default async function Blog() {
   let posts: PostListItem[] = []
   let fetchError = false

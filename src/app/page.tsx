@@ -8,8 +8,6 @@ import { getAllPosts } from '../lib/api'
 import { eyecatchLocal } from '../lib/constants'
 import { getImageBuffer } from '../lib/get-image-buffer'
 
-export const revalidate = 0
-
 export default async function Home() {
   const posts = await getAllPosts(4)
 
