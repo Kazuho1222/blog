@@ -102,12 +102,16 @@ export function BlogPostFormFields({
       <FormField
         control={form.control}
         name="publishDate"
-        render={() => (
+        render={({ field }) => (
           <FormItem className="relative mt-4">
             <FormLabel className="mt-4 flex">投稿日</FormLabel>
             <InputDateTime
-              selectedDate={publishDateAsPickerValue(form.watch('publishDate'))}
-              onChange={onDateChange}
+              selectedDate={publishDateAsPickerValue(field.value)}
+              onChange={(date) => {
+                const isoString = date ? date.toISOString() : ''
+                field.onChange(isoString)
+                onDateChange(date)
+              }}
             />
             <FormMessage className="text-red-500" />
           </FormItem>
@@ -116,14 +120,11 @@ export function BlogPostFormFields({
       <FormField
         control={form.control}
         name="_content"
-        render={() => (
+        render={({ field }) => (
           <FormItem>
             <FormLabel>内容</FormLabel>
             <FormControl>
-              <TiptapEditor
-                content={form.watch('_content')}
-                onChange={(val) => form.setValue('_content', val)}
-              />
+              <TiptapEditor content={field.value} onChange={field.onChange} />
             </FormControl>
             <FormMessage className="text-red-500" />
           </FormItem>
@@ -132,7 +133,7 @@ export function BlogPostFormFields({
       <FormField
         control={form.control}
         name="eyecatch"
-        render={() => (
+        render={({ field }) => (
           <FormItem>
             <FormControl>
               <div>
@@ -141,7 +142,12 @@ export function BlogPostFormFields({
                 <Input
                   type="file"
                   accept="image/*"
-                  onChange={onImageChange}
+                  onChange={(e) => {
+                    onImageChange(e)
+                    // ファイル名は React Hook Form にも通知
+                    const file = e.target.files?.[0]
+                    field.onChange(file ? file.name : '')
+                  }}
                   ref={fileInputRef}
                 />
                 {previewImage ? (
@@ -158,7 +164,10 @@ export function BlogPostFormFields({
                       <button
                         type="button"
                         className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 transform cursor-pointer rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                        onClick={handleRemoveClick}
+                        onClick={() => {
+                          handleRemoveClick()
+                          field.onChange('')
+                        }}
                         aria-label="画像を削除"
                       >
                         <FontAwesomeIcon icon={faCircleXmark} size="2x" />
@@ -175,7 +184,7 @@ export function BlogPostFormFields({
       <FormField
         control={form.control}
         name="categories"
-        render={() => (
+        render={({ field }) => (
           <FormItem>
             <FormLabel> カテゴリ</FormLabel>
             {categories.map((category) => (
@@ -183,17 +192,13 @@ export function BlogPostFormFields({
                 <FormControl>
                   <div className="flex items-center space-x-2">
                     <Checkbox
-                      checked={form.watch('categories').includes(category.id)}
+                      checked={field.value.includes(category.id)}
                       onCheckedChange={(checked) => {
-                        const selectedCategories = form.getValues('categories')
+                        const selectedCategories = [...field.value]
                         if (checked === true) {
-                          form.setValue('categories', [
-                            ...selectedCategories,
-                            category.id,
-                          ])
+                          field.onChange([...selectedCategories, category.id])
                         } else {
-                          form.setValue(
-                            'categories',
+                          field.onChange(
                             selectedCategories.filter(
                               (id) => id !== category.id,
                             ),
