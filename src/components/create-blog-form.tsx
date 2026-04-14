@@ -39,6 +39,10 @@ export default function CreateBlogForm({
     },
   })
 
+  const {
+    formState: { isSubmitting },
+  } = form
+
   const handleSubmit = async (formData: BlogPostFormValues) => {
     try {
       const fileInput = fileInputRef.current
@@ -168,8 +172,8 @@ export default function CreateBlogForm({
               onDateChange={handleDateChange}
               onImageChange={handleImageChange}
               onRemoveImage={handleRemoveImage}
-              submitLabel="送信"
-              isSubmitting={form.formState.isSubmitting}
+              submitLabel={isSubmitting ? '送信中...' : '公開'}
+              isSubmitting={isSubmitting}
             />
           </form>
         </Form>

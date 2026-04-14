@@ -44,6 +44,10 @@ export default function EditBlogForm({
     },
   })
 
+  const {
+    formState: { isSubmitting },
+  } = form
+
   // const extractFileNameFromUrl = (url: string) => {
   //   return url.split('/').pop() || ''
   // }
@@ -137,8 +141,8 @@ export default function EditBlogForm({
               onDateChange={handleDateChange}
               onImageChange={handleImageChange}
               onRemoveImage={handleRemoveImage}
-              submitLabel="更新"
-              isSubmitting={form.formState.isSubmitting}
+              submitLabel={isSubmitting ? '送信中...' : '更新'}
+              isSubmitting={isSubmitting}
             />
           </form>
         </Form>
