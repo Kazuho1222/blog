@@ -169,6 +169,7 @@ export default function CreateBlogForm({
               onImageChange={handleImageChange}
               onRemoveImage={handleRemoveImage}
               submitLabel="送信"
+              isSubmitting={form.formState.isSubmitting}
             />
           </form>
         </Form>

@@ -41,6 +41,7 @@ type BlogPostFormFieldsProps = {
   onImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   onRemoveImage: () => void
   submitLabel: string
+  isSubmitting?: boolean
 }
 
 function publishDateAsPickerValue(publishDate: string): Date | null {
@@ -61,6 +62,7 @@ export function BlogPostFormFields({
   onImageChange,
   onRemoveImage,
   submitLabel,
+  isSubmitting = false,
 }: BlogPostFormFieldsProps) {
   const handleRemoveClick = () => {
     if (previewImage?.startsWith('blob:')) {
@@ -208,7 +210,7 @@ export function BlogPostFormFields({
           </FormItem>
         )}
       />
-      <Button type="submit" className="hover:bg-red-500">
+      <Button type="submit" className="hover:bg-red-500" loading={isSubmitting}>
         {submitLabel}
       </Button>
     </>
