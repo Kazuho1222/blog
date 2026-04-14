@@ -44,7 +44,6 @@ jobs:
             http://localhost:3000/about
           uploadArtifacts: true
           temporaryPublicStorage: true
-          configPath: './lighthouserc.json'
 
       - name: Comment PR with results
         if: github.event_name == 'pull_request'
