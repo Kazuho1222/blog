@@ -17,20 +17,21 @@ export default function Posts({
       {posts.map(({ title, slug, eyecatch }) => (
         <article className={styles.post} key={slug}>
           <Link href={`/blog/${slug}`}>
-            <figure>
+            <figure className={styles.imageWrapper}>
               {eyecatch ? (
                 <Image
                   src={eyecatch.url}
-                  alt=""
+                  alt={title}
                   // layout='fill'
                   // objectFit='cover'
                   sizes="(min-width:1152px) 576px,50vw"
+                  className={styles.image}
                   fill
-                  placeholder="blur"
+                  placeholder={eyecatch.blurDataURL ? 'blur' : 'empty'}
                   blurDataURL={eyecatch.blurDataURL}
                 />
               ) : (
-                <div>No image available</div>
+                <div className={styles.noImage}>No image available</div>
               )}
             </figure>
             <h2>{title}</h2>

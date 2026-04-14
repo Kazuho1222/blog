@@ -16,3 +16,22 @@
   position: relative;
   aspect-ratio: 16 / 9;
 }
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.noImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eee;
+  height: 100%;
+}

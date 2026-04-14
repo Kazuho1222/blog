@@ -69,13 +69,13 @@ export default async function Post(props: {
           <Image
             key={eyecatch.url}
             src={eyecatch.url}
-            alt=""
+            alt={title}
             // layout="responsive"
             width={eyecatch.width}
             height={eyecatch.height}
             sizes="(min-width:1152px)1152px,100vw"
             priority
-            placeholder="blur"
+            placeholder={eyecatch.blurDataURL ? 'blur' : 'empty'}
             blurDataURL={post.eyecatch.blurDataURL}
           />
         </figure>
