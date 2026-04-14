@@ -23,7 +23,7 @@
     "reinstall": "npm run clean && npm install",
     "type-check": "tsc --noEmit",
     "test:build": "npm run build && npm run start",
-    "analyze": "ANALYZE=true npm run build",
+    "analyze": "next build --experimental-analyze",
     "prepare": "husky",
     "test": "vitest",
     "test:ui": "vitest --ui"
