@@ -75,7 +75,7 @@ export default async function Post(props: {
             height={eyecatch.height}
             sizes="(min-width:1152px)1152px,100vw"
             priority
-            placeholder={eyecatch.blurDataURL ? 'blur' : 'empty'}
+            placeholder={post.eyecatch.blurDataURL ? 'blur' : 'empty'}
             blurDataURL={post.eyecatch.blurDataURL}
           />
         </figure>
