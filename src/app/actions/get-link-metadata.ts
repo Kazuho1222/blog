@@ -6,9 +6,7 @@ import type { LinkMetadata } from '@/src/types/link-metadata'
 /**
  * 指定されたURLからOGPメタデータを取得するServer Action
  */
-export async function getLinkMetadata(
-  url: string,
-): Promise<LinkMetadata | null> {
+export async function getLinkMetadata(url: string): Promise<LinkMetadata> {
   try {
     const { result, error } = await ogs({ url })
 

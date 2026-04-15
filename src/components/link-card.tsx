@@ -17,15 +17,33 @@ const LinkCard = ({ url }: LinkCardProps) => {
   const isYoutube = url.includes('youtube.com') || url.includes('youtu.be')
 
   useEffect(() => {
+    let cancelled = false
+
     const fetchMetadata = async () => {
       setLoading(true)
-      const data = await getLinkMetadata(url)
-      setMetadata(data)
-      setLoading(false)
+      try {
+        const data = await getLinkMetadata(url)
+        if (!cancelled) {
+          setMetadata(data)
+        }
+      } catch (error) {
+        console.error('Failed to fetch link metadata:', error)
+        if (!cancelled) {
+          setMetadata(null)
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false)
+        }
+      }
     }
 
     if (url) {
       fetchMetadata()
+    }
+
+    return () => {
+      cancelled = true
     }
   }, [url])
 

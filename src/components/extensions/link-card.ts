@@ -50,6 +50,7 @@ export const LinkCard = Node.create({
     return [
       'a',
       mergeAttributes(HTMLAttributes, {
+        href: HTMLAttributes.url,
         'data-type': 'link-card',
         target: '_blank',
         rel: 'noopener noreferrer',

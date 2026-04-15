@@ -4,7 +4,11 @@ import { type NodeViewProps, NodeViewWrapper } from '@tiptap/react'
 import LinkCard from './link-card'
 
 const LinkCardView = (props: NodeViewProps) => {
-  const { url } = props.node.attrs as { url: string }
+  const url = props.node.attrs?.url as string | undefined
+
+  if (!url) {
+    return null
+  }
 
   return (
     <NodeViewWrapper>

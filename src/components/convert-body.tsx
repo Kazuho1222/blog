@@ -9,36 +9,50 @@ export default function ConvertBody({ contentHTML }: { contentHTML: string }) {
   const contentReact = parse(safeContentHTML, {
     replace: (node: DOMNode) => {
       // タグ（Element）の場合のみ処理
-      if (node instanceof Element) {
+      if (node instanceof Element || ('name' in node && 'attribs' in node)) {
+        const element = node as Element
+        const nodeName = element.name.toLowerCase()
+
         // テキストコンテンツを再帰的に抽出する共通関数
         const getText = (nodes: DOMNode[]): string => {
           if (!nodes) return ''
           return nodes.reduce((acc: string, child: DOMNode) => {
-            if (child instanceof Text) return acc + child.data
-            if (child instanceof Element)
-              return acc + getText(child.children as DOMNode[])
+            if (
+              child instanceof Text ||
+              ('data' in child && !('name' in child))
+            ) {
+              return acc + (child as Text).data
+            }
+            if (
+              child instanceof Element ||
+              ('name' in child && 'children' in child)
+            ) {
+              return acc + getText((child as Element).children as DOMNode[])
+            }
             return acc
           }, '')
         }
 
-        const textContent = getText(node.children as DOMNode[]).trim()
+        const textContent = getText(element.children as DOMNode[]).trim()
         const isUrl = /^https?:\/\/[^\s]+$/.test(textContent)
-        const href = node.attribs?.href
+        const href = element.attribs?.href
 
         // 1. <a>タグまたは<p>タグで、中身が単一のURLである場合
         // 2. data-type="link-card" を持っている場合
         const isLinkCard =
-          node.attribs?.['data-type'] === 'link-card' ||
-          ((node.name === 'a' || node.name === 'p') && isUrl)
+          element.attribs?.['data-type'] === 'link-card' ||
+          ((nodeName === 'a' || nodeName === 'p') && isUrl)
 
         if (isLinkCard) {
           const url = href || textContent
-          return <LinkCard url={url} />
+          if (url && /^https?:\/\/[^\s]+$/.test(url)) {
+            return <LinkCard url={url} />
+          }
         }
 
         // 画像の置換
-        if (node.name === 'img') {
-          const { src, alt, width, height } = node.attribs
+        if (nodeName === 'img') {
+          const { src, alt, width, height } = element.attribs
           if (src && alt && width && height) {
             return (
               <Image
