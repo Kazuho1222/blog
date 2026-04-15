@@ -45,12 +45,25 @@ export const LinkCard = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
+    // URLの安全性を確認 (http/httpsのみ許可)
+    let safeUrl = ''
+    try {
+      if (typeof HTMLAttributes.url === 'string') {
+        const parsedUrl = new URL(HTMLAttributes.url)
+        if (parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:') {
+          safeUrl = parsedUrl.href
+        }
+      }
+    } catch {
+      // 不正な形式のURLの場合は空文字にする
+    }
+
     // 保存時は「URLをテキストに持つ普通のリンク」として出力する
     // これならMicroCMSに消されることはない
     return [
       'a',
-      mergeAttributes(HTMLAttributes, {
-        href: HTMLAttributes.url,
+      mergeAttributes({
+        href: safeUrl,
         'data-type': 'link-card',
         target: '_blank',
         rel: 'noopener noreferrer',

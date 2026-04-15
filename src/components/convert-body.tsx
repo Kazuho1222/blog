@@ -15,7 +15,6 @@ export default function ConvertBody({ contentHTML }: { contentHTML: string }) {
 
         // テキストコンテンツを再帰的に抽出する共通関数
         const getText = (nodes: DOMNode[]): string => {
-          if (!nodes) return ''
           return nodes.reduce((acc: string, child: DOMNode) => {
             if (
               child instanceof Text ||

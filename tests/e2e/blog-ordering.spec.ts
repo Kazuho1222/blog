@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { expect, type Page, test } from '@playwright/test'
 
 test.describe('Blog Ordering', () => {
   const timestamp = Date.now()
@@ -6,23 +6,25 @@ test.describe('Blog Ordering', () => {
   const yyyymmdd = `${now.getFullYear()}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')}`
   const sameDate = `${yyyymmdd} 12:00`
 
-  const postA = {
+  interface BlogPost {
+    title: string
+    slug: string
+    content: string
+  }
+
+  const postA: BlogPost = {
     title: `Order Test A ${timestamp}`,
     slug: `order-test-a-${timestamp}`,
     content: 'First created post with same date',
   }
 
-  const postB = {
+  const postB: BlogPost = {
     title: `Order Test B ${timestamp}`,
     slug: `order-test-b-${timestamp}`,
     content: 'Second created post with same date',
   }
 
-  async function createPost(
-    page: any,
-    post: { title: string; slug: string; content: string },
-    date: string,
-  ) {
+  async function createPost(page: Page, post: BlogPost, date: string) {
     await page.goto('/create-blog')
     await page.getByLabel('タイトル').fill(post.title)
     await page.getByLabel('スラッグ').fill(post.slug)
@@ -34,7 +36,7 @@ test.describe('Blog Ordering', () => {
     await page.waitForURL('/', { timeout: 10000 })
   }
 
-  async function deletePost(page: any, slug: string, title: string) {
+  async function deletePost(page: Page, slug: string, title: string) {
     await page.goto(`/blog/${slug}`)
     await page.getByRole('button', { name: 'Delete' }).click()
     await page.getByRole('button', { name: 'はい' }).click()

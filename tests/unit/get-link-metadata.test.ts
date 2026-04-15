@@ -1,6 +1,7 @@
-import { describe, it, expect, vi } from 'vitest'
-import { getLinkMetadata } from '@/src/app/actions/get-link-metadata'
 import ogs from 'open-graph-scraper'
+import type { ErrorResult, SuccessResult } from 'open-graph-scraper/types'
+import { describe, expect, it, vi } from 'vitest'
+import { getLinkMetadata } from '@/src/app/actions/get-link-metadata'
 
 // open-graph-scraper をモック化
 vi.mock('open-graph-scraper', () => {
@@ -21,7 +22,7 @@ describe('getLinkMetadata Server Action', () => {
     vi.mocked(ogs).mockResolvedValue({
       result: mockMetadata,
       error: false,
-    } as any)
+    } as SuccessResult)
 
     const url = 'https://example.com'
     const result = await getLinkMetadata(url)
@@ -44,7 +45,7 @@ describe('getLinkMetadata Server Action', () => {
     vi.mocked(ogs).mockResolvedValue({
       result: mockMetadata,
       error: false,
-    } as any)
+    } as SuccessResult)
 
     const url = 'https://example.com'
     const result = await getLinkMetadata(url)
@@ -56,7 +57,7 @@ describe('getLinkMetadata Server Action', () => {
     vi.mocked(ogs).mockResolvedValue({
       result: {},
       error: false,
-    } as any)
+    } as SuccessResult)
 
     const url = 'https://example.com'
     const result = await getLinkMetadata(url)
@@ -68,7 +69,7 @@ describe('getLinkMetadata Server Action', () => {
     vi.mocked(ogs).mockResolvedValue({
       result: {},
       error: true,
-    } as any)
+    } as unknown as ErrorResult)
 
     const url = 'https://example.com'
     const result = await getLinkMetadata(url)

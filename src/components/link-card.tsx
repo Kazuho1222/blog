@@ -39,7 +39,7 @@ const LinkCard = ({ url }: LinkCardProps) => {
     }
 
     if (url) {
-      fetchMetadata()
+      void fetchMetadata()
     }
 
     return () => {
