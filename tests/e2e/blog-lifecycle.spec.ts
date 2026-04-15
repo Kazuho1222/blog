@@ -15,7 +15,9 @@ test.describe('Blog Lifecycle (Full)', () => {
     await page.getByLabel('タイトル').fill(testTitle)
     await page.getByLabel('スラッグ').fill(testSlug)
     await page.locator('.tiptap.ProseMirror').fill(testContent)
-    await page.getByPlaceholder('日付を選択').fill('2026/04/13 12:00')
+    const now = new Date()
+    const formattedDate = `${now.getFullYear()}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
+    await page.getByPlaceholder('日付を選択').fill(formattedDate)
     await page.keyboard.press('Enter')
     await page.locator('button[role="checkbox"]').first().click()
     await page.getByRole('button', { name: '公開' }).click()

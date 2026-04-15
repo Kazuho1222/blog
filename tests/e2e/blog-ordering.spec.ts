@@ -2,7 +2,9 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Blog Ordering', () => {
   const timestamp = Date.now()
-  const sameDate = '2026/04/13 12:00'
+  const now = new Date()
+  const yyyymmdd = `${now.getFullYear()}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')}`
+  const sameDate = `${yyyymmdd} 12:00`
 
   const postA = {
     title: `Order Test A ${timestamp}`,
@@ -95,10 +97,10 @@ test.describe('Blog Ordering', () => {
     }
 
     // 1. Create Post C (12:00)
-    await createPost(page, postC, '2026/04/13 12:00')
+    await createPost(page, postC, `${yyyymmdd} 12:00`)
 
     // 2. Create Post D (13:00)
-    await createPost(page, postD, '2026/04/13 13:00')
+    await createPost(page, postD, `${yyyymmdd} 13:00`)
 
     // 3. Verify ordering
     await page.goto('/blog')

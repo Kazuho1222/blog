@@ -42,7 +42,9 @@ test.describe('Blog Form Validation', () => {
     await expect(getErrorMessage('スラッグ')).not.toBeVisible()
 
     // 6. 投稿日を選択 -> エラーが消えることを確認
-    await page.getByPlaceholder('日付を選択').fill('2026/04/14 10:00')
+    const now = new Date()
+    const formattedDate = `${now.getFullYear()}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
+    await page.getByPlaceholder('日付を選択').fill(formattedDate)
     await page.keyboard.press('Enter')
     await expect(getErrorMessage('投稿日')).not.toBeVisible()
 
