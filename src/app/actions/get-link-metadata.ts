@@ -8,7 +8,15 @@ import type { LinkMetadata } from '@/src/types/link-metadata'
  */
 export async function getLinkMetadata(url: string): Promise<LinkMetadata> {
   try {
-    const { result, error } = await ogs({ url })
+    const { result, error } = await ogs({
+      url,
+      fetchOptions: {
+        headers: {
+          'user-agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        },
+      },
+    })
 
     if (error) {
       console.error('OGP fetch error for URL:', url, error)
