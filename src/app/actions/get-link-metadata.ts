@@ -3,6 +3,8 @@
 import ogs from 'open-graph-scraper'
 import type { LinkMetadata } from '@/src/types/link-metadata'
 
+const YOUTUBE_API_ENDPOINT = 'https://www.googleapis.com/youtube/v3/videos'
+
 /**
  * YouTubeの動画IDを抽出する
  */
@@ -29,16 +31,15 @@ async function getYouTubeMetadata(
   }
 
   try {
-    const params = new URLSearchParams({
-      part: 'snippet',
-      id: videoId,
-      key: apiKey,
-    })
+    // URLオブジェクトを使用して安全に構築し、SSRFのリスクを排除
+    const apiUrl = new URL(YOUTUBE_API_ENDPOINT)
+    apiUrl.searchParams.set('part', 'snippet')
+    apiUrl.searchParams.set('id', videoId)
+    apiUrl.searchParams.set('key', apiKey)
 
-    const res = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?${params.toString()}`,
-      { next: { revalidate: 3600 * 24 } }, // 24時間キャッシュ
-    )
+    const res = await fetch(apiUrl, {
+      next: { revalidate: 3600 * 24 }, // 24時間キャッシュ
+    })
     const data = await res.json()
 
     if (!data.items || data.items.length === 0) return null
