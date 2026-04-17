@@ -45,18 +45,17 @@ export const LinkCard = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    // URLの安全性を確認 (http/httpsのみ許可)
-    let safeUrl = ''
-    const rawUrl = HTMLAttributes.url
+    let validatedUrl = ''
 
-    if (typeof rawUrl === 'string') {
+    if (typeof HTMLAttributes.url === 'string') {
       try {
-        const url = new URL(rawUrl)
+        const url = new URL(HTMLAttributes.url)
+        // URLの安全性を確認 (http/httpsのみ許可)
         if (url.protocol === 'http:' || url.protocol === 'https:') {
-          safeUrl = url.href
+          validatedUrl = url.href
         }
       } catch {
-        // 不正な形式のURLの場合は空文字にする
+        // 不正な形式のURLの場合は空文字のままにする
       }
     }
 
@@ -65,12 +64,12 @@ export const LinkCard = Node.create({
     return [
       'a',
       mergeAttributes({
-        href: safeUrl,
+        href: validatedUrl,
         'data-type': 'link-card',
         target: '_blank',
         rel: 'noopener noreferrer',
       }),
-      safeUrl || '',
+      validatedUrl,
     ]
   },
 
