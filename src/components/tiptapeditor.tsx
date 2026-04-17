@@ -18,6 +18,7 @@ import Text from '@tiptap/extension-text'
 import Underline from '@tiptap/extension-underline'
 import { EditorContent, useEditor } from '@tiptap/react'
 import styles from '../styles/tiptap-editor.module.css'
+import { LinkCard } from './extensions/link-card'
 import RichEditorToolbar from './rich-editor-toolbar'
 
 interface TiptapEditorProps {
@@ -49,6 +50,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ content, onChange }) => {
         defaultProtocol: 'https',
         HTMLAttributes: { class: styles.link },
       }),
+      LinkCard,
     ],
     content,
     immediatelyRender: false, // SSRの問題回避
@@ -60,6 +62,26 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ content, onChange }) => {
     editorProps: {
       attributes: {
         class: 'prose prose-base m-5 focus:outline-none text-left',
+      },
+      // URLが貼り付けられた際の自動カード化ロジック
+      handlePaste: (view, event) => {
+        const text = event.clipboardData?.getData('text/plain')
+        if (!text) return false
+
+        // シンプルなURL正規表現
+        const urlRegex = /^https?:\/\/[^\s$.?#].[^\s]*$/gm
+        if (urlRegex.test(text)) {
+          const { state, dispatch } = view
+          const { selection } = state
+          const { from, to } = selection
+
+          // URLをリンクカードとして挿入
+          const node = state.schema.nodes.linkCard.create({ url: text })
+          const transaction = state.tr.replaceWith(from, to, node)
+          dispatch(transaction)
+          return true // デフォルトの貼り付け動作をキャンセル
+        }
+        return false
       },
     },
   })
