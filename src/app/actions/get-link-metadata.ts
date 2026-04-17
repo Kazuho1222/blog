@@ -23,9 +23,20 @@ async function getYouTubeMetadata(
   const apiKey = process.env.YOUTUBE_API_KEY
   if (!apiKey) return null
 
+  // YouTube IDの形式を厳密にチェック (11文字の英数字、ハイフン、アンダースコアのみ)
+  if (!/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
+    return null
+  }
+
   try {
+    const params = new URLSearchParams({
+      part: 'snippet',
+      id: videoId,
+      key: apiKey,
+    })
+
     const res = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`,
+      `https://www.googleapis.com/youtube/v3/videos?${params.toString()}`,
       { next: { revalidate: 3600 * 24 } }, // 24時間キャッシュ
     )
     const data = await res.json()

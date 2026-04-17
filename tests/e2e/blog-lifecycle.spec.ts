@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 test.describe('Blog Lifecycle (Full)', () => {
   const timestamp = Date.now()
@@ -65,7 +65,7 @@ test.describe('Blog Lifecycle (Full)', () => {
 
         // Verify redirect to Home after deletion
         await page.waitForURL('/', { timeout: 10000 })
-      } catch (e) {
+      } catch (_e) {
         // If the button never appeared, the post might not have been created or was already deleted
         console.log('Cleanup: Delete button not found or already deleted')
       }
