@@ -1,10 +1,17 @@
+import { notFound } from 'next/navigation'
 import type { JSX } from 'react'
 import EditBlogForm from '@/src/components/edit-blog-form'
+import { checkAdmin } from '@/src/lib/auth-check'
 import { getAllCategories, getPostBySlug } from '../../../lib/api'
 
 export default async function EditBlogPage(props: {
   params: Promise<{ id: string }>
 }): Promise<JSX.Element> {
+  const isAdmin = await checkAdmin()
+  if (!isAdmin) {
+    notFound()
+  }
+
   const params = await props.params
   const post = await getPostBySlug(params.id)
   const categories = await getAllCategories()

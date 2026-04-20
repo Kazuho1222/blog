@@ -16,6 +16,7 @@ import {
 } from '@/src/components/two-column'
 import { Button } from '@/src/components/ui/button'
 import { getAdjacentPosts, getPostBySlug } from '@/src/lib/api'
+import { checkAdmin } from '@/src/lib/auth-check'
 import { openGraphMetadata, twitterMetadata } from '@/src/lib/base-metadata'
 import { eyecatchLocal, siteMeta } from '@/src/lib/constants'
 import extractText from '@/src/lib/extract-text'
@@ -52,17 +53,21 @@ export default async function Post(props: {
   // getAdjacentPostsは { prev, next } を返すためそのまま分割代入
   const { prev: prevPost, next: nextPost } = adjacentPosts
 
+  const isAdmin = await checkAdmin()
+
   return (
     <Container large={false}>
       <article>
         <div className="flex items-center justify-between">
           <PostHeader title={title} subtitle="Blog Article" publish={publish} />
-          <div className="flex justify-end space-x-4">
-            <Link href={`/edit-blog/${post.slug}`}>
-              <Button variant="secondary">Edit</Button>
-            </Link>
-            <BlogDeleteButton blogId={id} />
-          </div>
+          {isAdmin && (
+            <div className="flex justify-end space-x-4">
+              <Link href={`/edit-blog/${post.slug}`}>
+                <Button variant="secondary">Edit</Button>
+              </Link>
+              <BlogDeleteButton blogId={id} />
+            </div>
+          )}
         </div>
 
         <figure>

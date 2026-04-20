@@ -2,12 +2,18 @@
 
 import z from 'zod'
 import { BASE_URL, revalidateBlogCache } from '@/src/lib/api'
+import { checkAdmin } from '@/src/lib/auth-check'
 
 const DeleteSchema = z.object({
   id: z.string().min(1, 'IDが指定されていません'),
 })
 
 export async function deleteBlogAction(id: string) {
+  const userId = await checkAdmin()
+  if (!userId) {
+    return { success: false, error: '管理者権限が必要です' }
+  }
+
   try {
     const parsed = DeleteSchema.parse({ id })
     const apiKey = process.env.MICROCMS_API_KEY

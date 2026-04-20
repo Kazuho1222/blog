@@ -1,3 +1,4 @@
+import { ClerkProvider } from '@clerk/nextjs'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import { Toaster } from '@/src/components/ui/toaster'
 import '@fortawesome/fontawesome-svg-core/styles.css'
@@ -34,16 +35,18 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Suspense fallback={null}>
-          <GoogleAnalytics />
-        </Suspense>
-        <Header />
-        {children}
-        <Toaster />
-        <Footer />
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <Suspense fallback={null}>
+            <GoogleAnalytics />
+          </Suspense>
+          <Header />
+          {children}
+          <Toaster />
+          <Footer />
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
