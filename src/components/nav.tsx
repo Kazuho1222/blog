@@ -1,5 +1,6 @@
 'use client'
 
+import { Show, SignInButton, UserButton, useUser } from '@clerk/nextjs'
 import Link from 'next/link'
 import { useState } from 'react'
 import { Button } from '@/src/components/ui/button'
@@ -8,6 +9,7 @@ import { SearchInput } from './search-input'
 
 export default function Nav() {
   const [navIsOpen, setNavIsOpen] = useState(false)
+  const { user } = useUser()
 
   const toggleNav = () => {
     setNavIsOpen((prev) => !prev)
@@ -16,6 +18,9 @@ export default function Nav() {
   const closeNav = () => {
     setNavIsOpen(false)
   }
+
+  const isAdmin =
+    user?.primaryEmailAddress?.emailAddress === process.env.ALLOWED_ADMIN_EMAIL
 
   return (
     <nav className={navIsOpen ? styles.open : styles.close}>
@@ -54,17 +59,33 @@ export default function Nav() {
             Blog
           </Link>
         </li>
-        <li>
-          <Button
-            asChild
-            variant="default"
-            className="bg-gray-800 text-white! hover:bg-red-500 hover:text-white"
-          >
-            <Link href="/create-blog" onClick={closeNav}>
-              Create-Blog
-            </Link>
-          </Button>
-        </li>
+        <Show when="signed-in">
+          {isAdmin && (
+            <li>
+              <Button
+                asChild
+                variant="default"
+                className="bg-gray-800 text-white! hover:bg-red-500 hover:text-white"
+              >
+                <Link href="/create-blog" onClick={closeNav}>
+                  Create-Blog
+                </Link>
+              </Button>
+            </li>
+          )}
+          <li className="flex items-center">
+            <UserButton />
+          </li>
+        </Show>
+        <Show when="signed-out">
+          <li>
+            <SignInButton mode="modal">
+              <Button variant="outline" size="sm">
+                Sign In
+              </Button>
+            </SignInButton>
+          </li>
+        </Show>
       </ul>
     </nav>
   )

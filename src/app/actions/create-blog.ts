@@ -1,6 +1,7 @@
 'use server'
 
 import { BASE_URL, isSlugAvailable, revalidateBlogCache } from '@/src/lib/api'
+import { checkAdmin } from '@/src/lib/auth-check'
 
 type CreateBlogFormData = {
   title: string
@@ -27,6 +28,11 @@ export type CreateBlogActionResult =
 export async function createBlogAction(
   formData: CreateBlogFormData,
 ): Promise<CreateBlogActionResult> {
+  const userId = await checkAdmin()
+  if (!userId) {
+    return { success: false, error: '管理者権限が必要です' }
+  }
+
   try {
     const apiKey = process.env.MICROCMS_API_KEY
     if (!apiKey) {

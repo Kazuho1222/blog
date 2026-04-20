@@ -1,6 +1,7 @@
 'use server'
 
 import { BASE_URL, isSlugAvailable, revalidateBlogCache } from '@/src/lib/api'
+import { checkAdmin } from '@/src/lib/auth-check'
 import type { FormDataType } from '@/src/types/form'
 import type { PostType } from '../../types/post'
 
@@ -13,6 +14,11 @@ export const editBlogAction = async (
   formData: FormDataType,
   imageUrl: string,
 ): Promise<EditBlogResponse> => {
+  const userId = await checkAdmin()
+  if (!userId) {
+    return { success: false, error: '管理者権限が必要です' }
+  }
+
   try {
     if (!process.env.MICROCMS_API_KEY) {
       return { success: false, error: 'APIキーが設定されていません' }
