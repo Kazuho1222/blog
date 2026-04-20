@@ -15,7 +15,7 @@ describe('checkAdmin', () => {
 
   beforeEach(() => {
     vi.resetAllMocks()
-    process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL = ADMIN_EMAIL
+    process.env.ALLOWED_ADMIN_EMAIL = ADMIN_EMAIL
   })
 
   it('未ログインの場合は null を返すこと', async () => {
