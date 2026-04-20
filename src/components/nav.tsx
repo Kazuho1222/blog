@@ -20,8 +20,7 @@ export default function Nav() {
   }
 
   const isAdmin =
-    user?.primaryEmailAddress?.emailAddress ===
-    process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL
+    user?.primaryEmailAddress?.emailAddress === process.env.ALLOWED_ADMIN_EMAIL
 
   return (
     <nav className={navIsOpen ? styles.open : styles.close}>
