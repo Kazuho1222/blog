@@ -10,7 +10,7 @@ export async function checkAdmin() {
 
   const user = await currentUser()
   const email = user?.emailAddresses[0]?.emailAddress
-  const allowedEmail = process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL
+  const allowedEmail = process.env.ALLOWED_ADMIN_EMAIL
 
   if (email && email === allowedEmail) {
     return userId
