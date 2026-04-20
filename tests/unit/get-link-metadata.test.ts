@@ -1,6 +1,6 @@
 import ogs from 'open-graph-scraper'
 import type { ErrorResult, SuccessResult } from 'open-graph-scraper/types'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { getLinkMetadata } from '@/src/app/actions/get-link-metadata'
 
 // open-graph-scraper をモック化
@@ -10,79 +10,163 @@ vi.mock('open-graph-scraper', () => {
   }
 })
 
-describe('getLinkMetadata Server Action', () => {
-  it('should return metadata for a valid URL', async () => {
-    const mockMetadata = {
-      ogTitle: 'Test Page',
-      ogDescription: 'This is a test page',
-      ogImage: [{ url: 'https://example.com/image.jpg' }],
-      favicon: 'https://example.com/favicon.ico',
-    }
+describe('getLinkMetadata サーバーアクション', () => {
+  const originalEnv = process.env
 
-    vi.mocked(ogs).mockResolvedValue({
-      result: mockMetadata,
-      error: false,
-    } as SuccessResult)
+  beforeEach(() => {
+    vi.resetModules()
+    process.env = { ...originalEnv }
+    global.fetch = vi.fn()
+  })
 
-    const url = 'https://example.com'
-    const result = await getLinkMetadata(url)
+  afterEach(() => {
+    process.env = originalEnv
+    vi.restoreAllMocks()
+  })
 
-    expect(result).toEqual({
-      url,
-      title: 'Test Page',
-      description: 'This is a test page',
-      image: 'https://example.com/image.jpg',
-      favicon: 'https://example.com/favicon.ico',
+  describe('一般的なURL (ogs)', () => {
+    it('有効なURLに対してメタデータを取得できること', async () => {
+      const mockMetadata = {
+        ogTitle: 'テストページ',
+        ogDescription: 'これはテストページです',
+        ogImage: [{ url: 'https://example.com/image.jpg' }],
+        favicon: 'https://example.com/favicon.ico',
+      }
+
+      vi.mocked(ogs).mockResolvedValue({
+        result: mockMetadata,
+        error: false,
+      } as SuccessResult)
+
+      const url = 'https://example.com'
+      const result = await getLinkMetadata(url)
+
+      expect(result).toEqual({
+        url,
+        title: 'テストページ',
+        description: 'これはテストページです',
+        image: 'https://example.com/image.jpg',
+        favicon: 'https://example.com/favicon.ico',
+      })
+    })
+
+    it('ogTitleがない場合はTwitterのタイトルを使用すること', async () => {
+      const mockMetadata = {
+        twitterTitle: 'Twitterページ',
+        ogDescription: 'これはテストページです',
+      }
+
+      vi.mocked(ogs).mockResolvedValue({
+        result: mockMetadata,
+        error: false,
+      } as SuccessResult)
+
+      const url = 'https://example.com'
+      const result = await getLinkMetadata(url)
+
+      expect(result?.title).toBe('Twitterページ')
+    })
+
+    it('ogsが失敗した場合は適切にエラーハンドリングされること', async () => {
+      vi.mocked(ogs).mockResolvedValue({
+        result: {},
+        error: true,
+      } as unknown as ErrorResult)
+
+      const url = 'https://example.com'
+      const result = await getLinkMetadata(url)
+
+      expect(result).toEqual({ url })
     })
   })
 
-  it('should use twitter title if ogTitle is missing', async () => {
-    const mockMetadata = {
-      twitterTitle: 'Twitter Page',
-      ogDescription: 'This is a test page',
-    }
+  describe('YouTube URL', () => {
+    const youtubeUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
 
-    vi.mocked(ogs).mockResolvedValue({
-      result: mockMetadata,
-      error: false,
-    } as SuccessResult)
+    it('APIキーがある場合はYouTube APIからメタデータを取得すること', async () => {
+      process.env.YOUTUBE_API_KEY = 'test-api-key'
 
-    const url = 'https://example.com'
-    const result = await getLinkMetadata(url)
+      const mockApiResponse = {
+        items: [
+          {
+            snippet: {
+              title: 'Rick Astley - Never Gonna Give You Up',
+              description: 'The official video for...',
+              thumbnails: {
+                maxres: {
+                  url: 'https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+                },
+              },
+            },
+          },
+        ],
+      }
 
-    expect(result?.title).toBe('Twitter Page')
-  })
+      vi.mocked(global.fetch).mockResolvedValue({
+        ok: true,
+        json: async () => mockApiResponse,
+      } as Response)
 
-  it('should return URL as title when no title is found', async () => {
-    vi.mocked(ogs).mockResolvedValue({
-      result: {},
-      error: false,
-    } as SuccessResult)
+      // 異なるYouTube URL形式でテスト
+      const urls = [
+        'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+        'https://youtu.be/dQw4w9WgXcQ',
+        'https://www.youtube.com/embed/dQw4w9WgXcQ',
+      ]
 
-    const url = 'https://example.com'
-    const result = await getLinkMetadata(url)
+      for (const url of urls) {
+        const result = await getLinkMetadata(url)
+        expect(result.title).toBe('Rick Astley - Never Gonna Give You Up')
+      }
 
-    expect(result?.title).toBe(url)
-  })
+      expect(global.fetch).toHaveBeenCalledTimes(urls.length)
+    })
 
-  it('should handle error when ogs fails', async () => {
-    vi.mocked(ogs).mockResolvedValue({
-      result: {},
-      error: true,
-    } as unknown as ErrorResult)
+    it('YouTube APIキーがない場合はogsにフォールバックすること', async () => {
+      delete process.env.YOUTUBE_API_KEY
 
-    const url = 'https://example.com'
-    const result = await getLinkMetadata(url)
+      vi.mocked(ogs).mockResolvedValue({
+        result: { ogTitle: 'YouTube OGS Title' },
+        error: false,
+      } as SuccessResult)
 
-    expect(result).toEqual({ url })
-  })
+      const result = await getLinkMetadata(youtubeUrl)
 
-  it('should handle exception gracefully', async () => {
-    vi.mocked(ogs).mockRejectedValue(new Error('Network error'))
+      expect(global.fetch).not.toHaveBeenCalled()
+      expect(result.title).toBe('YouTube OGS Title')
+    })
 
-    const url = 'https://example.com'
-    const result = await getLinkMetadata(url)
+    it('YouTube APIがアイテムを返さない場合はogsにフォールバックすること', async () => {
+      process.env.YOUTUBE_API_KEY = 'test-api-key'
 
-    expect(result).toEqual({ url })
+      vi.mocked(global.fetch).mockResolvedValue({
+        ok: true,
+        json: async () => ({ items: [] }),
+      } as Response)
+
+      vi.mocked(ogs).mockResolvedValue({
+        result: { ogTitle: 'YouTube OGS Title' },
+        error: false,
+      } as SuccessResult)
+
+      const result = await getLinkMetadata(youtubeUrl)
+
+      expect(result.title).toBe('YouTube OGS Title')
+    })
+
+    it('YouTube APIの取得に失敗した場合はogsにフォールバックすること', async () => {
+      process.env.YOUTUBE_API_KEY = 'test-api-key'
+
+      vi.mocked(global.fetch).mockRejectedValue(new Error('API Error'))
+
+      vi.mocked(ogs).mockResolvedValue({
+        result: { ogTitle: 'YouTube OGS Title' },
+        error: false,
+      } as SuccessResult)
+
+      const result = await getLinkMetadata(youtubeUrl)
+
+      expect(result.title).toBe('YouTube OGS Title')
+    })
   })
 })
