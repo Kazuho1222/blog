@@ -20,7 +20,9 @@ export default function Nav() {
   }
 
   const isAdmin =
-    user?.primaryEmailAddress?.emailAddress === process.env.ALLOWED_ADMIN_EMAIL
+    user?.primaryEmailAddress?.emailAddress?.toLowerCase() ===
+      process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL?.toLowerCase() &&
+    !!process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL
 
   return (
     <nav className={navIsOpen ? styles.open : styles.close}>
@@ -73,7 +75,7 @@ export default function Nav() {
               </Button>
             </li>
           )}
-          <li className="flex items-center">
+          <li className="flex items-center" data-testid="user-button">
             <UserButton />
           </li>
         </Show>

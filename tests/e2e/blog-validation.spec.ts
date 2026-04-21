@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-test.describe('Blog Validation and Button States', () => {
+test.describe('ブログのバリデーションとボタンの状態', () => {
   test('未入力の状態で送信しようとした際、バリデーションエラーが表示されること', async ({ page }) => {
     // 1. ブログ作成画面へ移動
     await page.goto('/create-blog')

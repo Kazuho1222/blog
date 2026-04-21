@@ -5,6 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests/e2e',
+  globalSetup: require.resolve('./tests/e2e/setup/global.setup.ts'),
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -26,9 +27,23 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    { name: 'setup', testMatch: /auth\.setup\.ts/ },
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        // 認証状態（ストレージ状態）を読み込む
+        storageState: 'playwright/.auth/user.json',
+      },
+      dependencies: ['setup'],
+      testIgnore: /auth-security\.spec\.ts/,
+    },
+    {
+      name: 'unauthenticated',
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+      testMatch: /auth-security\.spec\.ts/,
     },
   ],
 

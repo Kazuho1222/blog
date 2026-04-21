@@ -4,21 +4,25 @@ import type { FormDataType } from '@/src/types/form'
 import type { PostType } from '@/src/types/post'
 import { isSlugAvailable, revalidateBlogCache } from '@/src/lib/api'
 
+vi.mock('@/src/lib/auth-check', () => ({
+  checkAdmin: vi.fn().mockResolvedValue('admin_123'),
+}))
+
 vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
   updateTag: vi.fn(),
 }))
 
-vi.mock('@/src/lib/api', async () => {
-  const actual = await vi.importActual('@/src/lib/api')
+vi.mock('@/src/lib/api', async (importActual) => {
+  const actual = await importActual<typeof import('@/src/lib/api')>()
   return {
-    ...actual as any,
+    ...actual,
     isSlugAvailable: vi.fn(),
     revalidateBlogCache: vi.fn(),
   }
 })
 
-global.fetch = vi.fn() as unknown as typeof fetch
+global.fetch = vi.fn()
 
 describe('editBlogAction', () => {
   const mockPostData: PostType = {
@@ -58,10 +62,10 @@ describe('editBlogAction', () => {
   })
 
   it('成功時：IDが返る', async () => {
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: true,
       json: async () => ({ id: '123' }),
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -92,10 +96,10 @@ describe('editBlogAction', () => {
   it('スラッグが自分自身の記事のものである場合：成功する', async () => {
     // isSlugAvailableがtrueを返せば、内部でIDチェックが行われていようがいまいが成功するはず
     vi.mocked(isSlugAvailable).mockResolvedValue(true)
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: true,
       json: async () => ({ id: '1' }),
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -106,7 +110,7 @@ describe('editBlogAction', () => {
   })
 
   it('APIエラー時：success false', async () => {
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: false,
       status: 400,
       statusText: 'Bad Request',
@@ -114,7 +118,7 @@ describe('editBlogAction', () => {
         JSON.stringify({
           message: 'エラーです',
         }),
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -127,10 +131,10 @@ describe('editBlogAction', () => {
   })
 
   it('IDがない場合：エラー', async () => {
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: true,
       json: async () => ({}),
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -154,7 +158,7 @@ describe('editBlogAction', () => {
   })
 
   it('fetchが例外を投げた場合', async () => {
-    ;(fetch as any).mockRejectedValue(new Error('network error'))
+    vi.mocked(fetch).mockRejectedValue(new Error('network error'))
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -167,10 +171,10 @@ describe('editBlogAction', () => {
   })
 
   it('URLが正しいか', async () => {
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: true,
       json: async () => ({ id: '1' }),
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -182,10 +186,10 @@ describe('editBlogAction', () => {
   })
 
   it('methodがPATCHか', async () => {
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: true,
       json: async () => ({ id: '1' }),
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -200,16 +204,18 @@ describe('editBlogAction', () => {
   })
 
   it('eyecatchが上書きされているか', async () => {
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: true,
       json: async () => ({ id: '1' }),
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
     await editBlogAction(mockPostData, mockFormData, imageUrl)
 
-    const body = JSON.parse((fetch as any).mock.calls[0][1].body)
+    const calls = vi.mocked(fetch).mock.calls
+    const options = calls[0][1] as RequestInit
+    const body = JSON.parse(options.body as string)
 
     expect(body.eyecatch).toBe(imageUrl)
   })

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-test.describe('Link Card E2E', () => {
+test.describe('リンクカードのE2Eテスト', () => {
   test('エディタにYouTubeのURLを貼り付けた際、リンクカードが正しく生成されること', async ({ page, context }) => {
     // クリップボードへのアクセス権限を付与
     await context.grantPermissions(['clipboard-read', 'clipboard-write'])

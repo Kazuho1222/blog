@@ -15,7 +15,7 @@ describe('checkAdmin', () => {
 
   beforeEach(() => {
     vi.resetAllMocks()
-    process.env.ALLOWED_ADMIN_EMAIL = ADMIN_EMAIL
+    process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL = ADMIN_EMAIL
   })
 
   it('未ログインの場合は null を返すこと', async () => {
@@ -39,6 +39,16 @@ describe('checkAdmin', () => {
     vi.mocked(auth).mockResolvedValue({ userId: 'admin_123' } as AuthReturn)
     vi.mocked(currentUser).mockResolvedValue({
       emailAddresses: [{ emailAddress: ADMIN_EMAIL }],
+    } as unknown as CurrentUserReturn)
+
+    const result = await checkAdmin()
+    expect(result).toBe('admin_123')
+  })
+
+  it('大文字小文字が異なっていても一致すれば userId を返すこと', async () => {
+    vi.mocked(auth).mockResolvedValue({ userId: 'admin_123' } as AuthReturn)
+    vi.mocked(currentUser).mockResolvedValue({
+      emailAddresses: [{ emailAddress: ADMIN_EMAIL.toUpperCase() }],
     } as unknown as CurrentUserReturn)
 
     const result = await checkAdmin()

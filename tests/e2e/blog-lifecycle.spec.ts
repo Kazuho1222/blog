@@ -1,13 +1,13 @@
 import { expect, test } from '@playwright/test'
 
-test.describe('Blog Lifecycle (Full)', () => {
+test.describe('ブログのライフサイクル（全工程）', () => {
   const timestamp = Date.now()
   const testTitle = `E2E Lifecycle ${timestamp}`
   const updatedTitle = `E2E Updated ${timestamp}`
   const testSlug = `lifecycle-${timestamp}`
   const testContent = `Testing lifecycle at ${new Date().toISOString()}`
 
-  test('should create, edit, and delete a blog post, verifying all pages', async ({
+  test('ブログの作成、編集、削除が一連の流れで正しく行えること', async ({
     page,
   }) => {
     // --- 1. CREATE ---

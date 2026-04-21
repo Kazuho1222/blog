@@ -6,6 +6,23 @@ import Logo from '@/src/components/logo'
 import Social from '@/src/components/social'
 import Hero from '@/src/components/hero'
 
+// Clerk のモック化
+vi.mock('@clerk/nextjs', () => ({
+  useUser: () => ({
+    user: {
+      primaryEmailAddress: {
+        emailAddress: 'admin@example.com',
+      },
+    },
+  }),
+  Show: ({ children, when }: { children: React.ReactNode; when: string }) => {
+    if (when === 'signed-in') return <>{children}</>
+    return null
+  },
+  SignInButton: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  UserButton: () => <div data-testid="user-button" />,
+}))
+
 // SearchInput が内部で使用されているため、モック化
 vi.mock('@/src/components/search-input', () => ({
   SearchInput: () => <div data-testid="search-input" />
@@ -23,6 +40,7 @@ vi.mock('next/image', () => ({
 describe('Common Components Display', () => {
   describe('Nav', () => {
     it('主要なナビゲーションリンクが表示される', () => {
+      process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL = 'admin@example.com'
       render(<Nav />)
       expect(screen.getByText('Home')).toBeInTheDocument()
       expect(screen.getByText('About')).toBeInTheDocument()

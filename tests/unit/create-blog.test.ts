@@ -1,7 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { createBlogAction } from '@/src/app/actions/create-blog'
-import type { CreateBlogFormData } from '@/src/types/createblogformdata'
 import { isSlugAvailable, revalidateBlogCache } from '@/src/lib/api'
+import type { CreateBlogFormData } from '@/src/types/createblogformdata'
+
+vi.mock('@/src/lib/auth-check', () => ({
+  checkAdmin: vi.fn().mockResolvedValue('admin_123'),
+}))
 
 vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
@@ -9,15 +13,17 @@ vi.mock('next/cache', () => ({
 }))
 
 vi.mock('@/src/lib/api', async () => {
-  const actual = await vi.importActual('@/src/lib/api')
+  const actual = await vi.importActual<typeof import('@/src/lib/api')>(
+    '@/src/lib/api',
+  )
   return {
-    ...actual as any,
+    ...actual,
     isSlugAvailable: vi.fn(),
     revalidateBlogCache: vi.fn(),
   }
 })
 
-global.fetch = vi.fn() as unknown as typeof fetch
+global.fetch = vi.fn()
 
 describe('createBlogAction', () => {
   const mockFormData: CreateBlogFormData = {
@@ -35,10 +41,10 @@ describe('createBlogAction', () => {
   })
 
   it('成功時：IDが返る', async () => {
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: true,
       json: async () => ({ id: '123' }),
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -61,13 +67,15 @@ describe('createBlogAction', () => {
 
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.error).toBe('このスラッグは既に使用されています。別のスラッグを入力してください。')
+      expect(result.error).toBe(
+        'このスラッグは既に使用されています。別のスラッグを入力してください。',
+      )
     }
     expect(fetch).not.toHaveBeenCalled()
   })
 
   it('APIエラー時：success false', async () => {
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: false,
       status: 400,
       statusText: 'Bad Request',
@@ -75,7 +83,7 @@ describe('createBlogAction', () => {
         JSON.stringify({
           message: 'エラーです',
         }),
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -88,10 +96,10 @@ describe('createBlogAction', () => {
   })
 
   it('IDがない場合：エラー', async () => {
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: true,
       json: async () => ({}),
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -115,7 +123,7 @@ describe('createBlogAction', () => {
   })
 
   it('fetchが例外を投げた場合', async () => {
-    ;(fetch as any).mockRejectedValue(new Error('network error'))
+    vi.mocked(fetch).mockRejectedValue(new Error('network error'))
 
     process.env.MICROCMS_API_KEY = 'test-key'
 

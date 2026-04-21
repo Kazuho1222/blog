@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test'
 
-test.describe('Security E2E (Unauthenticated)', () => {
+test.describe('セキュリティ（未ログインユーザー）', () => {
   test('未ログインユーザーはブログ作成ページにアクセスできないこと', async ({
     page,
   }) => {

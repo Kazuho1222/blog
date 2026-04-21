@@ -2,12 +2,16 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { deleteBlogAction } from '@/src/app/actions/delete-blog'
 import type { PostType } from '@/src/types/post'
 
+vi.mock('@/src/lib/auth-check', () => ({
+  checkAdmin: vi.fn().mockResolvedValue('admin_123'),
+}))
+
 vi.mock('next/cache', () => ({
   revalidatePath: vi.fn(),
   updateTag: vi.fn(),
 }))
 
-global.fetch = vi.fn() as unknown as typeof fetch
+global.fetch = vi.fn()
 
 describe('deleteBlogAction', () => {
   const mockPostData: PostType = {
@@ -42,9 +46,9 @@ describe('deleteBlogAction', () => {
   })
 
   it('成功時：success true', async () => {
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: true,
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -56,7 +60,7 @@ describe('deleteBlogAction', () => {
   })
 
   it('APIエラー時：success false', async () => {
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: false,
       status: 400,
       statusText: 'Bad Request',
@@ -64,7 +68,7 @@ describe('deleteBlogAction', () => {
         JSON.stringify({
           message: 'エラーです',
         }),
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -77,9 +81,9 @@ describe('deleteBlogAction', () => {
   })
 
   it('IDがない場合：エラー', async () => {
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: true,
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -103,7 +107,7 @@ describe('deleteBlogAction', () => {
   })
 
   it('fetchが例外を投げた場合', async () => {
-    ;(fetch as any).mockRejectedValue(new Error('サーバーエラーが発生しました'))
+    vi.mocked(fetch).mockRejectedValue(new Error('サーバーエラーが発生しました'))
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -116,9 +120,9 @@ describe('deleteBlogAction', () => {
   })
 
   it('URLが正しいか', async () => {
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: true,
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 
@@ -130,9 +134,9 @@ describe('deleteBlogAction', () => {
   })
 
   it('methodがDELETEか', async () => {
-    ;(fetch as any).mockResolvedValue({
+    vi.mocked(fetch).mockResolvedValue({
       ok: true,
-    })
+    } as Response)
 
     process.env.MICROCMS_API_KEY = 'test-key'
 

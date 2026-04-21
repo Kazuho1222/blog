@@ -1,6 +1,6 @@
 import { expect, type Page, test } from '@playwright/test'
 
-test.describe('Blog Ordering', () => {
+test.describe('ブログの表示順', () => {
   const timestamp = Date.now()
   const now = new Date()
   const yyyymmdd = `${now.getFullYear()}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')}`
@@ -48,7 +48,7 @@ test.describe('Blog Ordering', () => {
     })
   }
 
-  test('should display later created post first when publish dates are identical', async ({
+  test('公開日が同じ場合、作成日時が新しい記事が先に表示されること', async ({
     page,
   }) => {
     // 1. Create Post A
@@ -84,7 +84,7 @@ test.describe('Blog Ordering', () => {
     await deletePost(page, postA.slug, postA.title)
   })
 
-  test('should display later time first when dates are same but times are different', async ({
+  test('公開日が同じで時刻が異なる場合、時刻が遅い記事が先に表示されること', async ({
     page,
   }) => {
     const postC = {
