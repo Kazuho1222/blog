@@ -1,9 +1,8 @@
 import { clerkSetup } from '@clerk/testing/playwright'
-import { test as setup } from '@playwright/test'
 
-// Setup must be run serially, this is necessary if Playwright is configured to run fully parallel: https://playwright.dev/docs/test-parallel
-setup.describe.configure({ mode: 'serial' })
-
-setup('global setup', async () => {
+async function globalSetup() {
+  // Clerk のテスト用 Frontend API の構成など、グローバルな初期化のみを行います
   await clerkSetup()
-})
+}
+
+export default globalSetup

@@ -21,7 +21,7 @@ export default function Nav() {
 
   const isAdmin =
     user?.primaryEmailAddress?.emailAddress?.toLowerCase() ===
-      process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL?.toLowerCase() &&
+      process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL.toLowerCase() &&
     !!process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL
 
   return (
