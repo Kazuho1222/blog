@@ -47,6 +47,15 @@ describe('Common Components Display', () => {
       expect(screen.getByText('Blog')).toBeInTheDocument()
       expect(screen.getByText('Create-Blog')).toBeInTheDocument()
     })
+
+    it('管理者メールアドレスが設定されていない場合でも、エラーなくレンダリングされる', () => {
+      const originalEnv = process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL
+      delete process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL
+      render(<Nav />)
+      expect(screen.getByText('Home')).toBeInTheDocument()
+      expect(screen.queryByText('Create-Blog')).not.toBeInTheDocument()
+      process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL = originalEnv
+    })
   });
 
   describe('PostCategories', () => {

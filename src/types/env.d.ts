@@ -2,7 +2,7 @@ declare namespace NodeJS {
   interface ProcessEnv {
     MICROCMS_SERVICE_DOMAIN: string
     MICROCMS_API_KEY?: string
-    NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL: string
+    NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL?: string
   }
 }
 

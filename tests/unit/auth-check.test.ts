@@ -54,4 +54,15 @@ describe('checkAdmin', () => {
     const result = await checkAdmin()
     expect(result).toBe('admin_123')
   })
+
+  it('管理者メールアドレスが設定されていない場合は null を返すこと', async () => {
+    delete process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL
+    vi.mocked(auth).mockResolvedValue({ userId: 'admin_123' } as AuthReturn)
+    vi.mocked(currentUser).mockResolvedValue({
+      emailAddresses: [{ emailAddress: ADMIN_EMAIL }],
+    } as unknown as CurrentUserReturn)
+
+    const result = await checkAdmin()
+    expect(result).toBeNull()
+  })
 })

@@ -20,9 +20,9 @@ export default function Nav() {
   }
 
   const isAdmin =
+    !!process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL &&
     user?.primaryEmailAddress?.emailAddress?.toLowerCase() ===
-      process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL.toLowerCase() &&
-    !!process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL
+      process.env.NEXT_PUBLIC_ALLOWED_ADMIN_EMAIL.toLowerCase()
 
   return (
     <nav className={navIsOpen ? styles.open : styles.close}>
