@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
+    useTypeScriptCli: true,
     serverActions: {
       // editBlog sends full post + form (large HTML); default 1MB triggers 413
       bodySizeLimit: '4mb',

@@ -84,7 +84,7 @@
     "html-to-text": "^10.0.0",
     "lightningcss": "^1.33.0",
     "lucide-react": "^1.25.0",
-    "next": "16.2.10",
+    "next": "^16.2.12",
     "next-sitemap": "^4.2.3",
     "open-graph-scraper": "^6.12.0",
     "plaiceholder": "^3.0.0",
@@ -116,7 +116,7 @@
     "jsdom": "^29.1.1",
     "lint-staged": "^17.1.0",
     "postcss": "^8.5.14",
-    "typescript": "^7.0.2",
+    "typescript": "7.0.2",
     "vitest": "^4.1.10"
   }
 }
