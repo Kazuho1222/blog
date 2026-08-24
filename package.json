@@ -40,7 +40,7 @@
     ]
   },
   "dependencies": {
-    "@clerk/nextjs": "^7.7.5",
+    "@clerk/nextjs": "^7.8.0",
     "@fortawesome/fontawesome-svg-core": "^7.3.1",
     "@fortawesome/free-brands-svg-icons": "^7.3.1",
     "@fortawesome/free-regular-svg-icons": "^7.3.1",
@@ -84,8 +84,8 @@
     "html-react-parser": "^6.1.7",
     "html-to-text": "^10.0.0",
     "lightningcss": "^1.33.0",
-    "lucide-react": "^1.31.0",
-    "next": "^16.3.1",
+    "lucide-react": "^1.33.0",
+    "next": "^16.3.2",
     "next-sitemap": "^4.2.3",
     "open-graph-scraper": "^6.12.0",
     "plaiceholder": "^3.0.0",
@@ -103,7 +103,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.8",
-    "@clerk/testing": "^2.2.23",
+    "@clerk/testing": "^2.2.28",
     "@playwright/test": "^1.62.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.2",
@@ -112,7 +112,7 @@
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
-    "baseline-browser-mapping": "^2.11.14",
+    "baseline-browser-mapping": "^2.11.17",
     "husky": "^9.1.7",
     "jsdom": "^30.0.1",
     "lint-staged": "^17.3.0",
