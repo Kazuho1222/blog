@@ -28,7 +28,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "scripts/migrate-content.js",
-    "src/app/next-sitemap.config.js",
     ".next/dev/types/**/*.ts",
     "public/**/*"
   ],

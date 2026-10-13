@@ -1,0 +1,4 @@
+/Users/desti/Documents/blog/next-sitemap.config.js
+/Users/desti/Documents/blog/public/sitemap-0.xml
+/Users/desti/Documents/blog/public/sitemap.xml
+/Users/desti/Documents/blog/tailwind.config.js
